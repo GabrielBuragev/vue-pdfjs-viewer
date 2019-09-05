@@ -1,5 +1,6 @@
 import "babel-polyfill";
 import Vue from "vue";
+import App from './App'
 import { PDFView } from "./";
 import './assets/scss/app.scss';
 
@@ -13,6 +14,6 @@ Vue.config.productionTip = false;
 
 
 new Vue({
-  render: h => h(PDFView)
+  render: h => h(App)
 }).$mount("#app");
 

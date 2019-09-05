@@ -99,6 +99,11 @@ export default {
     onDropzoneDragLeave() {
       this.dropzoneVisible = false;
     },
+    async getDataAsBuffer() {
+      if (this.viewer.content.pdf)
+        return await this.viewer.content.pdf.getData();
+      return null;
+    },
     async onDropzoneUpload(file) {
       this.viewer.content.pdf = null;
       this.viewer.content.pages = [];
