@@ -1,0 +1,162 @@
+.pdf-toolbar {
+  width: 100%;
+  position: relative;
+  height: 55px;
+  // padding:16px 0px 0px 0px !important;
+  background-color: #404040 !important;
+  color: white;
+  border: 1px solid #0a0a0a;
+  background: linear-gradient(to bottom, #404040 0%, #191919 100%);
+
+  #select-scale {
+    margin-left: 0;
+  }
+  .progress {
+    width: 100%;
+    position: absolute;
+    height: 5px;
+    bottom: 0;
+    left: 0;
+  }
+  #pdf-sidebar-toggle .sidebar-active {
+    box-shadow: 0px 0px 7px -1px;
+  }
+  & > a {
+    /* padding:5px 10px; */
+    text-align: center;
+  }
+  & a {
+    cursor: pointer;
+  }
+  #pdf-sidebar-toggle img {
+    width: 32px;
+    height: 32px;
+  }
+  #pdf-sidebar-toggle::before {
+    /* content:'';
+        background-image: url('/assets/img/pdf-sidebar-toggle.png');
+        background: none; */
+  }
+
+  #pdf-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  select {
+    color: white;
+    text-align: center;
+  }
+  option {
+    color: black;
+    text-align: center;
+  }
+  .center-toolbox,
+  .left-toolbox,
+  .right-toolbox {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+  }
+  .center-toolbox {
+    justify-content: center;
+    align-items: center;
+  }
+  .left-toolbox {
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .right-toolbox {
+    justify-content: flex-end;
+    align-items: center;
+  }
+  #pdf-zoom-out {
+    text-align: center;
+    order: 1;
+    flex-basis: 25%;
+  }
+  #select-scale {
+    order: 2;
+    flex-basis: 50%;
+    /* flex: auto; */
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  #select-scale:focus {
+    text-decoration: none;
+    outline: none;
+  }
+  #pdf-zoom-in {
+    text-align: center;
+    order: 3;
+    flex-basis: 25%;
+  }
+
+  #pdf-download {
+    font-size: 28px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: white;
+    padding: 0 10px 0 10px;
+    flex-direction: column;
+    &:hover {
+      color: #b7b7b7;
+    }
+
+    &.disabled {
+      touch-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .pdf-download-title {
+        font-size: 13px !important;
+      }
+    }
+    .pdf-download-icon {
+      font-size: 16px;
+      margin: 0 10px;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  #sidebar-toggle {
+    font-size: 28px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: white;
+    padding: 0 10px 0 10px;
+    flex-direction: column;
+    &:hover {
+      color: #b7b7b7;
+    }
+
+    &.disabled {
+      touch-events: none;
+    }
+    .pdf-sidebar-toggle-icon {
+      font-size: 16px;
+      margin: 0 10px;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

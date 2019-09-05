@@ -1,0 +1,83 @@
+.pdf-sidebar {
+  position: fixed;
+  left: -275px;
+  width: 275px;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background-color: rgba(68, 68, 68, 0.7) !important;
+  text-align: center;
+  overflow-y: scroll;
+  height: calc(100% - 62px);
+
+  &.sidebar-visible {
+    left: 0;
+  }
+  .pdf-sidebar-inside {
+    padding: 25px;
+    height: inherit;
+  }
+  .pdf-sidebar-wrapper {
+    position: fixed;
+    width: 200px;
+    left: 0;
+    /* top:128px; */
+    background-color: rgba(68, 68, 68, 0.7) !important;
+    text-align: center;
+    padding: 25px;
+    overflow-y: scroll;
+    height: calc(100% - 128px);
+  }
+
+  .thumbnail {
+    cursor: pointer;
+    text-align: center;
+    margin: 0 10px 15px 10px;
+
+    .thumbnailLabel {
+      color: white;
+    }
+    .thumbnailImage {
+      border: 1px solid transparent;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+      opacity: 0.6;
+      z-index: 99;
+      /* background-color: white; */
+      background-clip: content-box;
+    }
+    &.selected .thumbnailImage {
+      box-shadow: 0 0 0 1px #7a7a7a;
+      opacity: 1;
+    }
+    &.selected > .thumbnailSelectionRing {
+      background-color: #7a7a7a;
+      /* background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0)); */
+      background-clip: padding-box;
+      /* box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset, 0 0 1px hsla(0,0%,100%,.1) inset, 0 0 1px hsla(0,0%,0%,.2); */
+      color: #7a7a7a;
+    }
+
+    .thumbnailSelectionRing {
+      border-radius: 2px;
+      padding: 7px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    &:not(.selected):focus > .thumbnailSelectionRing,
+    &:not(.selected):hover > .thumbnailSelectionRing {
+      background-color: hsla(0, 0%, 100%, 0.15);
+      background-image: linear-gradient(
+        hsla(0, 0%, 100%, 0.05),
+        hsla(0, 0%, 100%, 0)
+      );
+      background-clip: padding-box;
+      box-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.05) inset,
+        0 0 1px hsla(0, 0%, 100%, 0.2) inset, 0 0 1px hsla(0, 0%, 0%, 0.2);
+      color: hsla(0, 0%, 100%, 0.9);
+    }
+    &:not(.selected):focus > .thumbnailSelectionRing > .thumbnailImage,
+    &:not(.selected):hover > .thumbnailSelectionRing > .thumbnailImage {
+      opacity: 0.9;
+    }
+  }
+}

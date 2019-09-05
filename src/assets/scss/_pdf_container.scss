@@ -1,0 +1,74 @@
+#pdfCanvasContainer {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  background-color: #525659 !important;
+  background-image: url(/assets/img/texture.png);
+  // padding-bottom: 115px;
+  // transition-duration: 200ms;
+  // transition-timing-function: ease;
+  overflow-y: scroll;
+
+  /* height: 100vh !important; */
+
+  &.pdf-wrapper {
+    position: relative;
+    flex-grow: 1;
+    overflow-y: auto;
+    .pdf-wrapper-inside {
+      width: 100%;
+    }
+  }
+  .loading-status {
+    color: white;
+    font-size: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .page {
+    position: relative;
+    box-sizing: content-box;
+  }
+  .textLayer > div {
+    position: absolute;
+  }
+  .page {
+    direction: ltr;
+    width: 816px;
+    height: 1056px;
+    margin: 1px auto -8px auto;
+    position: relative;
+    overflow: visible;
+    border: 9px solid transparent;
+    background-clip: content-box;
+    -o-border-image: url(/assets/img/shadow.png) 9 9 repeat;
+    border-image: url(/assets/img/shadow.png) 9 9 repeat;
+    background-color: white;
+
+    .page-loader-wrapper {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      display: flex;
+      img {
+        margin: auto;
+      }
+    }
+  }
+  .page:last-child {
+    margin: 1px auto 0px auto;
+  }
+
+  .canvasWrapper {
+    overflow: hidden;
+    box-shadow: 0 0 5px 0px black;
+  }
+}

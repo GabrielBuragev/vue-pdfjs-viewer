@@ -1,0 +1,21 @@
+.alert-wrapper {
+  .alert-text {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    color: white !important;
+    background-color: #ff3547 !important;
+  }
+  .alert-text a {
+    color: #3f4079;
+    text-decoration: underline;
+  }
+  @media (max-width: 768px) {
+    .alert-text {
+      font-size: 13px !important;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.pdf_notification {
+  width: 250px;
+  max-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 50px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border: 1px solid black;
+  box-shadow: 0 0 black;
+  color: black;
+  opacity: 0.7;
+  &.warning {
+    background-color: #fff3cd;
+  }
+  &.error {
+    background-color: #ff5161;
+  }
+  &.info {
+    background-color: #d1ecf1;
+  }
+  &.success {
+    background-color: #d4edda;
+  }
+
+  span.text {
+    padding: 17px 15px 15px 15px;
+  }
+  .close {
+    font-size: 15px;
+    color: black;
+    position: absolute;
+    top: 5%;
+    right: 3.5%;
+  }
+  cursor: pointer;
+}

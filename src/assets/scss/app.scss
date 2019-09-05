@@ -1,0 +1,16 @@
+@import "global";
+@import "pdf_view";
+@import "pdf_container";
+@import "pdf_sidebar";
+@import "pdf_toolbar";
+@import "pdf_text_layer";
+@import "notification";
+@import "pdf_notification_list";
+@import "404";
+@import "../css/text_layer_builder.css";
+
+html {
+  body {
+    margin: 0;
+  }
+}
