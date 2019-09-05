@@ -32852,12 +32852,12 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./src/assets/scss/app.scss
 var app = __webpack_require__("7e7d");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFView.vue?vue&type=template&id=9178350e&
-var PDFViewvue_type_template_id_9178350e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"dropzone",rawName:"v-dropzone",value:(_vm.dropzoneOptions),expression:"dropzoneOptions"}],attrs:{"id":"pdf-viewer-wrapper"}},[(_vm.toolbarVisible)?_c('PDFToolbar',{attrs:{"pdf":_vm.viewer.content.pdf,"height":_vm.viewer.toolbar.height},model:{value:(_vm.viewer.toolbar),callback:function ($$v) {_vm.$set(_vm.viewer, "toolbar", $$v)},expression:"viewer.toolbar"}}):_vm._e(),_c('PDFContainer',{ref:"pdfContainer",attrs:{"scale":_vm.viewer.toolbar.scale,"loading":_vm.viewer.content.loading},model:{value:(_vm.viewer.content),callback:function ($$v) {_vm.$set(_vm.viewer, "content", $$v)},expression:"viewer.content"}}),(_vm.viewer.content.pdf && _vm.viewer.content.pages.length && _vm.toolbarVisible)?_c('PDFSidebar',{directives:[{name:"show",rawName:"v-show",value:(_vm.viewer.toolbar.sidebarVisible),expression:"viewer.toolbar.sidebarVisible"}],attrs:{"pages":_vm.viewer.content.pages,"visible":_vm.viewer.toolbar.sidebarVisible,"topOffset":_vm.viewer.toolbar.height},on:{"jumpTo":_vm.$refs.pdfContainer.scrollToPage}}):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.dropzoneVisible),expression:"dropzoneVisible"}],attrs:{"id":"dropzone"}},[_vm._v("Drop PDFs like its hot !")]),_c('PDFNotifications',{attrs:{"notifications":_vm.pdfNotifications},on:{"update:notifications":function($event){_vm.pdfNotifications=$event}}})],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFView.vue?vue&type=template&id=461aaab4&
+var PDFViewvue_type_template_id_461aaab4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"dropzone",rawName:"v-dropzone",value:(_vm.dropzoneOptions),expression:"dropzoneOptions"}],attrs:{"id":"pdf-viewer-wrapper"}},[(_vm.toolbarVisible)?_c('PDFToolbar',{attrs:{"pdf":_vm.viewer.content.pdf,"height":_vm.viewer.toolbar.height},model:{value:(_vm.viewer.toolbar),callback:function ($$v) {_vm.$set(_vm.viewer, "toolbar", $$v)},expression:"viewer.toolbar"}}):_vm._e(),_c('PDFContainer',{ref:"pdfContainer",attrs:{"scale":_vm.viewer.toolbar.scale,"loading":_vm.viewer.content.loading},model:{value:(_vm.viewer.content),callback:function ($$v) {_vm.$set(_vm.viewer, "content", $$v)},expression:"viewer.content"}}),(_vm.viewer.content.pdf && _vm.viewer.content.pages.length && _vm.toolbarVisible)?_c('PDFSidebar',{directives:[{name:"show",rawName:"v-show",value:(_vm.viewer.toolbar.sidebarVisible),expression:"viewer.toolbar.sidebarVisible"}],attrs:{"pages":_vm.viewer.content.pages,"visible":_vm.viewer.toolbar.sidebarVisible,"topOffset":_vm.viewer.toolbar.height},on:{"jumpTo":_vm.$refs.pdfContainer.scrollToPage}}):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.dropzoneVisible),expression:"dropzoneVisible"}],attrs:{"id":"dropzone"}},[_vm._v("Drop PDFs like its hot !")]),_c('PDFNotifications',{attrs:{"notifications":_vm.pdfNotifications},on:{"update:notifications":function($event){_vm.pdfNotifications=$event}}})],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/PDFView.vue?vue&type=template&id=9178350e&
+// CONCATENATED MODULE: ./src/components/PDFView.vue?vue&type=template&id=461aaab4&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.array.includes.js
 var es7_array_includes = __webpack_require__("6762");
@@ -34388,7 +34388,7 @@ var vue_dropzone_Dropzone;
     },
     toolbarVisible: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   components: {
@@ -34682,7 +34682,7 @@ var vue_dropzone_Dropzone;
 
 var PDFView_component = normalizeComponent(
   components_PDFViewvue_type_script_lang_js_,
-  PDFViewvue_type_template_id_9178350e_render,
+  PDFViewvue_type_template_id_461aaab4_render,
   staticRenderFns,
   false,
   null,
