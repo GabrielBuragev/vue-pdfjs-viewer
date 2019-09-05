@@ -42,7 +42,7 @@ export default {
     },
     toolbarVisible: {
       type: Boolean,
-      default: false
+      default: true,
     }
   },
   components: {

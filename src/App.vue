@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <PDFView src="http://localhost:8082/test.pdf" ref="pdfView" :toolbarVisible="false"></PDFView>
+    <PDFView src="http://localhost:8082/test.pdf" ref="pdfView"></PDFView>
   </div>
 </template>
 
