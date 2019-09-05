@@ -32843,12 +32843,12 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./src/assets/scss/app.scss
 var app = __webpack_require__("7e7d");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFView.vue?vue&type=template&id=42ba7a8d&
-var PDFViewvue_type_template_id_42ba7a8d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"dropzone",rawName:"v-dropzone",value:(_vm.dropzoneOptions),expression:"dropzoneOptions"}],attrs:{"id":"pdf-viewer-wrapper"}},[_c('PDFToolbar',{attrs:{"pdf":_vm.viewer.content.pdf,"height":_vm.viewer.toolbar.height},model:{value:(_vm.viewer.toolbar),callback:function ($$v) {_vm.$set(_vm.viewer, "toolbar", $$v)},expression:"viewer.toolbar"}}),_c('PDFContainer',{ref:"pdfContainer",attrs:{"scale":_vm.viewer.toolbar.scale,"loading":_vm.viewer.content.loading},model:{value:(_vm.viewer.content),callback:function ($$v) {_vm.$set(_vm.viewer, "content", $$v)},expression:"viewer.content"}}),(_vm.viewer.content.pdf && _vm.viewer.content.pages.length)?_c('PDFSidebar',{directives:[{name:"show",rawName:"v-show",value:(_vm.viewer.toolbar.sidebarVisible),expression:"viewer.toolbar.sidebarVisible"}],attrs:{"pages":_vm.viewer.content.pages,"visible":_vm.viewer.toolbar.sidebarVisible,"topOffset":_vm.viewer.toolbar.height},on:{"jumpTo":_vm.$refs.pdfContainer.scrollToPage}}):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.dropzoneVisible),expression:"dropzoneVisible"}],attrs:{"id":"dropzone"}},[_vm._v("Drop PDFs like its hot !")]),_c('PDFNotifications',{attrs:{"notifications":_vm.pdfNotifications},on:{"update:notifications":function($event){_vm.pdfNotifications=$event}}})],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFView.vue?vue&type=template&id=9178350e&
+var PDFViewvue_type_template_id_9178350e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"dropzone",rawName:"v-dropzone",value:(_vm.dropzoneOptions),expression:"dropzoneOptions"}],attrs:{"id":"pdf-viewer-wrapper"}},[(_vm.toolbarVisible)?_c('PDFToolbar',{attrs:{"pdf":_vm.viewer.content.pdf,"height":_vm.viewer.toolbar.height},model:{value:(_vm.viewer.toolbar),callback:function ($$v) {_vm.$set(_vm.viewer, "toolbar", $$v)},expression:"viewer.toolbar"}}):_vm._e(),_c('PDFContainer',{ref:"pdfContainer",attrs:{"scale":_vm.viewer.toolbar.scale,"loading":_vm.viewer.content.loading},model:{value:(_vm.viewer.content),callback:function ($$v) {_vm.$set(_vm.viewer, "content", $$v)},expression:"viewer.content"}}),(_vm.viewer.content.pdf && _vm.viewer.content.pages.length && _vm.toolbarVisible)?_c('PDFSidebar',{directives:[{name:"show",rawName:"v-show",value:(_vm.viewer.toolbar.sidebarVisible),expression:"viewer.toolbar.sidebarVisible"}],attrs:{"pages":_vm.viewer.content.pages,"visible":_vm.viewer.toolbar.sidebarVisible,"topOffset":_vm.viewer.toolbar.height},on:{"jumpTo":_vm.$refs.pdfContainer.scrollToPage}}):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.dropzoneVisible),expression:"dropzoneVisible"}],attrs:{"id":"dropzone"}},[_vm._v("Drop PDFs like its hot !")]),_c('PDFNotifications',{attrs:{"notifications":_vm.pdfNotifications},on:{"update:notifications":function($event){_vm.pdfNotifications=$event}}})],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/PDFView.vue?vue&type=template&id=42ba7a8d&
+// CONCATENATED MODULE: ./src/components/PDFView.vue?vue&type=template&id=9178350e&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.array.includes.js
 var es7_array_includes = __webpack_require__("6762");
@@ -32904,12 +32904,12 @@ function _asyncToGenerator(fn) {
     });
   };
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Notifications/PDFNotifications.vue?vue&type=template&id=14b1d37d&
-var PDFNotificationsvue_type_template_id_14b1d37d_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"notifications-wrapper"},_vm._l((_vm.notifications),function(notification,index){return _c('Notification',{key:index,attrs:{"notification":notification},on:{"dieOut":function($event){return _vm.removeNotification(index)}},nativeOn:{"click":function($event){return _vm.removeNotification(index)}}})}),1)}
-var PDFNotificationsvue_type_template_id_14b1d37d_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Notifications/PDFNotifications.vue?vue&type=template&id=5a268cc9&
+var PDFNotificationsvue_type_template_id_5a268cc9_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"notifications-wrapper"},_vm._l((_vm.notifications),function(notification,index){return _c('Notification',{key:index,attrs:{"notification":notification},on:{"dieOut":function($event){return _vm.removeNotification(index)}},nativeOn:{"click":function($event){return _vm.removeNotification(index)}}})}),1)}
+var PDFNotificationsvue_type_template_id_5a268cc9_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Notifications/PDFNotifications.vue?vue&type=template&id=14b1d37d&
+// CONCATENATED MODULE: ./src/components/Notifications/PDFNotifications.vue?vue&type=template&id=5a268cc9&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Notifications/Notification.vue?vue&type=template&id=b8de80a6&
 var Notificationvue_type_template_id_b8de80a6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"pdf_notification",class:_vm.notification.type},[_c('span',{staticClass:"text"},[_vm._v(_vm._s(_vm.notification.text))]),_c('span',{staticClass:"close"},[_vm._v("x")])])}
@@ -33094,7 +33094,6 @@ var component = normalizeComponent(
   },
   methods: {
     removeNotification: function removeNotification(i) {
-      console.log(this.notifications.splice(i, 1));
       return this.$emit("update:notifications", this.notifications.splice(i, 1));
     }
   }
@@ -33111,8 +33110,8 @@ var component = normalizeComponent(
 
 var PDFNotifications_component = normalizeComponent(
   Notifications_PDFNotificationsvue_type_script_lang_js_,
-  PDFNotificationsvue_type_template_id_14b1d37d_render,
-  PDFNotificationsvue_type_template_id_14b1d37d_staticRenderFns,
+  PDFNotificationsvue_type_template_id_5a268cc9_render,
+  PDFNotificationsvue_type_template_id_5a268cc9_staticRenderFns,
   false,
   null,
   null,
@@ -33121,12 +33120,12 @@ var PDFNotifications_component = normalizeComponent(
 )
 
 /* harmony default export */ var PDFNotifications = (PDFNotifications_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFContainer.vue?vue&type=template&id=c920a9c4&
-var PDFContainervue_type_template_id_c920a9c4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"canvasContainer",staticClass:"pdf-wrapper",attrs:{"id":"pdfCanvasContainer"}},[(_vm.value.pdf || _vm.loading)?_c('div',{staticClass:"pdf-wrapper-inside",on:{"!click":function($event){return _vm.$emit('update:sidebarVisible', false)}}},[_c('div',[(_vm.pdfLoadingProgress < _vm.pdfNumPages || _vm.loading )?_c('div',{staticClass:"loading-status"},[_c('img',{attrs:{"src":__webpack_require__("0e63"),"width":"20%","height":"20%"}}),_c('br'),_c('h3',[_vm._v(_vm._s(_vm.loadingAlert))])]):_vm._e(),_vm._l((_vm.value.pages),function(page,index){return _c('PDFPage',{key:index,ref:'pdfpage-' + index,refInFor:true,attrs:{"page":page,"maxDimensions":_vm.maxDimensions,"scale":_vm.normalizedScale,"canvasContainer":_vm.$refs.canvasContainer},on:{"finishedRender":function($event){_vm.pdfLoadingProgress++}}})})],2)]):_c('PageNotFound',{attrs:{"statusMessage":_vm.pageNotFoundMessage,"statusCode":"404"}})],1)}
-var PDFContainervue_type_template_id_c920a9c4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFContainer.vue?vue&type=template&id=07729e74&
+var PDFContainervue_type_template_id_07729e74_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"canvasContainer",staticClass:"pdf-wrapper",attrs:{"id":"pdfCanvasContainer"}},[(_vm.value.pdf || _vm.loading)?_c('div',{staticClass:"pdf-wrapper-inside",on:{"!click":function($event){return _vm.$emit('update:sidebarVisible', false)}}},[_c('div',[(_vm.pdfLoadingProgress < _vm.pdfNumPages || _vm.loading )?_c('div',{staticClass:"loading-status"},[_c('img',{attrs:{"src":__webpack_require__("0e63"),"width":"20%","height":"20%"}}),_c('br'),_c('h3',[_vm._v(_vm._s(_vm.loadingAlert))])]):_vm._e(),_vm._l((_vm.value.pages),function(page,index){return _c('PDFPage',{key:index,ref:'pdfpage-' + index,refInFor:true,attrs:{"page":page,"maxDimensions":_vm.maxDimensions,"scale":_vm.normalizedScale,"canvasContainer":_vm.$refs.canvasContainer},on:{"finishedRender":function($event){_vm.pdfLoadingProgress++}}})})],2)]):_c('PageNotFound',{attrs:{"statusMessage":_vm.pageNotFoundMessage,"statusCode":"404"}})],1)}
+var PDFContainervue_type_template_id_07729e74_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/PDFContainer.vue?vue&type=template&id=c920a9c4&
+// CONCATENATED MODULE: ./src/components/PDFContainer.vue?vue&type=template&id=07729e74&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.promise.js
 var es6_promise = __webpack_require__("551c");
@@ -33647,21 +33646,20 @@ var dist = __webpack_require__("9029");
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                console.log(pdf.cleanup, pdf.destroy);
                 promiseArray = Array.from(new Array(pdf.numPages).keys()).map(function (val, index) {
                   return pdf.getPage(val + 1);
                 });
                 this.pages = [];
-                _context2.next = 5;
+                _context2.next = 4;
                 return Promise.all(promiseArray);
 
-              case 5:
+              case 4:
                 pages = _context2.sent;
                 this.value.pages = pages;
                 this.$emit("input", this.value);
                 return _context2.abrupt("return", true);
 
-              case 9:
+              case 8:
               case "end":
                 return _context2.stop();
             }
@@ -33688,8 +33686,8 @@ var dist = __webpack_require__("9029");
         height: 0
       };
 
-      for (var i = 0; i < self.pages.length; i++) {
-        var page = self.pages[i];
+      for (var i = 0; i < self.value.pages.length; i++) {
+        var page = self.value.pages[i];
         var pageVP = page.getViewport(1.0);
 
         if (pageVP.width > maxDims.width) {
@@ -33706,7 +33704,6 @@ var dist = __webpack_require__("9029");
     normalizedScale: function normalizedScale() {
       var fitScale = (this.$refs.canvasContainer.clientWidth - this.PAGE_BORDER_SIZE * 2 - this.SCROLLBAR_WIDTH) / this.maxDimensions.width;
       var scaleDecimal = parseFloat(this.scale);
-      console.log(this.scale, fitScale, scaleDecimal);
       if (this.scale == "auto") return fitScale;else return dist["isMobile"] ? fitScale * scaleDecimal : scaleDecimal;
     },
     pdfNumPages: function pdfNumPages() {
@@ -33726,8 +33723,8 @@ var dist = __webpack_require__("9029");
 
 var PDFContainer_component = normalizeComponent(
   components_PDFContainervue_type_script_lang_js_,
-  PDFContainervue_type_template_id_c920a9c4_render,
-  PDFContainervue_type_template_id_c920a9c4_staticRenderFns,
+  PDFContainervue_type_template_id_07729e74_render,
+  PDFContainervue_type_template_id_07729e74_staticRenderFns,
   false,
   null,
   null,
@@ -34362,6 +34359,11 @@ var vue_dropzone_Dropzone;
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -34373,8 +34375,11 @@ var vue_dropzone_Dropzone;
   },
   props: {
     src: {
-      type: [String],
       default: null
+    },
+    toolbarVisible: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -34387,7 +34392,7 @@ var vue_dropzone_Dropzone;
     return {
       viewer: {
         toolbar: {
-          scale: "1.25",
+          scale: "auto",
           visible: true,
           height: 50,
           downloadFeatureVisible: true,
@@ -34419,31 +34424,33 @@ var vue_dropzone_Dropzone;
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              this.toolbarVisible ? this.toolbar.height = 0 : "";
+
               if (!this.src) {
-                _context.next = 10;
+                _context.next = 11;
                 break;
               }
 
-              _context.prev = 1;
-              _context.next = 4;
+              _context.prev = 2;
+              _context.next = 5;
               return this.getPDF(this.normalizedSource);
 
-            case 4:
+            case 5:
               this.viewer.content.pdf = _context.sent;
-              _context.next = 10;
+              _context.next = 11;
               break;
 
-            case 7:
-              _context.prev = 7;
-              _context.t0 = _context["catch"](1);
+            case 8:
+              _context.prev = 8;
+              _context.t0 = _context["catch"](2);
               console.log(_context.t0);
 
-            case 10:
+            case 11:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, this, [[1, 7]]);
+      }, _callee, this, [[2, 8]]);
     }));
 
     function mounted() {
@@ -34462,31 +34469,34 @@ var vue_dropzone_Dropzone;
             switch (_context2.prev = _context2.next) {
               case 0:
                 if (!newval) {
-                  _context2.next = 11;
+                  _context2.next = 14;
                   break;
                 }
 
                 _context2.prev = 1;
-                _context2.next = 4;
+                this.viewer.content.pdf = null;
+                this.viewer.content.pages = [];
+                _context2.next = 6;
                 return this.getPDF(newval);
 
-              case 4:
+              case 6:
                 this.viewer.content.pdf = _context2.sent;
-                _context2.next = 11;
+                _context2.next = 14;
                 break;
 
-              case 7:
-                _context2.prev = 7;
+              case 9:
+                _context2.prev = 9;
                 _context2.t0 = _context2["catch"](1);
-                console.error(_context2.t0);
                 this.viewer.content.pdf = null;
+                this.viewer.content.pages = [];
+                console.error(_context2.t0);
 
-              case 11:
+              case 14:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, this, [[1, 7]]);
+        }, _callee2, this, [[1, 9]]);
       }));
 
       function normalizedSource(_x) {
@@ -34503,37 +34513,73 @@ var vue_dropzone_Dropzone;
     onDropzoneDragLeave: function onDropzoneDragLeave() {
       this.dropzoneVisible = false;
     },
-    onDropzoneUpload: function () {
-      var _onDropzoneUpload = _asyncToGenerator(
+    getDataAsBuffer: function () {
+      var _getDataAsBuffer = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee3(file) {
+      regeneratorRuntime.mark(function _callee3() {
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                this.viewer.content.pdf = null;
-                this.viewer.content.pages = [];
-                _context3.prev = 2;
-                _context3.next = 5;
-                return this.getPDF(new Uint8Array(file));
+                if (!this.viewer.content.pdf) {
+                  _context3.next = 4;
+                  break;
+                }
+
+                _context3.next = 3;
+                return this.viewer.content.pdf.getData();
+
+              case 3:
+                return _context3.abrupt("return", _context3.sent);
+
+              case 4:
+                return _context3.abrupt("return", null);
 
               case 5:
-                this.viewer.content.pdf = _context3.sent;
-                _context3.next = 12;
-                break;
-
-              case 8:
-                _context3.prev = 8;
-                _context3.t0 = _context3["catch"](2);
-                console.error(_context3.t0);
-                this.viewer.content.pdf = null;
-
-              case 12:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, this, [[2, 8]]);
+        }, _callee3, this);
+      }));
+
+      function getDataAsBuffer() {
+        return _getDataAsBuffer.apply(this, arguments);
+      }
+
+      return getDataAsBuffer;
+    }(),
+    onDropzoneUpload: function () {
+      var _onDropzoneUpload = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee4(file) {
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                this.viewer.content.pdf = null;
+                this.viewer.content.pages = [];
+                _context4.prev = 2;
+                _context4.next = 5;
+                return this.getPDF(new Uint8Array(file));
+
+              case 5:
+                this.viewer.content.pdf = _context4.sent;
+                _context4.next = 12;
+                break;
+
+              case 8:
+                _context4.prev = 8;
+                _context4.t0 = _context4["catch"](2);
+                console.error(_context4.t0);
+                this.viewer.content.pdf = null;
+
+              case 12:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this, [[2, 8]]);
       }));
 
       function onDropzoneUpload(_x2) {
@@ -34551,33 +34597,33 @@ var vue_dropzone_Dropzone;
     getPDF: function () {
       var _getPDF = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee4(val) {
+      regeneratorRuntime.mark(function _callee5(val) {
         var pdf;
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
-                _context4.prev = 0;
+                _context5.prev = 0;
                 this.viewer.content.loading = true;
-                _context4.next = 4;
+                _context5.next = 4;
                 return PDFJS.getDocument(val);
 
               case 4:
-                pdf = _context4.sent;
-                return _context4.abrupt("return", pdf);
+                pdf = _context5.sent;
+                return _context5.abrupt("return", pdf);
 
               case 8:
-                _context4.prev = 8;
-                _context4.t0 = _context4["catch"](0);
+                _context5.prev = 8;
+                _context5.t0 = _context5["catch"](0);
                 this.viewer.content.loading = false;
-                throw new Error(_context4.t0);
+                throw new Error(_context5.t0);
 
               case 12:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, this, [[0, 8]]);
+        }, _callee5, this, [[0, 8]]);
       }));
 
       function getPDF(_x3) {
@@ -34627,7 +34673,7 @@ var vue_dropzone_Dropzone;
 
 var PDFView_component = normalizeComponent(
   components_PDFViewvue_type_script_lang_js_,
-  PDFViewvue_type_template_id_42ba7a8d_render,
+  PDFViewvue_type_template_id_9178350e_render,
   staticRenderFns,
   false,
   null,
