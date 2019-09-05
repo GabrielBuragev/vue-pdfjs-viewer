@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <PDFView src="http://localhost:8082/test.pdf" ref="pdfView"></PDFView>
+    <PDFView :src.sync="src" ref="pdfView"></PDFView>
   </div>
 </template>
 
@@ -10,6 +10,11 @@ export default {
   name: "app",
   components: {
     PDFView
+  },
+  data() {
+    return {
+      src: "http://localhost:8082/test.pdf"
+    };
   }
 };
 </script>

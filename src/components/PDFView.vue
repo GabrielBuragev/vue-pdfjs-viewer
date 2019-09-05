@@ -42,7 +42,7 @@ export default {
     },
     toolbarVisible: {
       type: Boolean,
-      default: true,
+      default: true
     }
   },
   components: {
@@ -80,12 +80,12 @@ export default {
     };
   },
   async mounted() {
-    this.toolbarVisible ? (this.toolbar.height = 0) : "";
+    this.toolbarVisible ? (this.viewer.toolbar.height = 0) : "";
     if (this.src) {
       try {
         this.viewer.content.pdf = await this.getPDF(this.normalizedSource);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     }
   },
@@ -117,14 +117,12 @@ export default {
       return null;
     },
     async onDropzoneUpload(file) {
-      this.viewer.content.pdf = null;
-      this.viewer.content.pages = [];
-
       try {
-        this.viewer.content.pdf = await this.getPDF(new Uint8Array(file));
+        let binarySrc = new Uint8Array(file);
+        this.$emit("update:src", binarySrc);
       } catch (e) {
         console.error(e);
-        this.viewer.content.pdf = null;
+        this.src = null;
       }
     },
     onDropzoneUploadError(msg) {
@@ -161,15 +159,15 @@ export default {
   computed: {
     normalizedSource() {
       let src = this.src;
-      let data = null;
-      if (!src) return data;
+
+      if (!src) return null;
       if (
         (typeof src === "string", src.includes("data:application/pdf;base64,"))
       ) {
-        data = src.substring("data:application/pdf;base64,");
-      } else if (typeof src === "string") data = src;
+        src = src.substring("data:application/pdf;base64,");
+      }
 
-      return data;
+      return src;
     }
   }
 };
