@@ -1,6 +1,11 @@
 <template>
   <div id="pdf-viewer-wrapper" v-dropzone="dropzoneOptions">
-    <PDFToolbar v-model="viewer.toolbar" :pdf="viewer.content.pdf" :height="viewer.toolbar.height"></PDFToolbar>
+    <PDFToolbar
+      v-model="viewer.toolbar"
+      :pdf="viewer.content.pdf"
+      :height="viewer.toolbar.height"
+      v-if="toolbarVisible"
+    ></PDFToolbar>
     <PDFContainer
       v-model="viewer.content"
       :scale="viewer.toolbar.scale"
@@ -9,7 +14,7 @@
     ></PDFContainer>
     <PDFSidebar
       v-show="viewer.toolbar.sidebarVisible"
-      v-if="viewer.content.pdf && viewer.content.pages.length"
+      v-if="viewer.content.pdf && viewer.content.pages.length && toolbarVisible"
       :pages="viewer.content.pages"
       :visible="viewer.toolbar.sidebarVisible"
       :topOffset="viewer.toolbar.height"
@@ -33,8 +38,11 @@ export default {
   },
   props: {
     src: {
-      type: [String],
       default: null
+    },
+    toolbarVisible: {
+      type: Boolean,
+      default: false
     }
   },
   components: {
@@ -47,7 +55,7 @@ export default {
     return {
       viewer: {
         toolbar: {
-          scale: "1.25",
+          scale: "auto",
           visible: true,
           height: 50,
           downloadFeatureVisible: true,
@@ -72,6 +80,7 @@ export default {
     };
   },
   async mounted() {
+    this.toolbarVisible ? (this.toolbar.height = 0) : "";
     if (this.src) {
       try {
         this.viewer.content.pdf = await this.getPDF(this.normalizedSource);
@@ -84,10 +93,13 @@ export default {
     async normalizedSource(newval) {
       if (newval) {
         try {
+          this.viewer.content.pdf = null;
+          this.viewer.content.pages = [];
           this.viewer.content.pdf = await this.getPDF(newval);
         } catch (e) {
-          console.error(e);
           this.viewer.content.pdf = null;
+          this.viewer.content.pages = [];
+          console.error(e);
         }
       }
     }

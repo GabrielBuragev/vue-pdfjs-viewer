@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     removeNotification(i) {
-      console.log(this.notifications.splice(i, 1));
       return this.$emit(
         "update:notifications",
         this.notifications.splice(i, 1)

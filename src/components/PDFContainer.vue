@@ -84,7 +84,6 @@ export default {
   },
   methods: {
     async render(pdf) {
-      console.log(pdf.cleanup, pdf.destroy);
       var promiseArray = Array.from(new Array(pdf.numPages).keys()).map(
         function(val, index) {
           return pdf.getPage(val + 1);
@@ -113,8 +112,8 @@ export default {
         height: 0
       };
 
-      for (var i = 0; i < self.pages.length; i++) {
-        let page = self.pages[i];
+      for (var i = 0; i < self.value.pages.length; i++) {
+        let page = self.value.pages[i];
         var pageVP = page.getViewport(1.0);
         if (pageVP.width > maxDims.width) {
           maxDims.width = pageVP.width;
@@ -135,7 +134,6 @@ export default {
 
       let scaleDecimal = parseFloat(this.scale);
 
-      console.log(this.scale, fitScale, scaleDecimal);
       if (this.scale == "auto") return fitScale;
       else return isMobile ? fitScale * scaleDecimal : scaleDecimal;
     },
