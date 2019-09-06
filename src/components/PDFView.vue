@@ -90,6 +90,9 @@ export default {
     }
   },
   watch: {
+    "viewer.content.loading"(newval) {
+      this.$emit(newval ? "loadingBegin" : "loadingEnd");
+    },
     async normalizedSource(newval) {
       if (newval) {
         try {
@@ -135,7 +138,7 @@ export default {
       try {
         this.viewer.content.loading = true;
         let pdf = await PDFJS.getDocument(val);
-
+        this.viewer.content.loading = false;
         return pdf;
       } catch (e) {
         this.viewer.content.loading = false;
