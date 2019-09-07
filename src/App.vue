@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      src: "http://localhost:8082/test.pdf"
+      src: "http://localhost:8082/example_1.pdf"
     };
   }
 };

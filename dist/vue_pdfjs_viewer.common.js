@@ -3466,7 +3466,7 @@ exports = module.exports = __webpack_require__("2350")(false);
 
 
 // module
-exports.push([module.i, ".textLayer{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;opacity:.2;line-height:1}.textLayer>div{color:transparent;position:absolute;white-space:pre;cursor:text;-webkit-transform-origin:0 0;transform-origin:0 0}.textLayer .highlight{margin:-1px;padding:1px;background-color:#b400aa;border-radius:4px}.textLayer .highlight.begin{border-radius:4px 0 0 4px}.textLayer .highlight.end{border-radius:0 4px 4px 0}.textLayer .highlight.middle{border-radius:0}.textLayer .highlight.selected{background-color:#006400}.textLayer ::-moz-selection{background:#00f}.textLayer ::selection{background:#00f}.textLayer .endOfContent{display:block;position:absolute;left:0;top:100%;right:0;bottom:0;z-index:-1;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.textLayer .endOfContent.active{top:0}", ""]);
+exports.push([module.i, ".textLayer{position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;opacity:.2}.textLayer>div{color:transparent;position:absolute;white-space:pre;cursor:text;-webkit-transform-origin:0 0;transform-origin:0 0}.textLayer .highlight{margin:-1px;padding:1px;background-color:#b400aa;border-radius:4px}.textLayer .highlight.begin{border-radius:4px 0 0 4px}.textLayer .highlight.end{border-radius:0 4px 4px 0}.textLayer .highlight.middle{border-radius:0}.textLayer .highlight.selected{background-color:#006400}.textLayer ::-moz-selection{background:#00f}.textLayer ::selection{background:#00f}.textLayer .endOfContent{display:block;position:absolute;left:0;top:100%;right:0;bottom:0;z-index:-1;cursor:default;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.textLayer .endOfContent.active{top:0}", ""]);
 
 // exports
 
@@ -32843,12 +32843,12 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ./src/assets/scss/app.scss
 var app = __webpack_require__("7e7d");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFView.vue?vue&type=template&id=461aaab4&
-var PDFViewvue_type_template_id_461aaab4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"dropzone",rawName:"v-dropzone",value:(_vm.dropzoneOptions),expression:"dropzoneOptions"}],attrs:{"id":"pdf-viewer-wrapper"}},[(_vm.toolbarVisible)?_c('PDFToolbar',{attrs:{"pdf":_vm.viewer.content.pdf,"height":_vm.viewer.toolbar.height},model:{value:(_vm.viewer.toolbar),callback:function ($$v) {_vm.$set(_vm.viewer, "toolbar", $$v)},expression:"viewer.toolbar"}}):_vm._e(),_c('PDFContainer',{ref:"pdfContainer",attrs:{"scale":_vm.viewer.toolbar.scale,"loading":_vm.viewer.content.loading},model:{value:(_vm.viewer.content),callback:function ($$v) {_vm.$set(_vm.viewer, "content", $$v)},expression:"viewer.content"}}),(_vm.viewer.content.pdf && _vm.viewer.content.pages.length && _vm.toolbarVisible)?_c('PDFSidebar',{directives:[{name:"show",rawName:"v-show",value:(_vm.viewer.toolbar.sidebarVisible),expression:"viewer.toolbar.sidebarVisible"}],attrs:{"pages":_vm.viewer.content.pages,"visible":_vm.viewer.toolbar.sidebarVisible,"topOffset":_vm.viewer.toolbar.height},on:{"jumpTo":_vm.$refs.pdfContainer.scrollToPage}}):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.dropzoneVisible),expression:"dropzoneVisible"}],attrs:{"id":"dropzone"}},[_vm._v("Drop PDFs like its hot !")]),_c('PDFNotifications',{attrs:{"notifications":_vm.pdfNotifications},on:{"update:notifications":function($event){_vm.pdfNotifications=$event}}})],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5d3a2abf-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PDFView.vue?vue&type=template&id=43e044d0&
+var PDFViewvue_type_template_id_43e044d0_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"dropzone",rawName:"v-dropzone",value:(_vm.dropzoneOptions),expression:"dropzoneOptions"}],attrs:{"id":"pdf-viewer-wrapper"}},[(_vm.toolbarVisible)?_c('PDFToolbar',{attrs:{"pdf":_vm.viewer.content.pdf,"height":_vm.viewer.toolbar.height},model:{value:(_vm.viewer.toolbar),callback:function ($$v) {_vm.$set(_vm.viewer, "toolbar", $$v)},expression:"viewer.toolbar"}}):_vm._e(),_c('PDFContainer',{ref:"pdfContainer",attrs:{"scale":_vm.viewer.toolbar.scale,"loading":_vm.viewer.content.loading},model:{value:(_vm.viewer.content),callback:function ($$v) {_vm.$set(_vm.viewer, "content", $$v)},expression:"viewer.content"}}),(_vm.viewer.content.pdf && _vm.viewer.content.pages.length && _vm.toolbarVisible)?_c('PDFSidebar',{directives:[{name:"show",rawName:"v-show",value:(_vm.viewer.toolbar.sidebarVisible),expression:"viewer.toolbar.sidebarVisible"}],attrs:{"pages":_vm.viewer.content.pages,"visible":_vm.viewer.toolbar.sidebarVisible,"topOffset":_vm.viewer.toolbar.height},on:{"jumpTo":_vm.$refs.pdfContainer.scrollToPage}}):_vm._e(),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.dropzoneVisible),expression:"dropzoneVisible"}],attrs:{"id":"dropzone"}},[_vm._v("Drop PDFs like its hot !")]),_c('PDFNotifications',{attrs:{"notifications":_vm.pdfNotifications},on:{"update:notifications":function($event){_vm.pdfNotifications=$event}}})],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/PDFView.vue?vue&type=template&id=461aaab4&
+// CONCATENATED MODULE: ./src/components/PDFView.vue?vue&type=template&id=43e044d0&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.array.includes.js
 var es7_array_includes = __webpack_require__("6762");
@@ -34424,7 +34424,7 @@ var vue_dropzone_Dropzone;
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              this.toolbarVisible ? this.toolbar.height = 0 : "";
+              this.toolbarVisible ? this.viewer.toolbar.height = 0 : "";
 
               if (!this.src) {
                 _context.next = 11;
@@ -34443,7 +34443,7 @@ var vue_dropzone_Dropzone;
             case 8:
               _context.prev = 8;
               _context.t0 = _context["catch"](2);
-              console.log(_context.t0);
+              console.error(_context.t0);
 
             case 11:
             case "end":
@@ -34460,6 +34460,9 @@ var vue_dropzone_Dropzone;
     return mounted;
   }(),
   watch: {
+    "viewer.content.loading": function viewerContentLoading(newval) {
+      this.$emit(newval ? "loadingBegin" : "loadingEnd");
+    },
     normalizedSource: function () {
       var _normalizedSource = _asyncToGenerator(
       /*#__PURE__*/
@@ -34553,33 +34556,25 @@ var vue_dropzone_Dropzone;
       var _onDropzoneUpload = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee4(file) {
+        var binarySrc;
         return regeneratorRuntime.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                this.viewer.content.pdf = null;
-                this.viewer.content.pages = [];
-                _context4.prev = 2;
-                _context4.next = 5;
-                return this.getPDF(new Uint8Array(file));
+                try {
+                  binarySrc = new Uint8Array(file);
+                  this.$emit("update:src", binarySrc);
+                } catch (e) {
+                  console.error(e);
+                  this.src = null;
+                }
 
-              case 5:
-                this.viewer.content.pdf = _context4.sent;
-                _context4.next = 12;
-                break;
-
-              case 8:
-                _context4.prev = 8;
-                _context4.t0 = _context4["catch"](2);
-                console.error(_context4.t0);
-                this.viewer.content.pdf = null;
-
-              case 12:
+              case 1:
               case "end":
                 return _context4.stop();
             }
           }
-        }, _callee4, this, [[2, 8]]);
+        }, _callee4, this);
       }));
 
       function onDropzoneUpload(_x2) {
@@ -34610,20 +34605,21 @@ var vue_dropzone_Dropzone;
 
               case 4:
                 pdf = _context5.sent;
+                this.viewer.content.loading = false;
                 return _context5.abrupt("return", pdf);
 
-              case 8:
-                _context5.prev = 8;
+              case 9:
+                _context5.prev = 9;
                 _context5.t0 = _context5["catch"](0);
                 this.viewer.content.loading = false;
                 throw new Error(_context5.t0);
 
-              case 12:
+              case 13:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, this, [[0, 8]]);
+        }, _callee5, this, [[0, 9]]);
       }));
 
       function getPDF(_x3) {
@@ -34650,14 +34646,13 @@ var vue_dropzone_Dropzone;
   computed: {
     normalizedSource: function normalizedSource() {
       var src = this.src;
-      var data = null;
-      if (!src) return data;
+      if (!src) return null;
 
       if (typeof src === "string", src.includes("data:application/pdf;base64,")) {
-        data = src.substring("data:application/pdf;base64,");
-      } else if (typeof src === "string") data = src;
+        src = src.substring("data:application/pdf;base64,");
+      }
 
-      return data;
+      return src;
     }
   }
 });
@@ -34673,7 +34668,7 @@ var vue_dropzone_Dropzone;
 
 var PDFView_component = normalizeComponent(
   components_PDFViewvue_type_script_lang_js_,
-  PDFViewvue_type_template_id_461aaab4_render,
+  PDFViewvue_type_template_id_43e044d0_render,
   staticRenderFns,
   false,
   null,
