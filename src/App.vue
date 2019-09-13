@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <PDFView :src.sync="src" ref="pdfView"></PDFView>
+    <PDFView
+      :src.sync="src"
+      ref="pdfView"
+      :sidebarFeatureVisible="false"
+      :downloadFeatureVisible="false"
+    ></PDFView>
   </div>
 </template>
 

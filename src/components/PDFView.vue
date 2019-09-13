@@ -43,6 +43,14 @@ export default {
     toolbarVisible: {
       type: Boolean,
       default: true
+    },
+    downloadFeatureVisible: {
+      type: Boolean,
+      default: true
+    },
+    sidebarFeatureVisible: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
@@ -58,8 +66,6 @@ export default {
           scale: "auto",
           visible: true,
           height: 50,
-          downloadFeatureVisible: true,
-          sidebarFeatureVisible: true,
           sidebarVisible: false
         },
         content: {
@@ -81,6 +87,12 @@ export default {
   },
   async mounted() {
     this.toolbarVisible ? (this.viewer.toolbar.height = 0) : "";
+
+    Object.assign(this.viewer.toolbar, {
+      downloadFeatureVisible: this.downloadFeatureVisible,
+      sidebarFeatureVisible: this.sidebarFeatureVisible
+    });
+
     if (this.src) {
       try {
         this.viewer.content.pdf = await this.getPDF(this.normalizedSource);
