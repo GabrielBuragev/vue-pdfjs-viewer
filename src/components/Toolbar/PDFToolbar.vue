@@ -2,6 +2,7 @@
   <div class="pdf-toolbar" :style="{'min-height': height + 'px'}">
     <div class="left-toolbox">
       <PDFSidebarToggle v-if="pdf && value.sidebarFeatureVisible" @click="toggleSidebar"></PDFSidebarToggle>
+      <slot name="left-toolbox"></slot>
     </div>
     <div class="center-toolbox">
       <div id="pdf-sizer" tag="div">
@@ -24,6 +25,7 @@
       </div>
     </div>
     <div class="right-toolbox">
+      <slot name="right-toolbox"></slot>
       <PDFDownloadButton v-if="pdf && value.downloadFeatureVisible" :pdf="pdf"></PDFDownloadButton>
     </div>
   </div>

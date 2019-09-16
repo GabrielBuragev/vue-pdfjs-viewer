@@ -5,7 +5,14 @@
       :pdf="viewer.content.pdf"
       :height="viewer.toolbar.height"
       v-if="toolbarVisible"
-    ></PDFToolbar>
+    >
+      <template slot="right-toolbox">
+        <slot name="right-toolbox"></slot>
+      </template>
+      <template slot="left-toolbox">
+        <slot name="left-toolbox"></slot>
+      </template>
+    </PDFToolbar>
     <PDFContainer
       v-model="viewer.content"
       :scale="viewer.toolbar.scale"

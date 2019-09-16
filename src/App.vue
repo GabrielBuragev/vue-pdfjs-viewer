@@ -1,11 +1,14 @@
 <template>
-  <div id="app">
+  <div id="app" style="height:593px">
     <PDFView
       :src.sync="src"
       ref="pdfView"
       :sidebarFeatureVisible="false"
       :downloadFeatureVisible="false"
-    ></PDFView>
+    >
+      <template slot="right-toolbox"></template>
+      <template slot="left-toolbox"></template>
+    </PDFView>
   </div>
 </template>
 
@@ -18,7 +21,7 @@ export default {
   },
   data() {
     return {
-      src: "http://localhost:8082/example_1.pdf"
+      src: "http://localhost:8000/hh_a3.pdf"
     };
   }
 };
