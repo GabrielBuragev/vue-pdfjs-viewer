@@ -31,7 +31,6 @@ let onDestroy = (el, binding, vnode) => {
   binded = false;
 };
 let onUpdate = (el, binding, vnode) => {
-  console.log(lastActiveFlag);
   if (binding.value.active === lastActiveFlag) return;
 
   if (!binding.value.active && binded) {
