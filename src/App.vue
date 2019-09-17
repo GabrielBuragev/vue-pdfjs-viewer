@@ -5,6 +5,7 @@
       ref="pdfView"
       :sidebarFeatureVisible="false"
       :downloadFeatureVisible="false"
+      :dropzoneFeatureVisible="false"
     >
       <template slot="right-toolbox"></template>
       <template slot="left-toolbox"></template>

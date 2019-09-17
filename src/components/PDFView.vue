@@ -1,5 +1,5 @@
 <template>
-  <div id="pdf-viewer-wrapper" v-dropzone="dropzoneOptions">
+  <div id="pdf-viewer-wrapper" v-dropzone:[dropzoneOptions.active]="dropzoneOptions">
     <PDFToolbar
       v-model="viewer.toolbar"
       :pdf="viewer.content.pdf"
@@ -27,7 +27,11 @@
       :topOffset="viewer.toolbar.height"
       @jumpTo="$refs.pdfContainer.scrollToPage"
     ></PDFSidebar>
-    <div id="dropzone" v-show="dropzoneVisible">Drop PDFs like its hot !</div>
+    <div
+      id="dropzone"
+      v-show="dropzoneVisible"
+      v-if="dropzoneOptions.active"
+    >Drop PDFs like its hot !</div>
     <PDFNotifications :notifications.sync="pdfNotifications"></PDFNotifications>
   </div>
 </template>
@@ -58,6 +62,10 @@ export default {
     sidebarFeatureVisible: {
       type: Boolean,
       default: true
+    },
+    dropzoneFeatureVisible: {
+      type: Boolean,
+      default: true
     }
   },
   components: {
@@ -70,7 +78,7 @@ export default {
     return {
       viewer: {
         toolbar: {
-          scale: "auto",
+          scale: "1.25",
           visible: true,
           height: 50,
           sidebarVisible: false
@@ -84,6 +92,7 @@ export default {
       pdfNotifications: [],
       dropzoneVisible: false,
       dropzoneOptions: {
+        active: true,
         extensions: ["pdf"],
         onSuccess: this.onDropzoneUpload.bind(this),
         onError: this.onDropzoneUploadError.bind(this),
@@ -99,6 +108,8 @@ export default {
       downloadFeatureVisible: this.downloadFeatureVisible,
       sidebarFeatureVisible: this.sidebarFeatureVisible
     });
+
+    this.dropzoneOptions.active = this.dropzoneFeatureVisible;
 
     if (this.src) {
       try {
