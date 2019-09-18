@@ -5,13 +5,17 @@
       v-if="value.pdf || loading"
       @click.capture="$emit('update:sidebarVisible', false)"
     >
-      <div>
-        <div class="loading-status" v-if="pdfLoadingProgress < pdfNumPages || loading ">
-          <img src="../assets/images/icons/loader.svg" width="20%" height="20%" />
-          <br />
-          <h3>{{loadingAlert}}</h3>
-        </div>
+      <div class="loading-wrapper" v-if="pdfLoadingProgress < pdfNumPages || loading">
+        <slot name="loading" :loadingProgress="pdfLoadingProgress / pdfNumPages">
+          <div class="loading-status">
+            <img src="../assets/images/icons/loader.svg" width="20%" height="20%" />
+            <br />
+            <h3>{{loadingAlert}}</h3>
+          </div>
+        </slot>
+      </div>
 
+      <div class="pdf-pages-wrapper" v-show="!(pdfLoadingProgress < pdfNumPages || loading)">
         <PDFPage
           v-for="(page, index) in value.pages"
           :page="page"
@@ -24,7 +28,7 @@
         ></PDFPage>
       </div>
     </div>
-    <slot name="loading-error" v-else>
+    <slot name="error" v-else>
       <PageNotFound :statusMessage="pageNotFoundMessage" statusCode="404"></PageNotFound>
     </slot>
   </div>

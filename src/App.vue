@@ -9,7 +9,8 @@
     >
       <template slot="right-toolbox"></template>
       <template slot="left-toolbox"></template>
-      <template slot="loading-error">This is a loading message</template>
+      <template slot="error"></template>
+      <template slot="loading"></template>
     </PDFView>
   </div>
 </template>
@@ -23,7 +24,7 @@ export default {
   },
   data() {
     return {
-      src: "http://localhost:8000/hh_a3.pdf"
+      src: "http://localhost:8000/hhhh.pdf"
     };
   }
 };

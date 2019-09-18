@@ -19,8 +19,11 @@
       :loading="viewer.content.loading"
       ref="pdfContainer"
     >
-      <template slot="loading-error">
-        <slot name="loading-error"></slot>
+      <template slot="error">
+        <slot name="error"></slot>
+      </template>
+      <template slot="loading">
+        <slot name="loading"></slot>
       </template>
     </PDFContainer>
     <PDFSidebar
