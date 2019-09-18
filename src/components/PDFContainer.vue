@@ -24,8 +24,9 @@
         ></PDFPage>
       </div>
     </div>
-
-    <PageNotFound :statusMessage="pageNotFoundMessage" statusCode="404" v-else></PageNotFound>
+    <slot name="loading-error" v-else>
+      <PageNotFound :statusMessage="pageNotFoundMessage" statusCode="404"></PageNotFound>
+    </slot>
   </div>
 </template>
 

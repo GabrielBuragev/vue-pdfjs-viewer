@@ -9,6 +9,7 @@
     >
       <template slot="right-toolbox"></template>
       <template slot="left-toolbox"></template>
+      <template slot="loading-error">This is a loading message</template>
     </PDFView>
   </div>
 </template>

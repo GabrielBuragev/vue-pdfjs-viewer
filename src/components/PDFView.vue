@@ -18,7 +18,11 @@
       :scale="viewer.toolbar.scale"
       :loading="viewer.content.loading"
       ref="pdfContainer"
-    ></PDFContainer>
+    >
+      <template slot="loading-error">
+        <slot name="loading-error"></slot>
+      </template>
+    </PDFContainer>
     <PDFSidebar
       v-show="viewer.toolbar.sidebarVisible"
       v-if="viewer.content.pdf && viewer.content.pages.length && toolbarVisible"
