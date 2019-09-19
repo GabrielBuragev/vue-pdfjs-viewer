@@ -6,6 +6,7 @@
       :sidebarFeatureVisible="false"
       :downloadFeatureVisible="false"
       :dropzoneFeatureVisible="false"
+      initialScale="1.25"
     >
       <template slot="right-toolbox"></template>
       <template slot="left-toolbox"></template>
@@ -24,7 +25,7 @@ export default {
   },
   data() {
     return {
-      src: "http://localhost:8000/hhhh.pdf"
+      src: null
     };
   }
 };

@@ -66,11 +66,12 @@ export default {
     };
   },
   mounted() {
-    let scale = (this.value.scale * 100).toString();
+    let scale;
 
-    if (this.selectOptions.includes(scale)) {
-      this.scaleSelection = scale;
-    }
+    if (this.value.scale === "auto") scale = this.value.scale;
+    else scale = (this.value.scale * 100).toString();
+
+    if (this.selectOptions.includes(scale)) this.scaleSelection = scale;
   },
   watch: {
     scaleSelection(newval) {
