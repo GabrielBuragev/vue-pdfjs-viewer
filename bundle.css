@@ -1,0 +1,435 @@
+.ml-auto {
+  margin-left: auto !important; }
+
+.mr-auto {
+  margin-right: auto !important; }
+
+.mx-auto {
+  margin: auto !important; }
+
+.row.no-gutters {
+  margin: 0;
+  padding: 0; }
+
+#pdf-viewer-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: flex-start;
+  flex: 1;
+  min-height: 100%;
+  height: 100%; }
+  #pdf-viewer-wrapper .pdf-toolbar {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center; }
+  #pdf-viewer-wrapper #pdfCanvasContainer {
+    display: flex;
+    flex: 12; }
+  #pdf-viewer-wrapper #dropzone {
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.9;
+    display: flex;
+    background-color: #c3c3c3;
+    font-size: 35px;
+    font-weight: bold;
+    margin-top: auto;
+    align-items: center;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    position: absolute; }
+
+#pdfCanvasContainer {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  background-color: #525659 !important;
+  background-image: url(/assets/img/texture.png);
+  overflow-y: scroll;
+  /* height: 100vh !important; */ }
+  #pdfCanvasContainer.pdf-wrapper {
+    position: relative;
+    flex-grow: 1;
+    overflow-y: auto; }
+    #pdfCanvasContainer.pdf-wrapper .pdf-wrapper-inside {
+      width: 100%; }
+  #pdfCanvasContainer .loading-status {
+    color: white;
+    font-size: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center; }
+  #pdfCanvasContainer .page {
+    position: relative;
+    box-sizing: content-box; }
+  #pdfCanvasContainer .textLayer > div {
+    position: absolute; }
+  #pdfCanvasContainer .page {
+    direction: ltr;
+    width: 816px;
+    height: 1056px;
+    margin: 1px auto -8px auto;
+    position: relative;
+    overflow: visible;
+    border: 9px solid transparent;
+    background-clip: content-box;
+    -o-border-image: url(/assets/img/shadow.png) 9 9 repeat;
+    border-image: url(/assets/img/shadow.png) 9 9 repeat;
+    background-color: white; }
+    #pdfCanvasContainer .page .page-loader-wrapper {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      display: flex; }
+      #pdfCanvasContainer .page .page-loader-wrapper img {
+        margin: auto; }
+  #pdfCanvasContainer .page:last-child {
+    margin: 1px auto 0px auto; }
+  #pdfCanvasContainer .canvasWrapper {
+    overflow: hidden;
+    box-shadow: 0 0 5px 0px black; }
+
+.pdf-sidebar {
+  position: fixed;
+  left: -275px;
+  width: 275px;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background-color: rgba(68, 68, 68, 0.7) !important;
+  text-align: center;
+  overflow-y: scroll;
+  height: calc(100% - 62px); }
+  .pdf-sidebar.sidebar-visible {
+    left: 0; }
+  .pdf-sidebar .pdf-sidebar-inside {
+    padding: 25px;
+    height: inherit; }
+  .pdf-sidebar .pdf-sidebar-wrapper {
+    position: fixed;
+    width: 200px;
+    left: 0;
+    /* top:128px; */
+    background-color: rgba(68, 68, 68, 0.7) !important;
+    text-align: center;
+    padding: 25px;
+    overflow-y: scroll;
+    height: calc(100% - 128px); }
+  .pdf-sidebar .thumbnail {
+    cursor: pointer;
+    text-align: center;
+    margin: 0 10px 15px 10px; }
+    .pdf-sidebar .thumbnail .thumbnailLabel {
+      color: white; }
+    .pdf-sidebar .thumbnail .thumbnailImage {
+      border: 1px solid transparent;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+      opacity: 0.6;
+      z-index: 99;
+      /* background-color: white; */
+      background-clip: content-box; }
+    .pdf-sidebar .thumbnail.selected .thumbnailImage {
+      box-shadow: 0 0 0 1px #7a7a7a;
+      opacity: 1; }
+    .pdf-sidebar .thumbnail.selected > .thumbnailSelectionRing {
+      background-color: #7a7a7a;
+      /* background-image: linear-gradient(hsla(0,0%,100%,.05), hsla(0,0%,100%,0)); */
+      background-clip: padding-box;
+      /* box-shadow: 0 1px 0 hsla(0,0%,100%,.05) inset, 0 0 1px hsla(0,0%,100%,.1) inset, 0 0 1px hsla(0,0%,0%,.2); */
+      color: #7a7a7a; }
+    .pdf-sidebar .thumbnail .thumbnailSelectionRing {
+      border-radius: 2px;
+      padding: 7px;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto; }
+    .pdf-sidebar .thumbnail:not(.selected):focus > .thumbnailSelectionRing,
+    .pdf-sidebar .thumbnail:not(.selected):hover > .thumbnailSelectionRing {
+      background-color: rgba(255, 255, 255, 0.15);
+      background-image: linear-gradient(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
+      background-clip: padding-box;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05) inset, 0 0 1px rgba(255, 255, 255, 0.2) inset, 0 0 1px rgba(0, 0, 0, 0.2);
+      color: rgba(255, 255, 255, 0.9); }
+    .pdf-sidebar .thumbnail:not(.selected):focus > .thumbnailSelectionRing > .thumbnailImage,
+    .pdf-sidebar .thumbnail:not(.selected):hover > .thumbnailSelectionRing > .thumbnailImage {
+      opacity: 0.9; }
+
+.pdf-toolbar {
+  width: 100%;
+  position: relative;
+  height: 55px;
+  background-color: #404040 !important;
+  color: white;
+  border: 1px solid #0a0a0a;
+  background: linear-gradient(to bottom, #404040 0%, #191919 100%); }
+  .pdf-toolbar #select-scale {
+    margin-left: 0; }
+  .pdf-toolbar .progress {
+    width: 100%;
+    position: absolute;
+    height: 5px;
+    bottom: 0;
+    left: 0; }
+  .pdf-toolbar #pdf-sidebar-toggle .sidebar-active {
+    box-shadow: 0px 0px 7px -1px; }
+  .pdf-toolbar > a {
+    /* padding:5px 10px; */
+    text-align: center; }
+  .pdf-toolbar a {
+    cursor: pointer; }
+  .pdf-toolbar #pdf-sidebar-toggle img {
+    width: 32px;
+    height: 32px; }
+  .pdf-toolbar #pdf-sidebar-toggle::before {
+    /* content:'';
+        background-image: url('/assets/img/pdf-sidebar-toggle.png');
+        background: none; */ }
+  .pdf-toolbar #pdf-sidebar-toggle {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; }
+  .pdf-toolbar select {
+    color: white;
+    text-align: center; }
+  .pdf-toolbar option {
+    color: black;
+    text-align: center; }
+  .pdf-toolbar .center-toolbox,
+  .pdf-toolbar .left-toolbox,
+  .pdf-toolbar .right-toolbox {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    height: 100%; }
+  .pdf-toolbar .center-toolbox {
+    justify-content: center;
+    align-items: center; }
+  .pdf-toolbar .left-toolbox {
+    justify-content: flex-start;
+    align-items: center; }
+  .pdf-toolbar .right-toolbox {
+    justify-content: flex-end;
+    align-items: center; }
+  .pdf-toolbar #pdf-zoom-out {
+    text-align: center;
+    order: 1;
+    flex-basis: 25%; }
+  .pdf-toolbar #select-scale {
+    order: 2;
+    flex-basis: 50%;
+    /* flex: auto; */
+    background-color: transparent;
+    border: 0;
+    cursor: pointer; }
+  .pdf-toolbar #select-scale:focus {
+    text-decoration: none;
+    outline: none; }
+  .pdf-toolbar #pdf-zoom-in {
+    text-align: center;
+    order: 3;
+    flex-basis: 25%; }
+  .pdf-toolbar #pdf-download {
+    font-size: 28px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: white;
+    padding: 0 10px 0 10px;
+    flex-direction: column; }
+    .pdf-toolbar #pdf-download:hover {
+      color: #b7b7b7; }
+    .pdf-toolbar #pdf-download.disabled {
+      touch-events: none; }
+    @media (max-width: 600px) {
+      .pdf-toolbar #pdf-download .pdf-download-title {
+        font-size: 13px !important; } }
+    .pdf-toolbar #pdf-download .pdf-download-icon {
+      font-size: 16px;
+      margin: 0 10px;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+  .pdf-toolbar #sidebar-toggle {
+    font-size: 28px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: white;
+    padding: 0 10px 0 10px;
+    flex-direction: column; }
+    .pdf-toolbar #sidebar-toggle:hover {
+      color: #b7b7b7; }
+    .pdf-toolbar #sidebar-toggle.disabled {
+      touch-events: none; }
+    .pdf-toolbar #sidebar-toggle .pdf-sidebar-toggle-icon {
+      font-size: 16px;
+      margin: 0 10px;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+
+.textLayer > span {
+  position: absolute; }
+
+.pdf_notification {
+  width: 250px;
+  max-height: 250px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 50px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border: 1px solid black;
+  box-shadow: 0 0 black;
+  color: black;
+  opacity: 0.7;
+  cursor: pointer; }
+  .pdf_notification.warning {
+    background-color: #fff3cd; }
+  .pdf_notification.error {
+    background-color: #ff5161; }
+  .pdf_notification.info {
+    background-color: #d1ecf1; }
+  .pdf_notification.success {
+    background-color: #d4edda; }
+  .pdf_notification span.text {
+    padding: 17px 15px 15px 15px; }
+  .pdf_notification .close {
+    font-size: 15px;
+    color: black;
+    position: absolute;
+    top: 5%;
+    right: 3.5%; }
+
+.notifications-wrapper {
+  position: absolute;
+  right: 35px;
+  bottom: 0; }
+
+#error-page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: white; }
+  #error-page .error-status-code {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-width: 20%; }
+    #error-page .error-status-code .text {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px; }
+    #error-page .error-status-code img {
+      display: flex;
+      flex: 1;
+      max-height: 60px;
+      max-width: 100%; }
+
+/* Copyright 2014 Mozilla Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.textLayer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  opacity: 0.2;
+  line-height: 1; }
+
+.textLayer > div {
+  color: transparent;
+  position: absolute;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0% 0%; }
+
+.textLayer .highlight {
+  margin: -1px;
+  padding: 1px;
+  background-color: #b400aa;
+  border-radius: 4px; }
+
+.textLayer .highlight.begin {
+  border-radius: 4px 0px 0px 4px; }
+
+.textLayer .highlight.end {
+  border-radius: 0px 4px 4px 0px; }
+
+.textLayer .highlight.middle {
+  border-radius: 0px; }
+
+.textLayer .highlight.selected {
+  background-color: darkgreen; }
+
+.textLayer ::selection {
+  background: blue; }
+
+.textLayer .endOfContent {
+  display: block;
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  right: 0px;
+  bottom: 0px;
+  z-index: -1;
+  cursor: default;
+  user-select: none; }
+
+.textLayer .endOfContent.active {
+  top: 0px; }
+
+html body {
+  margin: 0; }
+
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  height: 100%; }

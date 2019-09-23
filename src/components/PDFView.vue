@@ -44,11 +44,11 @@ import PDFNotifications from "./Notifications/PDFNotifications";
 import PDFContainer from "./PDFContainer";
 import PDFToolbar from "./Toolbar/PDFToolbar";
 import PDFSidebar from "./Sidebar/PDFSidebar";
-import DropzoneDirective from "../directives/vue_dropzone";
+import dropzone from "vue_dropzone_directive";
 
 export default {
   directives: {
-    DropzoneDirective
+    dropzone
   },
   props: {
     src: {
@@ -159,6 +159,7 @@ export default {
     },
     async onDropzoneUpload(file) {
       try {
+        console.log(file);
         let binarySrc = new Uint8Array(file);
         this.$emit("update:src", binarySrc);
       } catch (e) {
