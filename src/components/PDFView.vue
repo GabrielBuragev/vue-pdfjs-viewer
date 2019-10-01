@@ -40,15 +40,15 @@
 </template>
 
 <script>
-import PDFNotifications from "./Notifications/PDFNotifications";
-import PDFContainer from "./PDFContainer";
-import PDFToolbar from "./Toolbar/PDFToolbar";
-import PDFSidebar from "./Sidebar/PDFSidebar";
-import dropzone from "vue_dropzone_directive";
+import PDFNotifications from "./Notifications/PDFNotifications.vue";
+import PDFContainer from "./PDFContainer.vue";
+import PDFToolbar from "./Toolbar/PDFToolbar.vue";
+import PDFSidebar from "./Sidebar/PDFSidebar.vue";
+import VueDropzone from "vue-dropzone";
 
 export default {
   directives: {
-    dropzone
+    dropzone: VueDropzone
   },
   props: {
     src: {
@@ -152,14 +152,8 @@ export default {
     onDropzoneDragLeave() {
       this.dropzoneVisible = false;
     },
-    async getDataAsBuffer() {
-      if (this.viewer.content.pdf)
-        return await this.viewer.content.pdf.getData();
-      return null;
-    },
     async onDropzoneUpload(file) {
       try {
-        console.log(file);
         let binarySrc = new Uint8Array(file);
         this.$emit("update:src", binarySrc);
       } catch (e) {
@@ -173,6 +167,12 @@ export default {
         type: "error"
       });
     },
+    async getDataAsBuffer() {
+      if (this.viewer.content.pdf)
+        return await this.viewer.content.pdf.getData();
+      return null;
+    },
+
     async getPDF(val) {
       try {
         this.viewer.content.loading = true;

@@ -1,48 +1,52 @@
 {
-  "name": "vue_pdfjs_viewer",
-  "version": "0.1.6",
-  "main": "src/index.js",
+  "name": "vue-pdfjs-viewer",
+  "version": "0.1.7",
+  "description": "Vue viewer component built on top of pdfjs",
+  "main": "dist/vue-pdfjs-viewer.umd.js",
+  "module": "dist/vue-pdfjs-viewer.es.js",
+  "unpkg": "dist/vue-pdfjs-viewer.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build-bundle": "vue-cli-service build --target lib --name vue_pdfjs_viewer src/index.js",
     "build": "vue-cli-service build",
+    "rollup": "rollup -c",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.5",
-    "lodash.debounce": "^4.0.8",
-    "mobile-device-detect": "^0.2.3",
     "pdfjs-dist": "2.0.943",
-    "simple-dropzone": "^0.7.0",
     "vue": "^2.6.10",
-    "worker-loader": "^2.0.0"
+    "vue-dropzone": "git+https://github.com/gabrielburagev/vue-dropzone.git"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.1",
+    "babel-preset-es2015-rollup": "^3.0.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",
+    "rollup": "^1.22.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-babel-minify": "^9.1.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-css-only": "^1.0.0",
+    "rollup-plugin-livereload": "^1.0.3",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-sass": "^1.2.2",
+    "rollup-plugin-scss": "^1.0.2",
+    "rollup-plugin-serve": "^1.0.1",
+    "rollup-plugin-svg": "^2.0.0",
+    "rollup-plugin-vue2": "^0.8.1",
+    "sass": "^1.17.4",
     "sass-loader": "^7.1.0",
     "vue-template-compiler": "^2.6.10"
   },
-  "files": [
-    "dist/*",
-    "src/*",
-    "public/*",
-    "*.json",
-    "*.js"
-  ],
-  "keywords": [
-    "pdfjs",
-    "pdfjs-dist",
-    "vue",
-    "vuejs",
-    "pdf-viewer"
-  ],
   "eslintConfig": {
     "root": true,
     "env": {

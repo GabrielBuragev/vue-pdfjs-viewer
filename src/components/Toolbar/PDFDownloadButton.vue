@@ -1,13 +1,15 @@
 <template>
   <a id="pdf-download" @click.stop.prevent="download">
     <span class="pdf-download-icon">
-      <img src="../../assets/images/icons/download.svg" width="20px" height="20px" />
+      <img :src="downloadSvg" width="20px" height="20px" />
       <br />
     </span>
     <span slot="label"></span>
   </a>
 </template>
 <script>
+import downloadSvg from "../../assets/images/icons/download.svg";
+
 export default {
   props: {
     pdf: {
@@ -18,6 +20,11 @@ export default {
       type: String,
       default: Date.now().toString()
     }
+  },
+  data() {
+    return {
+      downloadSvg
+    };
   },
   methods: {
     async download() {

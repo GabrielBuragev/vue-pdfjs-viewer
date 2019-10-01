@@ -346,5 +346,4 @@ DefaultTextLayerFactory.prototype = {
   }
 };
 
-
-module.exports = TextLayerBuilder;
+export default TextLayerBuilder;

@@ -8,7 +8,7 @@
     :style="viewportSizeStyle"
   >
     <div class="page-loader-wrapper">
-      <img src="../assets/images/icons/loader.svg" v-if="resizing" class="page-loader" />
+      <img :src="loader" v-if="resizing" class="page-loader" />
     </div>
 
     <div class="canvasWrapper" ref="canvasWrapper" :style="viewportSizeStyle">
@@ -28,8 +28,9 @@
 
 
 <script>
-import TextLayer from "./Layers/PDFTextLayer";
-import AnnotationLayer from "./Layers/PDFAnnotationLayer";
+import TextLayer from "./Layers/PDFTextLayer.vue";
+import AnnotationLayer from "./Layers/PDFAnnotationLayer.vue";
+import loader from "../assets/images/icons/loader.svg";
 
 export default {
   props: ["page", "maxDimensions", "canvasContainer", "scale"],
@@ -50,7 +51,8 @@ export default {
       pageToDataURL: undefined,
       textContent: {},
       annotations: [],
-      resizing: false
+      resizing: false,
+      loader
     };
   },
   mounted() {

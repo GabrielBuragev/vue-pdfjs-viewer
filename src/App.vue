@@ -5,7 +5,7 @@
       ref="pdfView"
       :sidebarFeatureVisible="false"
       :downloadFeatureVisible="false"
-      :dropzoneFeatureVisible="false"
+      :dropzoneFeatureVisible="true"
       initialScale="1.25"
     >
       <template slot="right-toolbox"></template>
@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { PDFView } from "../";
+import { PDFView } from "../dist/vue-pdfjs-viewer.es";
 export default {
   name: "app",
   components: {
