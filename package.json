@@ -5,6 +5,10 @@
   "main": "dist/vue-pdfjs-viewer.umd.js",
   "module": "dist/vue-pdfjs-viewer.es.js",
   "unpkg": "dist/vue-pdfjs-viewer.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GabrielBuragev/vue-pdfjs-viewer.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
