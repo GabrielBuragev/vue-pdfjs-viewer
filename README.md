@@ -1,10 +1,10 @@
 
-#  vue-pdfjs-viewer
+#  vue_pdfjs_viewer
 
 
 ###  Installation
 
-`npm install vue-pdfjs-viewer`
+`npm install vue_pdfjs_viewer`
 
 ###  Usage in vue
 
@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import {PDFView} from 'vue-pdfjs-viewer';
+import {PDFView} from 'vue_pdfjs_viewer';
 export default {
   components:{
   // ...
