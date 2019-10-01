@@ -1,6 +1,6 @@
 {
   "name": "vue_pdfjs_viewer",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Vue viewer component built on top of pdfjs",
   "main": "dist/vue-pdfjs-viewer.umd.js",
   "module": "dist/vue-pdfjs-viewer.es.js",
