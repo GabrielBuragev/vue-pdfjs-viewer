@@ -10,7 +10,6 @@ import vue from 'rollup-plugin-vue2';
 import postcss from 'rollup-plugin-postcss'
 import css from 'rollup-plugin-css-only';
 import svg from 'rollup-plugin-svg';
-import url from "rollup-plugin-url"
 
 const LIBRARY_NAME = 'PDFView';
 const FILE_NAME = 'vue-pdfjs-viewer';
@@ -42,10 +41,6 @@ const plugins = [
     plugin_globals(),
     builtins(),
     svg({ base64: true }),
-    url({
-        limit: 10 * 1024, // inline files < 10k, copy files > 10k
-        include: ["**/*.png"], // defaults to .svg, .png, .jpg and .gif files
-    })
 ];
 const pluginsWithMinify = plugins.slice(0);
 const external = [

@@ -46,7 +46,6 @@
     "rollup-plugin-scss": "^1.0.2",
     "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-svg": "^2.0.0",
-    "rollup-plugin-url": "^2.2.2",
     "rollup-plugin-vue2": "^0.8.1",
     "sass": "^1.17.4",
     "sass-loader": "^7.1.0",

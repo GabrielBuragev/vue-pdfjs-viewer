@@ -3,8 +3,8 @@
     <PDFView
       :src.sync="src"
       ref="pdfView"
-      :sidebarFeatureVisible="false"
-      :downloadFeatureVisible="false"
+      :sidebarFeatureVisible="true"
+      :downloadFeatureVisible="true"
       :dropzoneFeatureVisible="true"
       initialScale="1.25"
     >
@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      src: null
+      src: "http://127.0.0.1:8082/test.pdf"
     };
   }
 };
