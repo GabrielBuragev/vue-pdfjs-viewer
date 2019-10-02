@@ -67419,8 +67419,6 @@ var http = require$$5;
 var https = require$$5;
 var url = require$$6;
 
-console.log(http);
-
 var fileUriRegex = /^file:\/\/\/[a-zA-Z]:\//;
 function parseUrl(sourceUrl) {
   var parsedUrl = url.parse(sourceUrl);
