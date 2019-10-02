@@ -9,7 +9,7 @@ import serve from 'rollup-plugin-serve';
 import vue from 'rollup-plugin-vue2';
 import postcss from 'rollup-plugin-postcss'
 import css from 'rollup-plugin-css-only';
-import svg from 'rollup-plugin-svg'
+import svg from 'rollup-plugin-svg';
 
 const LIBRARY_NAME = 'PDFView';
 const FILE_NAME = 'vue-pdfjs-viewer';
@@ -31,7 +31,8 @@ const plugins = [
         output: false,
     }),
     resolve({
-        browser: true
+        browser: true,
+        preferBuiltins: true
     }),
     babel({
         exclude: 'node_modules/**',
@@ -43,14 +44,14 @@ const plugins = [
 ];
 const pluginsWithMinify = plugins.slice(0);
 const external = [
-    'fs',
-    'path',
-    'url'
+    // 'fs',
+    // 'path',
+    // 'url'
 ];
 const globals = {
-    'fs': 'fs',
-    'path': 'path',
-    'url': 'url'
+    // 'fs': 'fs',
+    // 'path': 'path',
+    // 'url': 'url'
 }
 const defaultConfig = {
     input: 'src/index.js'
