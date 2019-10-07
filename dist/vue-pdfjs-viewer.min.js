@@ -80827,7 +80827,7 @@ var PDFView = (function (exports) {
                 },
                 fileName: {
                   type: String,
-                  default: Date.now()
+                  default: Date.now() + ""
                 }
               },
               provide() {
