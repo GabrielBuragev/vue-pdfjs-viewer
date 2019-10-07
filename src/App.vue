@@ -3,7 +3,8 @@
     <PDFView
       :src.sync="src"
       ref="pdfView"
-      :sidebarFeatureVisible="true"
+      fileName="order"
+      :sidebarFeatureVisible="false"
       :downloadFeatureVisible="true"
       :dropzoneFeatureVisible="true"
       initialScale="1.25"
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+// import PDFView from "./components/PDFView";
 import { PDFView } from "../dist/vue-pdfjs-viewer.es";
 export default {
   name: "app",

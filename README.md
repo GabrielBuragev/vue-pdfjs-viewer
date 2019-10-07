@@ -15,6 +15,7 @@
     <PDFView
       :src.sync="src" // Valid PDF Source (read below for more info)
       ref="pdfView"
+      fileName="order" // Name of the file that's going to be downloaded (default: {Date.now()}.pdf )
       :sidebarFeatureVisible="false" // Should the sidebar feature be visible ? (default: true)
       :downloadFeatureVisible="false" // Should the download button feature be active ? (default: true)
       :dropzoneFeatureVisible="false" // Should the pdf dropzone feature be active ? (default: true)

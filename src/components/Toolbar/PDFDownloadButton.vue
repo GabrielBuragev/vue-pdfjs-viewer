@@ -15,12 +15,9 @@ export default {
     pdf: {
       type: Object,
       default: () => ({})
-    },
-    name: {
-      type: String,
-      default: Date.now().toString()
     }
   },
+  inject: ["getFileName"],
   data() {
     return {
       downloadSvg
@@ -28,8 +25,11 @@ export default {
   },
   methods: {
     async download() {
+      // console.log(this.pdf);
+      // let md = await this.pdf.getStats();
+      // return console.log(md);
       let binaryPDF = await this.pdf.getData();
-      this.downloadBlob(binaryPDF, this.name, "application/pdf");
+      this.downloadBlob(binaryPDF, this.getFileName(), "application/pdf");
     },
     downloadBlob(data, fileName, mimeType) {
       var blob, url;

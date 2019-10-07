@@ -20,7 +20,8 @@
     "core-js": "^2.6.5",
     "pdfjs-dist": "2.0.943",
     "vue": "^2.6.10",
-    "vue-dropzone": "git+https://github.com/gabrielburagev/vue-dropzone.git"
+    "vue-dropzone": "git+https://github.com/gabrielburagev/vue-dropzone.git",
+    "vue-in-viewport-mixin": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

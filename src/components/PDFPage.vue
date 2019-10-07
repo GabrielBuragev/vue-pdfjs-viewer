@@ -6,23 +6,28 @@
     :data-page-number="page.pageNumber"
     ref="pageWrapper"
     :style="viewportSizeStyle"
+    in-viewport-once="true"
   >
-    <div class="page-loader-wrapper">
-      <img :src="loader" v-if="resizing" class="page-loader" />
-    </div>
+    <div class="page-content-wrapper" v-if="inViewport.now">
+      <div class="page-loader-wrapper">
+        <img :src="loader" v-if="resizing" class="page-loader" />
+      </div>
+      <div class="canvasWrapper" ref="canvasWrapper" :style="viewportSizeStyle">
+        <canvas
+          ref="canvas"
+          :width="dprViewport.width"
+          :height="dprViewport.height"
+          :data-page="page.pageNumber"
+          :style="viewportSizeStyle"
+        ></canvas>
+      </div>
 
-    <div class="canvasWrapper" ref="canvasWrapper" :style="viewportSizeStyle">
-      <canvas
-        ref="canvas"
-        :width="dprViewport.width"
-        :height="dprViewport.height"
-        :data-page="page.pageNumber"
-        :style="viewportSizeStyle"
-      ></canvas>
+      <TextLayer :viewport="viewport" :textContent="textContent" :page="page"></TextLayer>
+      <AnnotationLayer :viewport="viewport" :page="page" :annotations="annotations"></AnnotationLayer>
     </div>
-
-    <TextLayer :viewport="viewport" :textContent="textContent" :page="page"></TextLayer>
-    <AnnotationLayer :viewport="viewport" :page="page" :annotations="annotations"></AnnotationLayer>
+    <div class="page-content-fallback" v-else>
+      <div class="canvasWrapper" ref="canvasWrapper" :style="viewportSizeStyle"></div>
+    </div>
   </div>
 </template>
 
@@ -31,13 +36,14 @@
 import TextLayer from "./Layers/PDFTextLayer.vue";
 import AnnotationLayer from "./Layers/PDFAnnotationLayer.vue";
 import loader from "../assets/images/icons/loader.svg";
-
+import inViewport from "vue-in-viewport-mixin";
 export default {
   props: ["page", "maxDimensions", "canvasContainer", "scale"],
   components: {
     TextLayer,
     AnnotationLayer
   },
+  mixins: [inViewport],
   data() {
     return {
       dims: {
@@ -67,6 +73,13 @@ export default {
       setTimeout(function() {
         self.resizePage();
       }, 100);
+    },
+    "inViewport.now": function(visible) {
+      if (visible) {
+        this.$nextTick(() => {
+          this.render();
+        });
+      }
     }
   },
   computed: {
@@ -92,16 +105,11 @@ export default {
     }
   },
   methods: {
-    async resizePage() {
+    async render(e) {
       this.resizing = true;
 
-      var self = this;
       var page = this.page;
       var canvas = this.$refs.canvas;
-      var canvasWrapper = this.$refs.canvasWrapper;
-      var pageWrapper = this.$refs.pageWrapper;
-      var canvasContainer = this.canvasContainer;
-      var viewport = this.viewport;
       var defaultViewport = this.dprViewport;
 
       var ctx = canvas.getContext("2d");
@@ -113,7 +121,12 @@ export default {
 
       this.textContent = await page.getTextContent();
       this.annotations = await page.getAnnotations();
+
       this.resizing = false;
+    },
+    async resizePage() {
+      if (this.inViewport.now) await this.render();
+
       this.$emit("finishedRender");
     }
   }

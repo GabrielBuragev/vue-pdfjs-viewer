@@ -28,7 +28,7 @@
     </PDFContainer>
     <PDFSidebar
       v-show="viewer.toolbar.sidebarVisible"
-      v-if="viewer.content.pdf && viewer.content.pages.length && toolbarVisible"
+      v-if="viewer.content.pdf && viewer.content.pages.length && toolbarVisible && sidebarFeatureVisible"
       :pages="viewer.content.pages"
       :visible="viewer.toolbar.sidebarVisible"
       :topOffset="viewer.toolbar.height"
@@ -73,7 +73,18 @@ export default {
     initialScale: {
       type: String,
       default: "1.25"
+    },
+    fileName: {
+      type: String,
+      default: Date.now()
     }
+  },
+  provide() {
+    return {
+      getFileName: function() {
+        return this.fileName;
+      }.bind(this)
+    };
   },
   components: {
     PDFToolbar,
