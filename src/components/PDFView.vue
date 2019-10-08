@@ -70,7 +70,7 @@ export default {
       type: Boolean,
       default: true
     },
-    initialScale: {
+    scale: {
       type: String,
       default: "1.25"
     },
@@ -124,7 +124,7 @@ export default {
       downloadFeatureVisible: this.downloadFeatureVisible,
       sidebarFeatureVisible: this.sidebarFeatureVisible,
       visible: this.toolbarVisible,
-      scale: this.initialScale,
+      scale: this.scale,
       height: this.toolbarVisible ? this.viewer.toolbar.height : 0
     });
 
@@ -139,6 +139,12 @@ export default {
     }
   },
   watch: {
+    scale(nv) {
+      this.viewer.toolbar.scale = nv.toString();
+    },
+    "viewer.toolbar.scale"(nv) {
+      this.$emit("update:scale", nv);
+    },
     "viewer.content.loading"(newval) {
       this.$emit(newval ? "loadingBegin" : "loadingEnd");
     },

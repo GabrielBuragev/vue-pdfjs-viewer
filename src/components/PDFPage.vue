@@ -6,7 +6,6 @@
     :data-page-number="page.pageNumber"
     ref="pageWrapper"
     :style="viewportSizeStyle"
-    in-viewport-once="true"
   >
     <div class="page-content-wrapper" v-if="inViewport.now">
       <div class="page-loader-wrapper">

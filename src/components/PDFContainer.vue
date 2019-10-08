@@ -24,6 +24,7 @@
           :canvasContainer="$refs.canvasContainer"
           :ref="'pdfpage-' + index"
           @finishedRender="pdfLoadingProgress++"
+          :in-viewport-once="true"
           v-bind:key="index"
         ></PDFPage>
       </div>

@@ -66,14 +66,12 @@ export default {
     };
   },
   mounted() {
-    let scale;
-
-    if (this.value.scale === "auto") scale = this.value.scale;
-    else scale = (this.value.scale * 100).toString();
-
-    if (this.selectOptions.includes(scale)) this.scaleSelection = scale;
+    this.selectScale(this.value.scale);
   },
   watch: {
+    "value.scale"(nv) {
+      this.selectScale(nv);
+    },
     scaleSelection(newval) {
       if (newval !== "auto") newval = (parseInt(newval) / 100).toString();
       this.$emit("input", Object.assign({}, this.value, { scale: newval }));
@@ -83,8 +81,10 @@ export default {
     toggleSidebar: function() {
       this.value.sidebarVisible = !this.value.sidebarVisible;
     },
-    scaleSelected: function(evt) {
-      var val = evt.target.value;
+    selectScale: function(scale) {
+      if (scale !== "auto") scale = (scale * 100).toString();
+
+      if (this.selectOptions.includes(scale)) this.scaleSelection = scale;
     }
   }
 };

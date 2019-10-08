@@ -7,7 +7,7 @@
       :sidebarFeatureVisible="false"
       :downloadFeatureVisible="true"
       :dropzoneFeatureVisible="true"
-      initialScale="1.25"
+      :scale.sync="scale"
     >
       <template slot="right-toolbox"></template>
       <template slot="left-toolbox"></template>
@@ -27,8 +27,15 @@ export default {
   },
   data() {
     return {
-      src: "http://127.0.0.1:8082/test.pdf"
+      src: "http://127.0.0.1:8082/test.pdf",
+      scale: "1.25"
     };
+  },
+  mounted() {
+    var self = this;
+    setTimeout(() => {
+      self.scale = "auto";
+    }, 5000);
   }
 };
 </script>
