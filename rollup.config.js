@@ -17,6 +17,16 @@ const FILE_NAME = 'vue-pdfjs-viewer';
 const sourcemap = true;
 const plugins = [
 
+    babel({
+        "exclude": "node_modules/**",
+        "runtimeHelpers": true,
+        "presets": [
+            "@babel/preset-env",
+        ],
+        "plugins": [
+            "@babel/plugin-transform-arrow-functions"
+        ],
+    }),
     commonjs({
         namedExports: {
             'node_modules/pdfjs-dist/build/pdf.js': ['pdfjs'],
@@ -34,25 +44,11 @@ const plugins = [
         browser: true,
         preferBuiltins: true
     }),
-    babel({
-        exclude: 'node_modules/**',
-        runtimeHelpers: true,
-    }),
     plugin_globals(),
     builtins(),
     svg({ base64: true }),
 ];
 const pluginsWithMinify = plugins.slice(0);
-const external = [
-    // 'fs',
-    // 'path',
-    // 'url'
-];
-const globals = {
-    // 'fs': 'fs',
-    // 'path': 'path',
-    // 'url': 'url'
-}
 const defaultConfig = {
     input: 'src/index.js'
 };
@@ -76,21 +72,18 @@ if (process.env.NODE_ENV === 'development') {
 
 export default [
     Object.assign({}, defaultConfig, {
-        external: external,
         output: [
             {
                 file: `dist/${FILE_NAME}.common.js`,
                 format: 'cjs',
                 sourcemap,
                 exports: 'named',
-                globals: globals
             },
             {
                 file: `dist/${FILE_NAME}.es.js`,
                 format: 'es',
                 sourcemap,
                 exports: 'named',
-                globals: globals
 
             },
             {
@@ -99,35 +92,28 @@ export default [
                 name: LIBRARY_NAME,
                 sourcemap,
                 exports: 'named',
-                globals: globals
 
             },
         ],
         plugins
     }),
     Object.assign({}, defaultConfig, {
-        external: external,
         output: {
             file: `dist/${FILE_NAME}.js`,
             format: 'iife',
             name: LIBRARY_NAME,
             sourcemap,
             exports: 'named',
-            globals: globals
-
         },
         plugins
     }),
     Object.assign({}, defaultConfig, {
-        external: external,
         output: {
             file: `dist/${FILE_NAME}.min.js`,
             format: 'iife',
             name: LIBRARY_NAME,
             sourcemap,
             exports: 'named',
-
-            globals: globals
         },
         plugins: pluginsWithMinify
     }),

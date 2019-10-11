@@ -14,7 +14,9 @@ export default {
   props: {
     pdf: {
       type: Object,
-      default: () => ({})
+      default: function() {
+        return {};
+      }
     }
   },
   inject: ["getFileName"],
@@ -35,7 +37,7 @@ export default {
       });
       url = window.URL.createObjectURL(blob);
       this.downloadURL(url, fileName);
-      this.$nextTick(() => {
+      this.$nextTick(function() {
         window.URL.revokeObjectURL(url);
       });
     },

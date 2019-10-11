@@ -69410,10 +69410,12 @@ var PDFView = (function (exports) {
               props: {
                 notification: {
                   type: Object,
-                  default: () => ({
-                    type: "info",
-                    text: ""
-                  })
+                  default: function() {
+                    return {
+                      type: "info",
+                      text: ""
+                    };
+                  }
                 }
               },
               data() {
@@ -69422,7 +69424,7 @@ var PDFView = (function (exports) {
                 };
               },
               mounted() {
-                setTimeout(() => {
+                setTimeout(function() {
                   this.$emit("dieOut");
                 }, 5000);
               }
@@ -71858,7 +71860,7 @@ var PDFView = (function (exports) {
                 },
                 "inViewport.now": function(visible) {
                   if (visible) {
-                    this.$nextTick(() => {
+                    this.$nextTick(function() {
                       this.render();
                     });
                   }
@@ -71947,11 +71949,13 @@ var PDFView = (function (exports) {
                 },
                 value: {
                   type: Object,
-                  default: () => ({
-                    pdf: null,
-                    loading: false,
-                    pages: []
-                  })
+                  default: function() {
+                    return {
+                      pdf: null,
+                      loading: false,
+                      pages: []
+                    };
+                  }
                 }
               },
               components: {
@@ -72049,7 +72053,9 @@ var PDFView = (function (exports) {
               props: {
                 pdf: {
                   type: Object,
-                  default: () => ({})
+                  default: function() {
+                    return {};
+                  }
                 }
               },
               inject: ["getFileName"],
@@ -72070,7 +72076,7 @@ var PDFView = (function (exports) {
                   });
                   url = window.URL.createObjectURL(blob);
                   this.downloadURL(url, fileName);
-                  this.$nextTick(() => {
+                  this.$nextTick(function() {
                     window.URL.revokeObjectURL(url);
                   });
                 },
@@ -72109,14 +72115,16 @@ var PDFView = (function (exports) {
               props: {
                 value: {
                   type: Object,
-                  default: () => ({
-                    scale: "1.25",
-                    visible: true,
-                    height: 50,
-                    downloadFeatureVisible: true,
-                    sidebarFeatureVisible: true,
-                    sidebarVisible: false
-                  })
+                  default: function() {
+                    return {
+                      scale: "1.25",
+                      visible: true,
+                      height: 50,
+                      downloadFeatureVisible: true,
+                      sidebarFeatureVisible: true,
+                      sidebarVisible: false
+                    };
+                  }
                 },
                 height: {
                   type: Number,
@@ -72124,7 +72132,9 @@ var PDFView = (function (exports) {
                 },
                 pdf: {
                   type: Object,
-                  default: () => ({})
+                  default: function() {
+                    return {};
+                  }
                 }
               },
               data() {

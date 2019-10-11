@@ -20,7 +20,7 @@
       :downloadFeatureVisible="false" // Should the download button feature be active ? (default: true)
       :dropzoneFeatureVisible="false" // Should the pdf dropzone feature be active ? (default: true)
       :toolbarVisible="false" // Should the toolbar be visible ? (default: true)
-      initialScale="1.25" // String value for the initial scale ["0.75", "1", "1.25", "1.5", "auto"] are supported 
+      scale.sync="scale" // String value for the page scale ["0.75", "1", "1.25", "1.5", "auto"] are supported 
     > 
         <template slot="right-toolbox"></template> <!-- Add more buttons/features on the right side of the toolbar -->
         <template slot="left-toolbox"></template> <!-- Add more buttons/features on the left side of the toolbar -->
@@ -35,6 +35,11 @@ export default {
   components:{
   // ...
     PDFView
+  },
+  data(){
+    return {
+      scale: "1.25"
+    }
   }
 }
 </script>

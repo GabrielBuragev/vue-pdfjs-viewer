@@ -58,11 +58,13 @@ export default {
     },
     value: {
       type: Object,
-      default: () => ({
-        pdf: null,
-        loading: false,
-        pages: []
-      })
+      default: function() {
+        return {
+          pdf: null,
+          loading: false,
+          pages: []
+        };
+      }
     }
   },
   components: {

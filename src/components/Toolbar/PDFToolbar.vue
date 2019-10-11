@@ -41,14 +41,16 @@ export default {
   props: {
     value: {
       type: Object,
-      default: () => ({
-        scale: "1.25",
-        visible: true,
-        height: 50,
-        downloadFeatureVisible: true,
-        sidebarFeatureVisible: true,
-        sidebarVisible: false
-      })
+      default: function() {
+        return {
+          scale: "1.25",
+          visible: true,
+          height: 50,
+          downloadFeatureVisible: true,
+          sidebarFeatureVisible: true,
+          sidebarVisible: false
+        };
+      }
     },
     height: {
       type: Number,
@@ -56,7 +58,9 @@ export default {
     },
     pdf: {
       type: Object,
-      default: () => ({})
+      default: function() {
+        return {};
+      }
     }
   },
   data() {

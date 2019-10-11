@@ -10,10 +10,12 @@ export default {
   props: {
     notification: {
       type: Object,
-      default: () => ({
-        type: "info",
-        text: ""
-      })
+      default: function() {
+        return {
+          type: "info",
+          text: ""
+        };
+      }
     }
   },
   data() {
@@ -22,7 +24,7 @@ export default {
     };
   },
   mounted() {
-    setTimeout(() => {
+    setTimeout(function() {
       this.$emit("dieOut");
     }, 5000);
   }

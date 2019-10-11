@@ -69411,10 +69411,12 @@ staticRenderFns: [],
   props: {
     notification: {
       type: Object,
-      default: () => ({
-        type: "info",
-        text: ""
-      })
+      default: function() {
+        return {
+          type: "info",
+          text: ""
+        };
+      }
     }
   },
   data() {
@@ -69423,7 +69425,7 @@ staticRenderFns: [],
     };
   },
   mounted() {
-    setTimeout(() => {
+    setTimeout(function() {
       this.$emit("dieOut");
     }, 5000);
   }
@@ -71859,7 +71861,7 @@ staticRenderFns: [],
     },
     "inViewport.now": function(visible) {
       if (visible) {
-        this.$nextTick(() => {
+        this.$nextTick(function() {
           this.render();
         });
       }
@@ -71948,11 +71950,13 @@ staticRenderFns: [],
     },
     value: {
       type: Object,
-      default: () => ({
-        pdf: null,
-        loading: false,
-        pages: []
-      })
+      default: function() {
+        return {
+          pdf: null,
+          loading: false,
+          pages: []
+        };
+      }
     }
   },
   components: {
@@ -72050,7 +72054,9 @@ staticRenderFns: [],
   props: {
     pdf: {
       type: Object,
-      default: () => ({})
+      default: function() {
+        return {};
+      }
     }
   },
   inject: ["getFileName"],
@@ -72071,7 +72077,7 @@ staticRenderFns: [],
       });
       url = window.URL.createObjectURL(blob);
       this.downloadURL(url, fileName);
-      this.$nextTick(() => {
+      this.$nextTick(function() {
         window.URL.revokeObjectURL(url);
       });
     },
@@ -72110,14 +72116,16 @@ staticRenderFns: [],
   props: {
     value: {
       type: Object,
-      default: () => ({
-        scale: "1.25",
-        visible: true,
-        height: 50,
-        downloadFeatureVisible: true,
-        sidebarFeatureVisible: true,
-        sidebarVisible: false
-      })
+      default: function() {
+        return {
+          scale: "1.25",
+          visible: true,
+          height: 50,
+          downloadFeatureVisible: true,
+          sidebarFeatureVisible: true,
+          sidebarVisible: false
+        };
+      }
     },
     height: {
       type: Number,
@@ -72125,7 +72133,9 @@ staticRenderFns: [],
     },
     pdf: {
       type: Object,
-      default: () => ({})
+      default: function() {
+        return {};
+      }
     }
   },
   data() {

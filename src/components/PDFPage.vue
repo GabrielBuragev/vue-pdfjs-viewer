@@ -75,7 +75,7 @@ export default {
     },
     "inViewport.now": function(visible) {
       if (visible) {
-        this.$nextTick(() => {
+        this.$nextTick(function() {
           this.render();
         });
       }

@@ -69413,10 +69413,12 @@
               props: {
                 notification: {
                   type: Object,
-                  default: () => ({
-                    type: "info",
-                    text: ""
-                  })
+                  default: function() {
+                    return {
+                      type: "info",
+                      text: ""
+                    };
+                  }
                 }
               },
               data() {
@@ -69425,7 +69427,7 @@
                 };
               },
               mounted() {
-                setTimeout(() => {
+                setTimeout(function() {
                   this.$emit("dieOut");
                 }, 5000);
               }
@@ -71861,7 +71863,7 @@
                 },
                 "inViewport.now": function(visible) {
                   if (visible) {
-                    this.$nextTick(() => {
+                    this.$nextTick(function() {
                       this.render();
                     });
                   }
@@ -71950,11 +71952,13 @@
                 },
                 value: {
                   type: Object,
-                  default: () => ({
-                    pdf: null,
-                    loading: false,
-                    pages: []
-                  })
+                  default: function() {
+                    return {
+                      pdf: null,
+                      loading: false,
+                      pages: []
+                    };
+                  }
                 }
               },
               components: {
@@ -72052,7 +72056,9 @@
               props: {
                 pdf: {
                   type: Object,
-                  default: () => ({})
+                  default: function() {
+                    return {};
+                  }
                 }
               },
               inject: ["getFileName"],
@@ -72073,7 +72079,7 @@
                   });
                   url = window.URL.createObjectURL(blob);
                   this.downloadURL(url, fileName);
-                  this.$nextTick(() => {
+                  this.$nextTick(function() {
                     window.URL.revokeObjectURL(url);
                   });
                 },
@@ -72112,14 +72118,16 @@
               props: {
                 value: {
                   type: Object,
-                  default: () => ({
-                    scale: "1.25",
-                    visible: true,
-                    height: 50,
-                    downloadFeatureVisible: true,
-                    sidebarFeatureVisible: true,
-                    sidebarVisible: false
-                  })
+                  default: function() {
+                    return {
+                      scale: "1.25",
+                      visible: true,
+                      height: 50,
+                      downloadFeatureVisible: true,
+                      sidebarFeatureVisible: true,
+                      sidebarVisible: false
+                    };
+                  }
                 },
                 height: {
                   type: Number,
@@ -72127,7 +72135,9 @@
                 },
                 pdf: {
                   type: Object,
-                  default: () => ({})
+                  default: function() {
+                    return {};
+                  }
                 }
               },
               data() {
