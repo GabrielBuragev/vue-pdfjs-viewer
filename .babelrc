@@ -1,0 +1,18 @@
+{
+    "plugins": [
+        "@babel/plugin-transform-async-to-generator",
+        "@babel/plugin-transform-regenerator",
+        [
+            "@babel/plugin-transform-runtime",
+            {
+                "helpers": true,
+                "regenerator": true
+            }
+        ],
+        "@babel/plugin-transform-arrow-functions",
+        "@babel/plugin-transform-shorthand-properties"
+    ],
+    "presets": [
+        "@babel/preset-env"
+    ]
+}

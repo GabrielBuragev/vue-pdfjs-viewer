@@ -69407,13 +69407,796 @@
               return TextLayerBuilder;
             }();
 
+            var runtime_1 = createCommonjsModule(function (module) {
+            /**
+             * Copyright (c) 2014-present, Facebook, Inc.
+             *
+             * This source code is licensed under the MIT license found in the
+             * LICENSE file in the root directory of this source tree.
+             */
+
+            var runtime = (function (exports) {
+
+              var Op = Object.prototype;
+              var hasOwn = Op.hasOwnProperty;
+              var undefined$1; // More compressible than void 0.
+              var $Symbol = typeof Symbol === "function" ? Symbol : {};
+              var iteratorSymbol = $Symbol.iterator || "@@iterator";
+              var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+              var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+              function wrap(innerFn, outerFn, self, tryLocsList) {
+                // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+                var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+                var generator = Object.create(protoGenerator.prototype);
+                var context = new Context(tryLocsList || []);
+
+                // The ._invoke method unifies the implementations of the .next,
+                // .throw, and .return methods.
+                generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+                return generator;
+              }
+              exports.wrap = wrap;
+
+              // Try/catch helper to minimize deoptimizations. Returns a completion
+              // record like context.tryEntries[i].completion. This interface could
+              // have been (and was previously) designed to take a closure to be
+              // invoked without arguments, but in all the cases we care about we
+              // already have an existing method we want to call, so there's no need
+              // to create a new function object. We can even get away with assuming
+              // the method takes exactly one argument, since that happens to be true
+              // in every case, so we don't have to touch the arguments object. The
+              // only additional allocation required is the completion record, which
+              // has a stable shape and so hopefully should be cheap to allocate.
+              function tryCatch(fn, obj, arg) {
+                try {
+                  return { type: "normal", arg: fn.call(obj, arg) };
+                } catch (err) {
+                  return { type: "throw", arg: err };
+                }
+              }
+
+              var GenStateSuspendedStart = "suspendedStart";
+              var GenStateSuspendedYield = "suspendedYield";
+              var GenStateExecuting = "executing";
+              var GenStateCompleted = "completed";
+
+              // Returning this object from the innerFn has the same effect as
+              // breaking out of the dispatch switch statement.
+              var ContinueSentinel = {};
+
+              // Dummy constructor functions that we use as the .constructor and
+              // .constructor.prototype properties for functions that return Generator
+              // objects. For full spec compliance, you may wish to configure your
+              // minifier not to mangle the names of these two functions.
+              function Generator() {}
+              function GeneratorFunction() {}
+              function GeneratorFunctionPrototype() {}
+
+              // This is a polyfill for %IteratorPrototype% for environments that
+              // don't natively support it.
+              var IteratorPrototype = {};
+              IteratorPrototype[iteratorSymbol] = function () {
+                return this;
+              };
+
+              var getProto = Object.getPrototypeOf;
+              var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+              if (NativeIteratorPrototype &&
+                  NativeIteratorPrototype !== Op &&
+                  hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+                // This environment has a native %IteratorPrototype%; use it instead
+                // of the polyfill.
+                IteratorPrototype = NativeIteratorPrototype;
+              }
+
+              var Gp = GeneratorFunctionPrototype.prototype =
+                Generator.prototype = Object.create(IteratorPrototype);
+              GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+              GeneratorFunctionPrototype.constructor = GeneratorFunction;
+              GeneratorFunctionPrototype[toStringTagSymbol] =
+                GeneratorFunction.displayName = "GeneratorFunction";
+
+              // Helper for defining the .next, .throw, and .return methods of the
+              // Iterator interface in terms of a single ._invoke method.
+              function defineIteratorMethods(prototype) {
+                ["next", "throw", "return"].forEach(function(method) {
+                  prototype[method] = function(arg) {
+                    return this._invoke(method, arg);
+                  };
+                });
+              }
+
+              exports.isGeneratorFunction = function(genFun) {
+                var ctor = typeof genFun === "function" && genFun.constructor;
+                return ctor
+                  ? ctor === GeneratorFunction ||
+                    // For the native GeneratorFunction constructor, the best we can
+                    // do is to check its .name property.
+                    (ctor.displayName || ctor.name) === "GeneratorFunction"
+                  : false;
+              };
+
+              exports.mark = function(genFun) {
+                if (Object.setPrototypeOf) {
+                  Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+                } else {
+                  genFun.__proto__ = GeneratorFunctionPrototype;
+                  if (!(toStringTagSymbol in genFun)) {
+                    genFun[toStringTagSymbol] = "GeneratorFunction";
+                  }
+                }
+                genFun.prototype = Object.create(Gp);
+                return genFun;
+              };
+
+              // Within the body of any async function, `await x` is transformed to
+              // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+              // `hasOwn.call(value, "__await")` to determine if the yielded value is
+              // meant to be awaited.
+              exports.awrap = function(arg) {
+                return { __await: arg };
+              };
+
+              function AsyncIterator(generator) {
+                function invoke(method, arg, resolve, reject) {
+                  var record = tryCatch(generator[method], generator, arg);
+                  if (record.type === "throw") {
+                    reject(record.arg);
+                  } else {
+                    var result = record.arg;
+                    var value = result.value;
+                    if (value &&
+                        typeof value === "object" &&
+                        hasOwn.call(value, "__await")) {
+                      return Promise.resolve(value.__await).then(function(value) {
+                        invoke("next", value, resolve, reject);
+                      }, function(err) {
+                        invoke("throw", err, resolve, reject);
+                      });
+                    }
+
+                    return Promise.resolve(value).then(function(unwrapped) {
+                      // When a yielded Promise is resolved, its final value becomes
+                      // the .value of the Promise<{value,done}> result for the
+                      // current iteration.
+                      result.value = unwrapped;
+                      resolve(result);
+                    }, function(error) {
+                      // If a rejected Promise was yielded, throw the rejection back
+                      // into the async generator function so it can be handled there.
+                      return invoke("throw", error, resolve, reject);
+                    });
+                  }
+                }
+
+                var previousPromise;
+
+                function enqueue(method, arg) {
+                  function callInvokeWithMethodAndArg() {
+                    return new Promise(function(resolve, reject) {
+                      invoke(method, arg, resolve, reject);
+                    });
+                  }
+
+                  return previousPromise =
+                    // If enqueue has been called before, then we want to wait until
+                    // all previous Promises have been resolved before calling invoke,
+                    // so that results are always delivered in the correct order. If
+                    // enqueue has not been called before, then it is important to
+                    // call invoke immediately, without waiting on a callback to fire,
+                    // so that the async generator function has the opportunity to do
+                    // any necessary setup in a predictable way. This predictability
+                    // is why the Promise constructor synchronously invokes its
+                    // executor callback, and why async functions synchronously
+                    // execute code before the first await. Since we implement simple
+                    // async functions in terms of async generators, it is especially
+                    // important to get this right, even though it requires care.
+                    previousPromise ? previousPromise.then(
+                      callInvokeWithMethodAndArg,
+                      // Avoid propagating failures to Promises returned by later
+                      // invocations of the iterator.
+                      callInvokeWithMethodAndArg
+                    ) : callInvokeWithMethodAndArg();
+                }
+
+                // Define the unified helper method that is used to implement .next,
+                // .throw, and .return (see defineIteratorMethods).
+                this._invoke = enqueue;
+              }
+
+              defineIteratorMethods(AsyncIterator.prototype);
+              AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+                return this;
+              };
+              exports.AsyncIterator = AsyncIterator;
+
+              // Note that simple async functions are implemented on top of
+              // AsyncIterator objects; they just return a Promise for the value of
+              // the final result produced by the iterator.
+              exports.async = function(innerFn, outerFn, self, tryLocsList) {
+                var iter = new AsyncIterator(
+                  wrap(innerFn, outerFn, self, tryLocsList)
+                );
+
+                return exports.isGeneratorFunction(outerFn)
+                  ? iter // If outerFn is a generator, return the full iterator.
+                  : iter.next().then(function(result) {
+                      return result.done ? result.value : iter.next();
+                    });
+              };
+
+              function makeInvokeMethod(innerFn, self, context) {
+                var state = GenStateSuspendedStart;
+
+                return function invoke(method, arg) {
+                  if (state === GenStateExecuting) {
+                    throw new Error("Generator is already running");
+                  }
+
+                  if (state === GenStateCompleted) {
+                    if (method === "throw") {
+                      throw arg;
+                    }
+
+                    // Be forgiving, per 25.3.3.3.3 of the spec:
+                    // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+                    return doneResult();
+                  }
+
+                  context.method = method;
+                  context.arg = arg;
+
+                  while (true) {
+                    var delegate = context.delegate;
+                    if (delegate) {
+                      var delegateResult = maybeInvokeDelegate(delegate, context);
+                      if (delegateResult) {
+                        if (delegateResult === ContinueSentinel) continue;
+                        return delegateResult;
+                      }
+                    }
+
+                    if (context.method === "next") {
+                      // Setting context._sent for legacy support of Babel's
+                      // function.sent implementation.
+                      context.sent = context._sent = context.arg;
+
+                    } else if (context.method === "throw") {
+                      if (state === GenStateSuspendedStart) {
+                        state = GenStateCompleted;
+                        throw context.arg;
+                      }
+
+                      context.dispatchException(context.arg);
+
+                    } else if (context.method === "return") {
+                      context.abrupt("return", context.arg);
+                    }
+
+                    state = GenStateExecuting;
+
+                    var record = tryCatch(innerFn, self, context);
+                    if (record.type === "normal") {
+                      // If an exception is thrown from innerFn, we leave state ===
+                      // GenStateExecuting and loop back for another invocation.
+                      state = context.done
+                        ? GenStateCompleted
+                        : GenStateSuspendedYield;
+
+                      if (record.arg === ContinueSentinel) {
+                        continue;
+                      }
+
+                      return {
+                        value: record.arg,
+                        done: context.done
+                      };
+
+                    } else if (record.type === "throw") {
+                      state = GenStateCompleted;
+                      // Dispatch the exception by looping back around to the
+                      // context.dispatchException(context.arg) call above.
+                      context.method = "throw";
+                      context.arg = record.arg;
+                    }
+                  }
+                };
+              }
+
+              // Call delegate.iterator[context.method](context.arg) and handle the
+              // result, either by returning a { value, done } result from the
+              // delegate iterator, or by modifying context.method and context.arg,
+              // setting context.delegate to null, and returning the ContinueSentinel.
+              function maybeInvokeDelegate(delegate, context) {
+                var method = delegate.iterator[context.method];
+                if (method === undefined$1) {
+                  // A .throw or .return when the delegate iterator has no .throw
+                  // method always terminates the yield* loop.
+                  context.delegate = null;
+
+                  if (context.method === "throw") {
+                    // Note: ["return"] must be used for ES3 parsing compatibility.
+                    if (delegate.iterator["return"]) {
+                      // If the delegate iterator has a return method, give it a
+                      // chance to clean up.
+                      context.method = "return";
+                      context.arg = undefined$1;
+                      maybeInvokeDelegate(delegate, context);
+
+                      if (context.method === "throw") {
+                        // If maybeInvokeDelegate(context) changed context.method from
+                        // "return" to "throw", let that override the TypeError below.
+                        return ContinueSentinel;
+                      }
+                    }
+
+                    context.method = "throw";
+                    context.arg = new TypeError(
+                      "The iterator does not provide a 'throw' method");
+                  }
+
+                  return ContinueSentinel;
+                }
+
+                var record = tryCatch(method, delegate.iterator, context.arg);
+
+                if (record.type === "throw") {
+                  context.method = "throw";
+                  context.arg = record.arg;
+                  context.delegate = null;
+                  return ContinueSentinel;
+                }
+
+                var info = record.arg;
+
+                if (! info) {
+                  context.method = "throw";
+                  context.arg = new TypeError("iterator result is not an object");
+                  context.delegate = null;
+                  return ContinueSentinel;
+                }
+
+                if (info.done) {
+                  // Assign the result of the finished delegate to the temporary
+                  // variable specified by delegate.resultName (see delegateYield).
+                  context[delegate.resultName] = info.value;
+
+                  // Resume execution at the desired location (see delegateYield).
+                  context.next = delegate.nextLoc;
+
+                  // If context.method was "throw" but the delegate handled the
+                  // exception, let the outer generator proceed normally. If
+                  // context.method was "next", forget context.arg since it has been
+                  // "consumed" by the delegate iterator. If context.method was
+                  // "return", allow the original .return call to continue in the
+                  // outer generator.
+                  if (context.method !== "return") {
+                    context.method = "next";
+                    context.arg = undefined$1;
+                  }
+
+                } else {
+                  // Re-yield the result returned by the delegate method.
+                  return info;
+                }
+
+                // The delegate iterator is finished, so forget it and continue with
+                // the outer generator.
+                context.delegate = null;
+                return ContinueSentinel;
+              }
+
+              // Define Generator.prototype.{next,throw,return} in terms of the
+              // unified ._invoke helper method.
+              defineIteratorMethods(Gp);
+
+              Gp[toStringTagSymbol] = "Generator";
+
+              // A Generator should always return itself as the iterator object when the
+              // @@iterator function is called on it. Some browsers' implementations of the
+              // iterator prototype chain incorrectly implement this, causing the Generator
+              // object to not be returned from this call. This ensures that doesn't happen.
+              // See https://github.com/facebook/regenerator/issues/274 for more details.
+              Gp[iteratorSymbol] = function() {
+                return this;
+              };
+
+              Gp.toString = function() {
+                return "[object Generator]";
+              };
+
+              function pushTryEntry(locs) {
+                var entry = { tryLoc: locs[0] };
+
+                if (1 in locs) {
+                  entry.catchLoc = locs[1];
+                }
+
+                if (2 in locs) {
+                  entry.finallyLoc = locs[2];
+                  entry.afterLoc = locs[3];
+                }
+
+                this.tryEntries.push(entry);
+              }
+
+              function resetTryEntry(entry) {
+                var record = entry.completion || {};
+                record.type = "normal";
+                delete record.arg;
+                entry.completion = record;
+              }
+
+              function Context(tryLocsList) {
+                // The root entry object (effectively a try statement without a catch
+                // or a finally block) gives us a place to store values thrown from
+                // locations where there is no enclosing try statement.
+                this.tryEntries = [{ tryLoc: "root" }];
+                tryLocsList.forEach(pushTryEntry, this);
+                this.reset(true);
+              }
+
+              exports.keys = function(object) {
+                var keys = [];
+                for (var key in object) {
+                  keys.push(key);
+                }
+                keys.reverse();
+
+                // Rather than returning an object with a next method, we keep
+                // things simple and return the next function itself.
+                return function next() {
+                  while (keys.length) {
+                    var key = keys.pop();
+                    if (key in object) {
+                      next.value = key;
+                      next.done = false;
+                      return next;
+                    }
+                  }
+
+                  // To avoid creating an additional object, we just hang the .value
+                  // and .done properties off the next function object itself. This
+                  // also ensures that the minifier will not anonymize the function.
+                  next.done = true;
+                  return next;
+                };
+              };
+
+              function values(iterable) {
+                if (iterable) {
+                  var iteratorMethod = iterable[iteratorSymbol];
+                  if (iteratorMethod) {
+                    return iteratorMethod.call(iterable);
+                  }
+
+                  if (typeof iterable.next === "function") {
+                    return iterable;
+                  }
+
+                  if (!isNaN(iterable.length)) {
+                    var i = -1, next = function next() {
+                      while (++i < iterable.length) {
+                        if (hasOwn.call(iterable, i)) {
+                          next.value = iterable[i];
+                          next.done = false;
+                          return next;
+                        }
+                      }
+
+                      next.value = undefined$1;
+                      next.done = true;
+
+                      return next;
+                    };
+
+                    return next.next = next;
+                  }
+                }
+
+                // Return an iterator with no values.
+                return { next: doneResult };
+              }
+              exports.values = values;
+
+              function doneResult() {
+                return { value: undefined$1, done: true };
+              }
+
+              Context.prototype = {
+                constructor: Context,
+
+                reset: function(skipTempReset) {
+                  this.prev = 0;
+                  this.next = 0;
+                  // Resetting context._sent for legacy support of Babel's
+                  // function.sent implementation.
+                  this.sent = this._sent = undefined$1;
+                  this.done = false;
+                  this.delegate = null;
+
+                  this.method = "next";
+                  this.arg = undefined$1;
+
+                  this.tryEntries.forEach(resetTryEntry);
+
+                  if (!skipTempReset) {
+                    for (var name in this) {
+                      // Not sure about the optimal order of these conditions:
+                      if (name.charAt(0) === "t" &&
+                          hasOwn.call(this, name) &&
+                          !isNaN(+name.slice(1))) {
+                        this[name] = undefined$1;
+                      }
+                    }
+                  }
+                },
+
+                stop: function() {
+                  this.done = true;
+
+                  var rootEntry = this.tryEntries[0];
+                  var rootRecord = rootEntry.completion;
+                  if (rootRecord.type === "throw") {
+                    throw rootRecord.arg;
+                  }
+
+                  return this.rval;
+                },
+
+                dispatchException: function(exception) {
+                  if (this.done) {
+                    throw exception;
+                  }
+
+                  var context = this;
+                  function handle(loc, caught) {
+                    record.type = "throw";
+                    record.arg = exception;
+                    context.next = loc;
+
+                    if (caught) {
+                      // If the dispatched exception was caught by a catch block,
+                      // then let that catch block handle the exception normally.
+                      context.method = "next";
+                      context.arg = undefined$1;
+                    }
+
+                    return !! caught;
+                  }
+
+                  for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+                    var entry = this.tryEntries[i];
+                    var record = entry.completion;
+
+                    if (entry.tryLoc === "root") {
+                      // Exception thrown outside of any try block that could handle
+                      // it, so set the completion value of the entire function to
+                      // throw the exception.
+                      return handle("end");
+                    }
+
+                    if (entry.tryLoc <= this.prev) {
+                      var hasCatch = hasOwn.call(entry, "catchLoc");
+                      var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+                      if (hasCatch && hasFinally) {
+                        if (this.prev < entry.catchLoc) {
+                          return handle(entry.catchLoc, true);
+                        } else if (this.prev < entry.finallyLoc) {
+                          return handle(entry.finallyLoc);
+                        }
+
+                      } else if (hasCatch) {
+                        if (this.prev < entry.catchLoc) {
+                          return handle(entry.catchLoc, true);
+                        }
+
+                      } else if (hasFinally) {
+                        if (this.prev < entry.finallyLoc) {
+                          return handle(entry.finallyLoc);
+                        }
+
+                      } else {
+                        throw new Error("try statement without catch or finally");
+                      }
+                    }
+                  }
+                },
+
+                abrupt: function(type, arg) {
+                  for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+                    var entry = this.tryEntries[i];
+                    if (entry.tryLoc <= this.prev &&
+                        hasOwn.call(entry, "finallyLoc") &&
+                        this.prev < entry.finallyLoc) {
+                      var finallyEntry = entry;
+                      break;
+                    }
+                  }
+
+                  if (finallyEntry &&
+                      (type === "break" ||
+                       type === "continue") &&
+                      finallyEntry.tryLoc <= arg &&
+                      arg <= finallyEntry.finallyLoc) {
+                    // Ignore the finally entry if control is not jumping to a
+                    // location outside the try/catch block.
+                    finallyEntry = null;
+                  }
+
+                  var record = finallyEntry ? finallyEntry.completion : {};
+                  record.type = type;
+                  record.arg = arg;
+
+                  if (finallyEntry) {
+                    this.method = "next";
+                    this.next = finallyEntry.finallyLoc;
+                    return ContinueSentinel;
+                  }
+
+                  return this.complete(record);
+                },
+
+                complete: function(record, afterLoc) {
+                  if (record.type === "throw") {
+                    throw record.arg;
+                  }
+
+                  if (record.type === "break" ||
+                      record.type === "continue") {
+                    this.next = record.arg;
+                  } else if (record.type === "return") {
+                    this.rval = this.arg = record.arg;
+                    this.method = "return";
+                    this.next = "end";
+                  } else if (record.type === "normal" && afterLoc) {
+                    this.next = afterLoc;
+                  }
+
+                  return ContinueSentinel;
+                },
+
+                finish: function(finallyLoc) {
+                  for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+                    var entry = this.tryEntries[i];
+                    if (entry.finallyLoc === finallyLoc) {
+                      this.complete(entry.completion, entry.afterLoc);
+                      resetTryEntry(entry);
+                      return ContinueSentinel;
+                    }
+                  }
+                },
+
+                "catch": function(tryLoc) {
+                  for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+                    var entry = this.tryEntries[i];
+                    if (entry.tryLoc === tryLoc) {
+                      var record = entry.completion;
+                      if (record.type === "throw") {
+                        var thrown = record.arg;
+                        resetTryEntry(entry);
+                      }
+                      return thrown;
+                    }
+                  }
+
+                  // The context.catch method must only be called with a location
+                  // argument that corresponds to a known catch block.
+                  throw new Error("illegal catch attempt");
+                },
+
+                delegateYield: function(iterable, resultName, nextLoc) {
+                  this.delegate = {
+                    iterator: values(iterable),
+                    resultName: resultName,
+                    nextLoc: nextLoc
+                  };
+
+                  if (this.method === "next") {
+                    // Deliberately forget the last sent value so that we don't
+                    // accidentally pass it on to the delegate.
+                    this.arg = undefined$1;
+                  }
+
+                  return ContinueSentinel;
+                }
+              };
+
+              // Regardless of whether this script is executing as a CommonJS module
+              // or not, return the runtime object so that we can declare the variable
+              // regeneratorRuntime in the outer scope, which allows this module to be
+              // injected easily by `bin/regenerator --include-runtime script.js`.
+              return exports;
+
+            }(
+              // If this script is executing as a CommonJS module, use module.exports
+              // as the regeneratorRuntime namespace. Otherwise create a new empty
+              // object. Either way, the resulting object will be used to initialize
+              // the regeneratorRuntime variable at the top of this file.
+               module.exports 
+            ));
+
+            try {
+              regeneratorRuntime = runtime;
+            } catch (accidentalStrictMode) {
+              // This module should not be running in strict mode, so the above
+              // assignment should always work unless something is misconfigured. Just
+              // in case runtime.js accidentally runs in strict mode, we can escape
+              // strict mode using a global Function call. This could conceivably fail
+              // if a Content Security Policy forbids using Function, but in that case
+              // the proper solution is to fix the accidental strict mode problem. If
+              // you've misconfigured your bundler to force strict mode and applied a
+              // CSP to forbid Function, and you're not willing to fix either of those
+              // problems, please detail your unique predicament in a GitHub issue.
+              Function("r", "regeneratorRuntime = r")(runtime);
+            }
+            });
+
+            var regenerator = runtime_1;
+
+            function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+              try {
+                var info = gen[key](arg);
+                var value = info.value;
+              } catch (error) {
+                reject(error);
+                return;
+              }
+
+              if (info.done) {
+                resolve(value);
+              } else {
+                Promise.resolve(value).then(_next, _throw);
+              }
+            }
+
+            function _asyncToGenerator(fn) {
+              return function () {
+                var self = this,
+                    args = arguments;
+                return new Promise(function (resolve, reject) {
+                  var gen = fn.apply(self, args);
+
+                  function _next(value) {
+                    asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+                  }
+
+                  function _throw(err) {
+                    asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+                  }
+
+                  _next(undefined);
+                });
+              };
+            }
+
+            var asyncToGenerator = _asyncToGenerator;
+
             var Notification = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"pdf_notification",class:_vm.notification.type},[_c('span',{staticClass:"text"},[_vm._v(_vm._s(_vm.notification.text))]),_vm._v(" "),_c('span',{staticClass:"close"},[_vm._v("x")])])},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  staticClass: "pdf_notification",
+                  class: _vm.notification.type
+                }, [_c('span', {
+                  staticClass: "text"
+                }, [_vm._v(_vm._s(_vm.notification.text))]), _vm._v(" "), _c('span', {
+                  staticClass: "close"
+                }, [_vm._v("x")])]);
+              },
+              staticRenderFns: [],
               props: {
                 notification: {
                   type: Object,
-                  default: function() {
+                  default: function _default() {
                     return {
                       type: "info",
                       text: ""
@@ -69421,23 +70204,50 @@
                   }
                 }
               },
-              data() {
+              data: function data() {
                 return {
                   lifespan: 5000
                 };
               },
-              mounted() {
-                setTimeout(function() {
+              mounted: function mounted() {
+                setTimeout(function () {
                   this.$emit("dieOut");
                 }, 5000);
               }
             };
 
             var PDFNotifications = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"notifications-wrapper"},_vm._l((_vm.notifications),function(notification,index){return _c('Notification',{key:index,attrs:{"notification":notification},on:{"dieOut":function($event){return _vm.removeNotification(index)}},nativeOn:{"click":function($event){return _vm.removeNotification(index)}}})}),1)},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  staticClass: "notifications-wrapper"
+                }, _vm._l(_vm.notifications, function (notification, index) {
+                  return _c('Notification', {
+                    key: index,
+                    attrs: {
+                      "notification": notification
+                    },
+                    on: {
+                      "dieOut": function dieOut($event) {
+                        return _vm.removeNotification(index);
+                      }
+                    },
+                    nativeOn: {
+                      "click": function click($event) {
+                        return _vm.removeNotification(index);
+                      }
+                    }
+                  });
+                }), 1);
+              },
+              staticRenderFns: [],
               components: {
-                Notification
+                Notification: Notification
               },
               props: {
                 notifications: {
@@ -69446,11 +70256,8 @@
                 }
               },
               methods: {
-                removeNotification(i) {
-                  return this.$emit(
-                    "update:notifications",
-                    this.notifications.splice(i, 1)
-                  );
+                removeNotification: function removeNotification(i) {
+                  return this.$emit("update:notifications", this.notifications.splice(i, 1));
                 }
               }
             };
@@ -69458,46 +70265,85 @@
             var warningIcon = 'data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhcyIgZGF0YS1pY29uPSJleGNsYW1hdGlvbi10cmlhbmdsZSIgY2xhc3M9InN2Zy1pbmxpbmUtLWZhIGZhLWV4Y2xhbWF0aW9uLXRyaWFuZ2xlIGZhLXctMTgiIHJvbGU9ImltZyIgCiAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1NzYgNTEyIj4KICAgIDxwYXRoIGZpbGw9IiNmZmQ4MDkiIGQ9Ik01NjkuNTE3IDQ0MC4wMTNDNTg3Ljk3NSA0NzIuMDA3IDU2NC44MDYgNTEyIDUyNy45NCA1MTJINDguMDU0Yy0zNi45MzcgMC01OS45OTktNDAuMDU1LTQxLjU3Ny03MS45ODdMMjQ2LjQyMyAyMy45ODVjMTguNDY3LTMyLjAwOSA2NC43Mi0zMS45NTEgODMuMTU0IDBsMjM5Ljk0IDQxNi4wMjh6TTI4OCAzNTRjLTI1LjQwNSAwLTQ2IDIwLjU5NS00NiA0NnMyMC41OTUgNDYgNDYgNDYgNDYtMjAuNTk1IDQ2LTQ2LTIwLjU5NS00Ni00Ni00NnptLTQzLjY3My0xNjUuMzQ2bDcuNDE4IDEzNmMuMzQ3IDYuMzY0IDUuNjA5IDExLjM0NiAxMS45ODIgMTEuMzQ2aDQ4LjU0NmM2LjM3MyAwIDExLjYzNS00Ljk4MiAxMS45ODItMTEuMzQ2bDcuNDE4LTEzNmMuMzc1LTYuODc0LTUuMDk4LTEyLjY1NC0xMS45ODItMTIuNjU0aC02My4zODNjLTYuODg0IDAtMTIuMzU2IDUuNzgtMTEuOTgxIDEyLjY1NHoiPjwvcGF0aD4KPC9zdmc+';
 
             var PageNotFound = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"error-page"}},[_c('h2',{staticClass:"error-status-code",attrs:{"slot":"status-code"},slot:"status-code"},[_c('span',{staticClass:"text"},[_vm._v(_vm._s(_vm.statusCode))]),_vm._v(" "),_c('img',{attrs:{"src":_vm.warningIcon}})]),_vm._v(" "),_c('h3',{staticClass:"error-status-message"},[_vm._v(_vm._s(_vm.statusMessage))])])},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  attrs: {
+                    "id": "error-page"
+                  }
+                }, [_c('h2', {
+                  staticClass: "error-status-code",
+                  attrs: {
+                    "slot": "status-code"
+                  },
+                  slot: "status-code"
+                }, [_c('span', {
+                  staticClass: "text"
+                }, [_vm._v(_vm._s(_vm.statusCode))]), _vm._v(" "), _c('img', {
+                  attrs: {
+                    "src": _vm.warningIcon
+                  }
+                })]), _vm._v(" "), _c('h3', {
+                  staticClass: "error-status-message"
+                }, [_vm._v(_vm._s(_vm.statusMessage))])]);
+              },
+              staticRenderFns: [],
               props: ["statusCode", "statusMessage"],
-              data() {
+              data: function data() {
                 return {
-                  warningIcon
+                  warningIcon: warningIcon
                 };
               }
             };
 
             var TextLayer = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"textLayerDiv",staticClass:"textLayer",style:({'width': _vm.viewport.width + 'px','height': _vm.viewport.height+ 'px'})})},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  ref: "textLayerDiv",
+                  staticClass: "textLayer",
+                  style: {
+                    'width': _vm.viewport.width + 'px',
+                    'height': _vm.viewport.height + 'px'
+                  }
+                });
+              },
+              staticRenderFns: [],
               props: ["page", "viewport", "textContent"],
-              data() {
+              data: function data() {
                 return {};
               },
               watch: {
-                textContent() {
+                textContent: function textContent() {
                   this.$refs.textLayerDiv.innerHTML = "";
                   this.renderText();
                 },
-                viewport() {
+                viewport: function viewport() {
                   this.$refs.textLayerDiv.innerHTML = "";
                   this.renderText();
                 }
               },
               methods: {
-                renderText() {
+                renderText: function renderText() {
                   // Create new instance of TextLayerBuilder class
                   var textLayer = new TextLayerBuilder({
                     textLayerDiv: this.$refs.textLayerDiv,
                     pageIndex: this.page.pageIndex,
                     viewport: this.viewport
-                  });
+                  }); // Set text-fragments
 
-                  // Set text-fragments
-                  textLayer.setTextContent(this.textContent);
+                  textLayer.setTextContent(this.textContent); // Render text-fragments
 
-                  // Render text-fragments
                   return textLayer.render();
                 }
               }
@@ -70266,7 +71112,7 @@
               }
             }
 
-            var regenerator = runtimeModule;
+            var regenerator$1 = runtimeModule;
 
             var ui_utils = createCommonjsModule(function (module, exports) {
 
@@ -70277,7 +71123,7 @@
 
 
 
-            var _regenerator2 = _interopRequireDefault(regenerator);
+            var _regenerator2 = _interopRequireDefault(regenerator$1);
 
             var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -71566,33 +72412,51 @@
             var pdf_link_service_2 = pdf_link_service.PDFLinkService;
 
             var AnnotationLayer = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"annotationLayer",staticClass:"annotationLayer",staticStyle:{"width":"0px","height":"0px"},attrs:{"id":"annotation-layer"}})},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  ref: "annotationLayer",
+                  staticClass: "annotationLayer",
+                  staticStyle: {
+                    "width": "0px",
+                    "height": "0px"
+                  },
+                  attrs: {
+                    "id": "annotation-layer"
+                  }
+                });
+              },
+              staticRenderFns: [],
               props: ["page", "viewport", "canvas", "annotations"],
-              data() {
+              data: function data() {
                 return {};
               },
               watch: {
-                annotations() {
+                annotations: function annotations() {
                   this.$refs.annotationLayer.innerHTML = "";
                   this.renderAnnotations();
                 },
-                viewport() {
+                viewport: function viewport() {
                   this.$refs.annotationLayer.innerHTML = "";
                   this.renderAnnotations();
                 }
               },
               methods: {
-                renderAnnotations() {
+                renderAnnotations: function renderAnnotations() {
                   var self = this;
-
-                  let pdfLinkService = new pdf_link_service_2({
+                  var pdfLinkService = new pdf_link_service_2({
                     externalLinkTarget: 2
-                  });
+                  }); // Render the annotation layer
 
-                  // Render the annotation layer
                   PDFJS.AnnotationLayer.render({
-                    viewport: self.viewport.clone({ dontFlip: true }),
+                    viewport: self.viewport.clone({
+                      dontFlip: true
+                    }),
                     div: self.$refs.annotationLayer,
                     annotations: self.annotations,
                     page: self.page,
@@ -71824,15 +72688,71 @@
             var inViewport = unwrapExports(vueInViewportMixin);
 
             var PDFPage = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"pageWrapper",staticClass:"pdf-page page",class:['page-' + _vm.page.pageNumber],style:(_vm.viewportSizeStyle),attrs:{"id":'page-'+ _vm.page.pageNumber,"data-page-number":_vm.page.pageNumber}},[(_vm.inViewport.now)?_c('div',{staticClass:"page-content-wrapper"},[_c('div',{staticClass:"page-loader-wrapper"},[(_vm.resizing)?_c('img',{staticClass:"page-loader",attrs:{"src":_vm.loader}}):_vm._e()]),_vm._v(" "),_c('div',{ref:"canvasWrapper",staticClass:"canvasWrapper",style:(_vm.viewportSizeStyle)},[_c('canvas',{ref:"canvas",style:(_vm.viewportSizeStyle),attrs:{"width":_vm.dprViewport.width,"height":_vm.dprViewport.height,"data-page":_vm.page.pageNumber}})]),_vm._v(" "),_c('TextLayer',{attrs:{"viewport":_vm.viewport,"textContent":_vm.textContent,"page":_vm.page}}),_vm._v(" "),_c('AnnotationLayer',{attrs:{"viewport":_vm.viewport,"page":_vm.page,"annotations":_vm.annotations}})],1):_c('div',{staticClass:"page-content-fallback"},[_c('div',{ref:"canvasWrapper",staticClass:"canvasWrapper",style:(_vm.viewportSizeStyle)})])])},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  ref: "pageWrapper",
+                  staticClass: "pdf-page page",
+                  class: ['page-' + _vm.page.pageNumber],
+                  style: _vm.viewportSizeStyle,
+                  attrs: {
+                    "id": 'page-' + _vm.page.pageNumber,
+                    "data-page-number": _vm.page.pageNumber
+                  }
+                }, [_vm.inViewport.now ? _c('div', {
+                  staticClass: "page-content-wrapper"
+                }, [_c('div', {
+                  staticClass: "page-loader-wrapper"
+                }, [_vm.resizing ? _c('img', {
+                  staticClass: "page-loader",
+                  attrs: {
+                    "src": _vm.loader
+                  }
+                }) : _vm._e()]), _vm._v(" "), _c('div', {
+                  ref: "canvasWrapper",
+                  staticClass: "canvasWrapper",
+                  style: _vm.viewportSizeStyle
+                }, [_c('canvas', {
+                  ref: "canvas",
+                  style: _vm.viewportSizeStyle,
+                  attrs: {
+                    "width": _vm.dprViewport.width,
+                    "height": _vm.dprViewport.height,
+                    "data-page": _vm.page.pageNumber
+                  }
+                })]), _vm._v(" "), _c('TextLayer', {
+                  attrs: {
+                    "viewport": _vm.viewport,
+                    "textContent": _vm.textContent,
+                    "page": _vm.page
+                  }
+                }), _vm._v(" "), _c('AnnotationLayer', {
+                  attrs: {
+                    "viewport": _vm.viewport,
+                    "page": _vm.page,
+                    "annotations": _vm.annotations
+                  }
+                })], 1) : _c('div', {
+                  staticClass: "page-content-fallback"
+                }, [_c('div', {
+                  ref: "canvasWrapper",
+                  staticClass: "canvasWrapper",
+                  style: _vm.viewportSizeStyle
+                })])]);
+              },
+              staticRenderFns: [],
               props: ["page", "maxDimensions", "canvasContainer", "scale"],
               components: {
-                TextLayer,
-                AnnotationLayer
+                TextLayer: TextLayer,
+                AnnotationLayer: AnnotationLayer
               },
               mixins: [inViewport],
-              data() {
+              data: function data() {
                 return {
                   dims: {
                     width: 0,
@@ -71846,44 +72766,44 @@
                   textContent: {},
                   annotations: [],
                   resizing: false,
-                  loader
+                  loader: loader
                 };
               },
-              mounted() {
+              mounted: function mounted() {
                 this.dims = this.page.getViewport(1.0);
                 this.pageIndex = this.page.pageNumber;
                 this.resizePage();
               },
               watch: {
-                scale: function(newVal, oldVal) {
+                scale: function scale(newVal, oldVal) {
                   var self = this;
-                  setTimeout(function() {
+                  setTimeout(function () {
                     self.resizePage();
                   }, 100);
                 },
-                "inViewport.now": function(visible) {
+                "inViewport.now": function inViewportNow(visible) {
                   if (visible) {
-                    this.$nextTick(function() {
+                    this.$nextTick(function () {
                       this.render();
                     });
                   }
                 }
               },
               computed: {
-                viewportSizeStyle() {
+                viewportSizeStyle: function viewportSizeStyle() {
                   return {
                     width: this.viewport.width + "px",
                     height: this.viewport.height + "px"
                   };
                 },
-                viewport: function() {
+                viewport: function viewport() {
                   var page = this.page;
                   var viewport = page.getViewport(this.scale);
                   viewport.width = Math.floor(viewport.width);
                   viewport.height = Math.floor(viewport.height);
                   return viewport;
                 },
-                dprViewport: function() {
+                dprViewport: function dprViewport() {
                   var page = this.page;
                   var viewport = page.getViewport(this.scale * window.devicePixelRatio);
                   viewport.width = Math.floor(viewport.width);
@@ -71892,29 +72812,77 @@
                 }
               },
               methods: {
-                async render(e) {
-                  this.resizing = true;
+                render: function render(e) {
+                  var _this = this;
 
-                  var page = this.page;
-                  var canvas = this.$refs.canvas;
-                  var defaultViewport = this.dprViewport;
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee() {
+                    var page, canvas, defaultViewport, ctx;
+                    return regenerator.wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            _this.resizing = true;
+                            page = _this.page;
+                            canvas = _this.$refs.canvas;
+                            defaultViewport = _this.dprViewport;
+                            ctx = canvas.getContext("2d");
+                            _context.next = 7;
+                            return page.render({
+                              canvasContext: ctx,
+                              viewport: defaultViewport
+                            });
 
-                  var ctx = canvas.getContext("2d");
+                          case 7:
+                            _context.next = 9;
+                            return page.getTextContent();
 
-                  await page.render({
-                    canvasContext: ctx,
-                    viewport: defaultViewport
-                  });
+                          case 9:
+                            _this.textContent = _context.sent;
+                            _context.next = 12;
+                            return page.getAnnotations();
 
-                  this.textContent = await page.getTextContent();
-                  this.annotations = await page.getAnnotations();
+                          case 12:
+                            _this.annotations = _context.sent;
+                            _this.resizing = false;
 
-                  this.resizing = false;
+                          case 14:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _callee);
+                  }))();
                 },
-                async resizePage() {
-                  if (this.inViewport.now) await this.render();
+                resizePage: function resizePage() {
+                  var _this2 = this;
 
-                  this.$emit("finishedRender");
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee2() {
+                    return regenerator.wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            if (!_this2.inViewport.now) {
+                              _context2.next = 3;
+                              break;
+                            }
+
+                            _context2.next = 3;
+                            return _this2.render();
+
+                          case 3:
+                            _this2.$emit("finishedRender");
+
+                          case 4:
+                          case "end":
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2);
+                  }))();
                 }
               }
             };
@@ -71934,8 +72902,72 @@
             };
 
             var PDFContainer = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"canvasContainer",staticClass:"pdf-wrapper",attrs:{"id":"pdfCanvasContainer"}},[(_vm.value.pdf || _vm.loading)?_c('div',{staticClass:"pdf-wrapper-inside",on:{"!click":function($event){return _vm.$emit('update:sidebarVisible', false)}}},[(_vm.pdfLoadingProgress < _vm.pdfNumPages || _vm.loading)?_c('div',{staticClass:"loading-wrapper"},[_vm._t("loading",[_c('div',{staticClass:"loading-status"},[_c('img',{attrs:{"src":_vm.loader,"width":"20%","height":"20%"}}),_vm._v(" "),_c('br'),_vm._v(" "),_c('h3',[_vm._v(_vm._s(_vm.loadingAlert))])])],{"loadingProgress":_vm.pdfLoadingProgress / _vm.pdfNumPages})],2):_vm._e(),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(!(_vm.pdfLoadingProgress < _vm.pdfNumPages || _vm.loading)),expression:"!(pdfLoadingProgress < pdfNumPages || loading)"}],staticClass:"pdf-pages-wrapper"},_vm._l((_vm.value.pages),function(page,index){return _c('PDFPage',{key:index,ref:'pdfpage-' + index,refInFor:true,attrs:{"page":page,"maxDimensions":_vm.maxDimensions,"scale":_vm.normalizedScale,"canvasContainer":_vm.$refs.canvasContainer,"in-viewport-once":true},on:{"finishedRender":function($event){_vm.pdfLoadingProgress++;}}})}),1)]):_vm._t("error",[_c('PageNotFound',{attrs:{"statusMessage":_vm.pageNotFoundMessage,"statusCode":"404"}})])],2)},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  ref: "canvasContainer",
+                  staticClass: "pdf-wrapper",
+                  attrs: {
+                    "id": "pdfCanvasContainer"
+                  }
+                }, [_vm.value.pdf || _vm.loading ? _c('div', {
+                  staticClass: "pdf-wrapper-inside",
+                  on: {
+                    "!click": function click($event) {
+                      return _vm.$emit('update:sidebarVisible', false);
+                    }
+                  }
+                }, [_vm.pdfLoadingProgress < _vm.pdfNumPages || _vm.loading ? _c('div', {
+                  staticClass: "loading-wrapper"
+                }, [_vm._t("loading", [_c('div', {
+                  staticClass: "loading-status"
+                }, [_c('img', {
+                  attrs: {
+                    "src": _vm.loader,
+                    "width": "20%",
+                    "height": "20%"
+                  }
+                }), _vm._v(" "), _c('br'), _vm._v(" "), _c('h3', [_vm._v(_vm._s(_vm.loadingAlert))])])], {
+                  "loadingProgress": _vm.pdfLoadingProgress / _vm.pdfNumPages
+                })], 2) : _vm._e(), _vm._v(" "), _c('div', {
+                  directives: [{
+                    name: "show",
+                    rawName: "v-show",
+                    value: !(_vm.pdfLoadingProgress < _vm.pdfNumPages || _vm.loading),
+                    expression: "!(pdfLoadingProgress < pdfNumPages || loading)"
+                  }],
+                  staticClass: "pdf-pages-wrapper"
+                }, _vm._l(_vm.value.pages, function (page, index) {
+                  return _c('PDFPage', {
+                    key: index,
+                    ref: 'pdfpage-' + index,
+                    refInFor: true,
+                    attrs: {
+                      "page": page,
+                      "maxDimensions": _vm.maxDimensions,
+                      "scale": _vm.normalizedScale,
+                      "canvasContainer": _vm.$refs.canvasContainer,
+                      "in-viewport-once": true
+                    },
+                    on: {
+                      "finishedRender": function finishedRender($event) {
+                        _vm.pdfLoadingProgress++;
+                      }
+                    }
+                  });
+                }), 1)]) : _vm._t("error", [_c('PageNotFound', {
+                  attrs: {
+                    "statusMessage": _vm.pageNotFoundMessage,
+                    "statusCode": "404"
+                  }
+                })])], 2);
+              },
+              staticRenderFns: [],
               mixins: [isMobile],
               props: {
                 scale: {
@@ -71952,7 +72984,7 @@
                 },
                 value: {
                   type: Object,
-                  default: function() {
+                  default: function _default() {
                     return {
                       pdf: null,
                       loading: false,
@@ -71962,10 +72994,10 @@
                 }
               },
               components: {
-                PageNotFound,
-                PDFPage
+                PageNotFound: PageNotFound,
+                PDFPage: PDFPage
               },
-              data() {
+              data: function data() {
                 return {
                   pageNotFoundMessage: "Please insert a correct pdf source !",
                   PAGE_BORDER_SIZE: 8,
@@ -71974,43 +73006,86 @@
                   pdfLoading: true,
                   pages: [],
                   height: 0,
-                  loader
+                  loader: loader
                 };
               },
-              mounted() {
+              mounted: function mounted() {
                 this.height = this.$refs.canvasContainer.parentNode.clientHeight;
               },
               watch: {
-                "value.pdf": async function(pdf) {
-                  if (pdf) {
-                    await this.render(pdf);
+                "value.pdf": function () {
+                  var _valuePdf = asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee(pdf) {
+                    return regenerator.wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            if (!pdf) {
+                              _context.next = 3;
+                              break;
+                            }
+
+                            _context.next = 3;
+                            return this.render(pdf);
+
+                          case 3:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _callee, this);
+                  }));
+
+                  function valuePdf(_x) {
+                    return _valuePdf.apply(this, arguments);
                   }
-                }
+
+                  return valuePdf;
+                }()
               },
               methods: {
-                async render(pdf) {
-                  var promiseArray = Array.from(new Array(pdf.numPages).keys()).map(
-                    function(val, index) {
-                      return pdf.getPage(val + 1);
-                    }
-                  );
+                render: function render(pdf) {
+                  var _this = this;
 
-                  this.pages = [];
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee2() {
+                    var promiseArray, pages;
+                    return regenerator.wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            promiseArray = Array.from(new Array(pdf.numPages).keys()).map(function (val, index) {
+                              return pdf.getPage(val + 1);
+                            });
+                            _this.pages = [];
+                            _context2.next = 4;
+                            return Promise.all(promiseArray);
 
-                  let pages = await Promise.all(promiseArray);
+                          case 4:
+                            pages = _context2.sent;
+                            _this.value.pages = pages;
 
-                  this.value.pages = pages;
-                  this.$emit("input", this.value);
+                            _this.$emit("input", _this.value);
 
-                  return true;
+                            return _context2.abrupt("return", true);
+
+                          case 8:
+                          case "end":
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2);
+                  }))();
                 },
-                scrollToPage(index) {
-                  let scrollTop = this.$refs["pdfpage-" + index][0].$el.offsetTop;
+                scrollToPage: function scrollToPage(index) {
+                  var scrollTop = this.$refs["pdfpage-" + index][0].$el.offsetTop;
                   this.$refs.canvasContainer.scrollTo(0, scrollTop);
                 }
               },
               computed: {
-                maxDimensions() {
+                maxDimensions: function maxDimensions() {
                   var self = this;
                   var maxDims = {
                     width: 0,
@@ -72018,11 +73093,13 @@
                   };
 
                   for (var i = 0; i < self.value.pages.length; i++) {
-                    let page = self.value.pages[i];
+                    var page = self.value.pages[i];
                     var pageVP = page.getViewport(1.0);
+
                     if (pageVP.width > maxDims.width) {
                       maxDims.width = pageVP.width;
                     }
+
                     if (pageVP.height > maxDims.height) {
                       maxDims.height = pageVP.height;
                     }
@@ -72030,19 +73107,12 @@
 
                   return maxDims;
                 },
-                normalizedScale() {
-                  let fitScale =
-                    (this.$refs.canvasContainer.clientWidth -
-                      this.PAGE_BORDER_SIZE * 2 -
-                      this.SCROLLBAR_WIDTH) /
-                    this.maxDimensions.width;
-
-                  let scaleDecimal = parseFloat(this.scale);
-
-                  if (this.scale == "auto") return fitScale;
-                  else return this.isMobile() ? fitScale * scaleDecimal : scaleDecimal;
+                normalizedScale: function normalizedScale() {
+                  var fitScale = (this.$refs.canvasContainer.clientWidth - this.PAGE_BORDER_SIZE * 2 - this.SCROLLBAR_WIDTH) / this.maxDimensions.width;
+                  var scaleDecimal = parseFloat(this.scale);
+                  if (this.scale == "auto") return fitScale;else return this.isMobile() ? fitScale * scaleDecimal : scaleDecimal;
                 },
-                pdfNumPages() {
+                pdfNumPages: function pdfNumPages() {
                   return this.value.pdf && this.value.pdf.numPages;
                 }
               }
@@ -72051,39 +73121,94 @@
             var downloadSvg = 'data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhcyIgZGF0YS1pY29uPSJmaWxlLWRvd25sb2FkIiBjbGFzcz0ic3ZnLWlubGluZS0tZmEgZmEtZmlsZS1kb3dubG9hZCBmYS13LTEyIiByb2xlPSJpbWciIAogICAgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMzg0IDUxMiI+CiAgICA8cGF0aCBmaWxsPSIjZmZmZmZmIiBkPSJNMjI0IDEzNlYwSDI0QzEwLjcgMCAwIDEwLjcgMCAyNHY0NjRjMCAxMy4zIDEwLjcgMjQgMjQgMjRoMzM2YzEzLjMgMCAyNC0xMC43IDI0LTI0VjE2MEgyNDhjLTEzLjIgMC0yNC0xMC44LTI0LTI0em03Ni40NSAyMTEuMzZsLTk2LjQyIDk1LjdjLTYuNjUgNi42MS0xNy4zOSA2LjYxLTI0LjA0IDBsLTk2LjQyLTk1LjdDNzMuNDIgMzM3LjI5IDgwLjU0IDMyMCA5NC44MiAzMjBIMTYwdi04MGMwLTguODQgNy4xNi0xNiAxNi0xNmgzMmM4Ljg0IDAgMTYgNy4xNiAxNiAxNnY4MGg2NS4xOGMxNC4yOCAwIDIxLjQgMTcuMjkgMTEuMjcgMjcuMzZ6TTM3NyAxMDVMMjc5LjEgN2MtNC41LTQuNS0xMC42LTctMTctN0gyNTZ2MTI4aDEyOHYtNi4xYzAtNi4zLTIuNS0xMi40LTctMTYuOXoiPjwvcGF0aD4KPC9zdmc+';
 
             var PDFDownloadButton = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a',{attrs:{"id":"pdf-download"},on:{"click":function($event){$event.stopPropagation();$event.preventDefault();return _vm.download($event)}}},[_c('span',{staticClass:"pdf-download-icon"},[_c('img',{attrs:{"src":_vm.downloadSvg,"width":"20px","height":"20px"}}),_vm._v(" "),_c('br')]),_vm._v(" "),_c('span',{attrs:{"slot":"label"},slot:"label"})])},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('a', {
+                  attrs: {
+                    "id": "pdf-download"
+                  },
+                  on: {
+                    "click": function click($event) {
+                      $event.stopPropagation();
+                      $event.preventDefault();
+                      return _vm.download($event);
+                    }
+                  }
+                }, [_c('span', {
+                  staticClass: "pdf-download-icon"
+                }, [_c('img', {
+                  attrs: {
+                    "src": _vm.downloadSvg,
+                    "width": "20px",
+                    "height": "20px"
+                  }
+                }), _vm._v(" "), _c('br')]), _vm._v(" "), _c('span', {
+                  attrs: {
+                    "slot": "label"
+                  },
+                  slot: "label"
+                })]);
+              },
+              staticRenderFns: [],
               props: {
                 pdf: {
                   type: Object,
-                  default: function() {
+                  default: function _default() {
                     return {};
                   }
                 }
               },
               inject: ["getFileName"],
-              data() {
+              data: function data() {
                 return {
-                  downloadSvg
+                  downloadSvg: downloadSvg
                 };
               },
               methods: {
-                async download() {
-                  let binaryPDF = await this.pdf.getData();
-                  this.downloadBlob(binaryPDF, this.getFileName(), "application/pdf");
+                download: function download() {
+                  var _this = this;
+
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee() {
+                    var binaryPDF;
+                    return regenerator.wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            _context.next = 2;
+                            return _this.pdf.getData();
+
+                          case 2:
+                            binaryPDF = _context.sent;
+
+                            _this.downloadBlob(binaryPDF, _this.getFileName(), "application/pdf");
+
+                          case 4:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _callee);
+                  }))();
                 },
-                downloadBlob(data, fileName, mimeType) {
+                downloadBlob: function downloadBlob(data, fileName, mimeType) {
                   var blob, url;
                   blob = new Blob([data], {
                     type: mimeType
                   });
                   url = window.URL.createObjectURL(blob);
                   this.downloadURL(url, fileName);
-                  this.$nextTick(function() {
+                  this.$nextTick(function () {
                     window.URL.revokeObjectURL(url);
                   });
                 },
-                downloadURL(data, fileName) {
+                downloadURL: function downloadURL(data, fileName) {
                   var a;
                   a = document.createElement("a");
                   a.href = data;
@@ -72099,26 +73224,123 @@
             var sidebarToggleImg = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxyZWN0IHg9IjMiIHk9IjMiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgcng9IjIiIHJ5PSIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8bGluZSB4MT0iOSIgeTE9IjMiIHgyPSI5IiB5Mj0iMjEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+';
 
             var PDFSidebarToggle = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('a',{attrs:{"id":"sidebar-toggle"},on:{"click":function($event){$event.stopPropagation();$event.preventDefault();return _vm.$emit('click')}}},[_c('span',{staticClass:"pdf-sidebar-toggle-icon"},[_c('img',{attrs:{"src":_vm.sidebarToggleImg,"width":"20px","height":"20px"}}),_vm._v(" "),_c('br')]),_vm._v(" "),_c('span',{attrs:{"slot":"label"},slot:"label"})])},
-            staticRenderFns: [],
-              data() {
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('a', {
+                  attrs: {
+                    "id": "sidebar-toggle"
+                  },
+                  on: {
+                    "click": function click($event) {
+                      $event.stopPropagation();
+                      $event.preventDefault();
+                      return _vm.$emit('click');
+                    }
+                  }
+                }, [_c('span', {
+                  staticClass: "pdf-sidebar-toggle-icon"
+                }, [_c('img', {
+                  attrs: {
+                    "src": _vm.sidebarToggleImg,
+                    "width": "20px",
+                    "height": "20px"
+                  }
+                }), _vm._v(" "), _c('br')]), _vm._v(" "), _c('span', {
+                  attrs: {
+                    "slot": "label"
+                  },
+                  slot: "label"
+                })]);
+              },
+              staticRenderFns: [],
+              data: function data() {
                 return {
-                  sidebarToggleImg
+                  sidebarToggleImg: sidebarToggleImg
                 };
               }
             };
 
             var PDFToolbar = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"pdf-toolbar",style:({'min-height': _vm.height + 'px'})},[_c('div',{staticClass:"left-toolbox"},[(_vm.pdf && _vm.value.sidebarFeatureVisible)?_c('PDFSidebarToggle',{on:{"click":_vm.toggleSidebar}}):_vm._e(),_vm._v(" "),_vm._t("left-toolbox")],2),_vm._v(" "),_c('div',{staticClass:"center-toolbox"},[_c('div',{attrs:{"id":"pdf-sizer","tag":"div"}},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.scaleSelection),expression:"scaleSelection"}],staticClass:"mx-auto form-control",staticStyle:{"width":"auto"},attrs:{"id":"select-scale"},on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.scaleSelection=$event.target.multiple ? $$selectedVal : $$selectedVal[0];}}},_vm._l((_vm.selectOptions),function(scale,i){return _c('option',{key:i,domProps:{"value":scale,"selected":(_vm.scaleSelection == scale)}},[_vm._v("\n          "+_vm._s(scale)+"\n          "),(scale != 'auto')?_c('span',[_vm._v("%")]):_vm._e()])}),0)])]),_vm._v(" "),_c('div',{staticClass:"right-toolbox"},[_vm._t("right-toolbox"),_vm._v(" "),(_vm.pdf && _vm.value.downloadFeatureVisible)?_c('PDFDownloadButton',{attrs:{"pdf":_vm.pdf}}):_vm._e()],2)])},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  staticClass: "pdf-toolbar",
+                  style: {
+                    'min-height': _vm.height + 'px'
+                  }
+                }, [_c('div', {
+                  staticClass: "left-toolbox"
+                }, [_vm.pdf && _vm.value.sidebarFeatureVisible ? _c('PDFSidebarToggle', {
+                  on: {
+                    "click": _vm.toggleSidebar
+                  }
+                }) : _vm._e(), _vm._v(" "), _vm._t("left-toolbox")], 2), _vm._v(" "), _c('div', {
+                  staticClass: "center-toolbox"
+                }, [_c('div', {
+                  attrs: {
+                    "id": "pdf-sizer",
+                    "tag": "div"
+                  }
+                }, [_c('select', {
+                  directives: [{
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.scaleSelection,
+                    expression: "scaleSelection"
+                  }],
+                  staticClass: "mx-auto form-control",
+                  staticStyle: {
+                    "width": "auto"
+                  },
+                  attrs: {
+                    "id": "select-scale"
+                  },
+                  on: {
+                    "change": function change($event) {
+                      var $$selectedVal = Array.prototype.filter.call($event.target.options, function (o) {
+                        return o.selected;
+                      }).map(function (o) {
+                        var val = "_value" in o ? o._value : o.value;
+                        return val;
+                      });
+                      _vm.scaleSelection = $event.target.multiple ? $$selectedVal : $$selectedVal[0];
+                    }
+                  }
+                }, _vm._l(_vm.selectOptions, function (scale, i) {
+                  return _c('option', {
+                    key: i,
+                    domProps: {
+                      "value": scale,
+                      "selected": _vm.scaleSelection == scale
+                    }
+                  }, [_vm._v("\n          " + _vm._s(scale) + "\n          "), scale != 'auto' ? _c('span', [_vm._v("%")]) : _vm._e()]);
+                }), 0)])]), _vm._v(" "), _c('div', {
+                  staticClass: "right-toolbox"
+                }, [_vm._t("right-toolbox"), _vm._v(" "), _vm.pdf && _vm.value.downloadFeatureVisible ? _c('PDFDownloadButton', {
+                  attrs: {
+                    "pdf": _vm.pdf
+                  }
+                }) : _vm._e()], 2)]);
+              },
+              staticRenderFns: [],
               components: {
-                PDFDownloadButton,
-                PDFSidebarToggle
+                PDFDownloadButton: PDFDownloadButton,
+                PDFSidebarToggle: PDFSidebarToggle
               },
               props: {
                 value: {
                   type: Object,
-                  default: function() {
+                  default: function _default() {
                     return {
                       scale: "1.25",
                       visible: true,
@@ -72135,51 +73357,85 @@
                 },
                 pdf: {
                   type: Object,
-                  default: function() {
+                  default: function _default() {
                     return {};
                   }
                 }
               },
-              data() {
+              data: function data() {
                 return {
                   selectOptions: ["auto", "75", "100", "125", "150"],
                   scaleSelection: "125"
                 };
               },
-              mounted() {
+              mounted: function mounted() {
                 this.selectScale(this.value.scale);
               },
               watch: {
-                "value.scale"(nv) {
+                "value.scale": function valueScale(nv) {
                   this.selectScale(nv);
                 },
-                scaleSelection(newval) {
+                scaleSelection: function scaleSelection(newval) {
                   if (newval !== "auto") newval = (parseInt(newval) / 100).toString();
-                  this.$emit("input", Object.assign({}, this.value, { scale: newval }));
+                  this.$emit("input", Object.assign({}, this.value, {
+                    scale: newval
+                  }));
                 }
               },
               methods: {
-                toggleSidebar: function() {
+                toggleSidebar: function toggleSidebar() {
                   this.value.sidebarVisible = !this.value.sidebarVisible;
                 },
-                selectScale: function(scale) {
+                selectScale: function selectScale(scale) {
                   if (scale !== "auto") scale = (scale * 100).toString();
-
                   if (this.selectOptions.includes(scale)) this.scaleSelection = scale;
                 }
               }
             };
 
             var PDFSidebarThumbnail = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"thumbnail",attrs:{"id":'thumbnail-document-' + _vm.page.pageNumber},on:{"click":function($event){return _vm.$emit('click')}}},[_c('div',{staticClass:"thumbnailSelectionRing",style:({'width': (_vm.scaledWidth + 7) + 'px','box-sizing': 'content-box'})},[_c('img',{staticClass:"thumbnailImage",attrs:{"width":_vm.scaledWidth,"height":_vm.scaledHeight,"src":_vm.thumbnailImage}}),_vm._v(" "),_c('div',{staticClass:"thumbnailLabel"},[_vm._v(_vm._s(_vm.page.pageNumber))])])])},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  staticClass: "thumbnail",
+                  attrs: {
+                    "id": 'thumbnail-document-' + _vm.page.pageNumber
+                  },
+                  on: {
+                    "click": function click($event) {
+                      return _vm.$emit('click');
+                    }
+                  }
+                }, [_c('div', {
+                  staticClass: "thumbnailSelectionRing",
+                  style: {
+                    'width': _vm.scaledWidth + 7 + 'px',
+                    'box-sizing': 'content-box'
+                  }
+                }, [_c('img', {
+                  staticClass: "thumbnailImage",
+                  attrs: {
+                    "width": _vm.scaledWidth,
+                    "height": _vm.scaledHeight,
+                    "src": _vm.thumbnailImage
+                  }
+                }), _vm._v(" "), _c('div', {
+                  staticClass: "thumbnailLabel"
+                }, [_vm._v(_vm._s(_vm.page.pageNumber))])])]);
+              },
+              staticRenderFns: [],
               props: {
                 page: {
                   type: Object,
                   default: null
                 }
               },
-              data() {
+              data: function data() {
                 return {
                   initialWidth: 100,
                   initialHeight: 100,
@@ -72188,39 +73444,55 @@
                   thumbnailImage: null
                 };
               },
-              async mounted() {
-                let canvas = document.createElement("canvas");
-                let viewport = this.dprViewport;
-                let ctx = canvas.getContext("2d");
+              mounted: function mounted() {
+                var _this = this;
 
-                var ratioH = viewport.height / viewport.width;
-                var ratioW = viewport.width / viewport.height;
-                if (ratioH > 1) {
-                  this.scaledWidth = 100;
-                  this.scaledHeight = this.scaledWidth * ratioH;
-                } else {
-                  this.scaledHeight = 100;
-                  this.scaledWidth = this.scaledHeight * ratioW;
-                }
+                return asyncToGenerator(
+                /*#__PURE__*/
+                regenerator.mark(function _callee() {
+                  var canvas, viewport, ctx, ratioH, ratioW;
+                  return regenerator.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          canvas = document.createElement("canvas");
+                          viewport = _this.dprViewport;
+                          ctx = canvas.getContext("2d");
+                          ratioH = viewport.height / viewport.width;
+                          ratioW = viewport.width / viewport.height;
 
-                canvas.width = this.scaledWidth;
-                canvas.height = this.scaledHeight;
+                          if (ratioH > 1) {
+                            _this.scaledWidth = 100;
+                            _this.scaledHeight = _this.scaledWidth * ratioH;
+                          } else {
+                            _this.scaledHeight = 100;
+                            _this.scaledWidth = _this.scaledHeight * ratioW;
+                          }
 
-                await this.page.render({
-                  canvasContext: ctx,
-                  viewport: this.page.getViewport(
-                    this.scaledWidth / this.page.getViewport(1.0).width
-                  )
-                });
-                this.thumbnailImage = canvas.toDataURL();
+                          canvas.width = _this.scaledWidth;
+                          canvas.height = _this.scaledHeight;
+                          _context.next = 10;
+                          return _this.page.render({
+                            canvasContext: ctx,
+                            viewport: _this.page.getViewport(_this.scaledWidth / _this.page.getViewport(1.0).width)
+                          });
+
+                        case 10:
+                          _this.thumbnailImage = canvas.toDataURL();
+
+                        case 11:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }))();
               },
               computed: {
-                dprViewport: function() {
+                dprViewport: function dprViewport() {
                   var page = this.page;
                   var normalViewport = page.getViewport(1.0);
-                  var scaledViewport = page.getViewport(
-                    this.initialWidth / normalViewport.width
-                  );
+                  var scaledViewport = page.getViewport(this.initialWidth / normalViewport.width);
                   scaledViewport.width = Math.floor(scaledViewport.width);
                   scaledViewport.height = Math.floor(scaledViewport.height);
                   return scaledViewport;
@@ -72229,8 +73501,40 @@
             };
 
             var PDFSidebar = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:"pdfSidebar",staticClass:"pdf-sidebar",class:{'sidebar-visible': _vm.visible},style:({'height' : 'calc(100% - ' + _vm.topOffset + 'px )','top' : _vm.topOffset + 'px'})},[_c('div',{staticClass:"pdf-sidebar-inside"},_vm._l((_vm.pages),function(page,index){return _c('PDFSidebarThumbnail',{key:index,attrs:{"page":page},on:{"click":function($event){return _vm.$emit('jumpTo', page.pageIndex)}}})}),1)])},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  ref: "pdfSidebar",
+                  staticClass: "pdf-sidebar",
+                  class: {
+                    'sidebar-visible': _vm.visible
+                  },
+                  style: {
+                    'height': 'calc(100% - ' + _vm.topOffset + 'px )',
+                    'top': _vm.topOffset + 'px'
+                  }
+                }, [_c('div', {
+                  staticClass: "pdf-sidebar-inside"
+                }, _vm._l(_vm.pages, function (page, index) {
+                  return _c('PDFSidebarThumbnail', {
+                    key: index,
+                    attrs: {
+                      "page": page
+                    },
+                    on: {
+                      "click": function click($event) {
+                        return _vm.$emit('jumpTo', page.pageIndex);
+                      }
+                    }
+                  });
+                }), 1)]);
+              },
+              staticRenderFns: [],
               props: {
                 pages: {
                   type: Array,
@@ -72246,7 +73550,7 @@
                 }
               },
               components: {
-                PDFSidebarThumbnail
+                PDFSidebarThumbnail: PDFSidebarThumbnail
               }
             };
 
@@ -80806,8 +82110,94 @@
             VueDropzone.install = install;
 
             var PDFView = {
-            render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"dropzone",rawName:"v-dropzone:[dropzoneOptions.active]",value:(_vm.dropzoneOptions),expression:"dropzoneOptions",arg:_vm.dropzoneOptions.active}],attrs:{"id":"pdf-viewer-wrapper"}},[(_vm.toolbarVisible)?_c('PDFToolbar',{attrs:{"pdf":_vm.viewer.content.pdf,"height":_vm.viewer.toolbar.height},model:{value:(_vm.viewer.toolbar),callback:function ($$v) {_vm.$set(_vm.viewer, "toolbar", $$v);},expression:"viewer.toolbar"}},[_c('template',{slot:"right-toolbox"},[_vm._t("right-toolbox")],2),_vm._v(" "),_c('template',{slot:"left-toolbox"},[_vm._t("left-toolbox")],2)],2):_vm._e(),_vm._v(" "),_c('PDFContainer',{ref:"pdfContainer",attrs:{"scale":_vm.viewer.toolbar.scale,"loading":_vm.viewer.content.loading},model:{value:(_vm.viewer.content),callback:function ($$v) {_vm.$set(_vm.viewer, "content", $$v);},expression:"viewer.content"}},[_c('template',{slot:"error"},[_vm._t("error")],2),_vm._v(" "),_c('template',{slot:"loading"},[_vm._t("loading")],2)],2),_vm._v(" "),(_vm.viewer.content.pdf && _vm.viewer.content.pages.length && _vm.toolbarVisible && _vm.sidebarFeatureVisible)?_c('PDFSidebar',{directives:[{name:"show",rawName:"v-show",value:(_vm.viewer.toolbar.sidebarVisible),expression:"viewer.toolbar.sidebarVisible"}],attrs:{"pages":_vm.viewer.content.pages,"visible":_vm.viewer.toolbar.sidebarVisible,"topOffset":_vm.viewer.toolbar.height},on:{"jumpTo":_vm.$refs.pdfContainer.scrollToPage}}):_vm._e(),_vm._v(" "),(_vm.dropzoneOptions.active)?_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.dropzoneVisible),expression:"dropzoneVisible"}],attrs:{"id":"dropzone"}},[_vm._v("Drop PDFs here !")]):_vm._e(),_vm._v(" "),_c('PDFNotifications',{attrs:{"notifications":_vm.pdfNotifications},on:{"update:notifications":function($event){_vm.pdfNotifications=$event;}}})],1)},
-            staticRenderFns: [],
+              render: function render() {
+                var _vm = this;
+
+                var _h = _vm.$createElement;
+
+                var _c = _vm._self._c || _h;
+
+                return _c('div', {
+                  directives: [{
+                    name: "dropzone",
+                    rawName: "v-dropzone:[dropzoneOptions.active]",
+                    value: _vm.dropzoneOptions,
+                    expression: "dropzoneOptions",
+                    arg: _vm.dropzoneOptions.active
+                  }],
+                  attrs: {
+                    "id": "pdf-viewer-wrapper"
+                  }
+                }, [_vm.toolbarVisible ? _c('PDFToolbar', {
+                  attrs: {
+                    "pdf": _vm.viewer.content.pdf,
+                    "height": _vm.viewer.toolbar.height
+                  },
+                  model: {
+                    value: _vm.viewer.toolbar,
+                    callback: function callback($$v) {
+                      _vm.$set(_vm.viewer, "toolbar", $$v);
+                    },
+                    expression: "viewer.toolbar"
+                  }
+                }, [_c('template', {
+                  slot: "right-toolbox"
+                }, [_vm._t("right-toolbox")], 2), _vm._v(" "), _c('template', {
+                  slot: "left-toolbox"
+                }, [_vm._t("left-toolbox")], 2)], 2) : _vm._e(), _vm._v(" "), _c('PDFContainer', {
+                  ref: "pdfContainer",
+                  attrs: {
+                    "scale": _vm.viewer.toolbar.scale,
+                    "loading": _vm.viewer.content.loading
+                  },
+                  model: {
+                    value: _vm.viewer.content,
+                    callback: function callback($$v) {
+                      _vm.$set(_vm.viewer, "content", $$v);
+                    },
+                    expression: "viewer.content"
+                  }
+                }, [_c('template', {
+                  slot: "error"
+                }, [_vm._t("error")], 2), _vm._v(" "), _c('template', {
+                  slot: "loading"
+                }, [_vm._t("loading")], 2)], 2), _vm._v(" "), _vm.viewer.content.pdf && _vm.viewer.content.pages.length && _vm.toolbarVisible && _vm.sidebarFeatureVisible ? _c('PDFSidebar', {
+                  directives: [{
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.viewer.toolbar.sidebarVisible,
+                    expression: "viewer.toolbar.sidebarVisible"
+                  }],
+                  attrs: {
+                    "pages": _vm.viewer.content.pages,
+                    "visible": _vm.viewer.toolbar.sidebarVisible,
+                    "topOffset": _vm.viewer.toolbar.height
+                  },
+                  on: {
+                    "jumpTo": _vm.$refs.pdfContainer.scrollToPage
+                  }
+                }) : _vm._e(), _vm._v(" "), _vm.dropzoneOptions.active ? _c('div', {
+                  directives: [{
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.dropzoneVisible,
+                    expression: "dropzoneVisible"
+                  }],
+                  attrs: {
+                    "id": "dropzone"
+                  }
+                }, [_vm._v("Drop PDFs here !")]) : _vm._e(), _vm._v(" "), _c('PDFNotifications', {
+                  attrs: {
+                    "notifications": _vm.pdfNotifications
+                  },
+                  on: {
+                    "update:notifications": function updateNotifications($event) {
+                      _vm.pdfNotifications = $event;
+                    }
+                  }
+                })], 1);
+              },
+              staticRenderFns: [],
               directives: {
                 dropzone: VueDropzone
               },
@@ -80840,20 +82230,20 @@
                   default: Date.now() + ""
                 }
               },
-              provide() {
+              provide: function provide() {
                 return {
-                  getFileName: function() {
+                  getFileName: function () {
                     return this.fileName;
                   }.bind(this)
                 };
               },
               components: {
-                PDFToolbar,
-                PDFContainer,
-                PDFSidebar,
-                PDFNotifications
+                PDFToolbar: PDFToolbar,
+                PDFContainer: PDFContainer,
+                PDFSidebar: PDFSidebar,
+                PDFNotifications: PDFNotifications
               },
-              data() {
+              data: function data() {
                 return {
                   viewer: {
                     toolbar: {
@@ -80880,110 +82270,233 @@
                   }
                 };
               },
-              async beforeMount() {
-                Object.assign(this.viewer.toolbar, {
-                  downloadFeatureVisible: this.downloadFeatureVisible,
-                  sidebarFeatureVisible: this.sidebarFeatureVisible,
-                  visible: this.toolbarVisible,
-                  scale: this.scale,
-                  height: this.toolbarVisible ? this.viewer.toolbar.height : 0
-                });
+              beforeMount: function beforeMount() {
+                var _this = this;
 
-                this.dropzoneOptions.active = this.dropzoneFeatureVisible;
+                return asyncToGenerator(
+                /*#__PURE__*/
+                regenerator.mark(function _callee() {
+                  return regenerator.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          Object.assign(_this.viewer.toolbar, {
+                            downloadFeatureVisible: _this.downloadFeatureVisible,
+                            sidebarFeatureVisible: _this.sidebarFeatureVisible,
+                            visible: _this.toolbarVisible,
+                            scale: _this.scale,
+                            height: _this.toolbarVisible ? _this.viewer.toolbar.height : 0
+                          });
+                          _this.dropzoneOptions.active = _this.dropzoneFeatureVisible;
 
-                if (this.src) {
-                  try {
-                    this.viewer.content.pdf = await this.getPDF(this.normalizedSource);
-                  } catch (e) {
-                    console.error(e);
-                  }
-                }
+                          if (!_this.src) {
+                            _context.next = 12;
+                            break;
+                          }
+
+                          _context.prev = 3;
+                          _context.next = 6;
+                          return _this.getPDF(_this.normalizedSource);
+
+                        case 6:
+                          _this.viewer.content.pdf = _context.sent;
+                          _context.next = 12;
+                          break;
+
+                        case 9:
+                          _context.prev = 9;
+                          _context.t0 = _context["catch"](3);
+                          console.error(_context.t0);
+
+                        case 12:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee, null, [[3, 9]]);
+                }))();
               },
               watch: {
-                scale(nv) {
+                scale: function scale(nv) {
                   this.viewer.toolbar.scale = nv.toString();
                 },
-                "viewer.toolbar.scale"(nv) {
+                "viewer.toolbar.scale": function viewerToolbarScale(nv) {
                   this.$emit("update:scale", nv);
                 },
-                "viewer.content.loading"(newval) {
+                "viewer.content.loading": function viewerContentLoading(newval) {
                   this.$emit(newval ? "loadingBegin" : "loadingEnd");
                 },
-                async normalizedSource(newval) {
-                  if (newval) {
-                    try {
-                      this.viewer.content.pdf = null;
-                      this.viewer.content.pages = [];
-                      this.viewer.content.pdf = await this.getPDF(newval);
-                    } catch (e) {
-                      this.viewer.content.pdf = null;
-                      this.viewer.content.pages = [];
-                      console.error(e);
-                    }
-                  }
+                normalizedSource: function normalizedSource(newval) {
+                  var _this2 = this;
+
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee2() {
+                    return regenerator.wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            if (!newval) {
+                              _context2.next = 14;
+                              break;
+                            }
+
+                            _context2.prev = 1;
+                            _this2.viewer.content.pdf = null;
+                            _this2.viewer.content.pages = [];
+                            _context2.next = 6;
+                            return _this2.getPDF(newval);
+
+                          case 6:
+                            _this2.viewer.content.pdf = _context2.sent;
+                            _context2.next = 14;
+                            break;
+
+                          case 9:
+                            _context2.prev = 9;
+                            _context2.t0 = _context2["catch"](1);
+                            _this2.viewer.content.pdf = null;
+                            _this2.viewer.content.pages = [];
+                            console.error(_context2.t0);
+
+                          case 14:
+                          case "end":
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2, null, [[1, 9]]);
+                  }))();
                 }
               },
               methods: {
-                onDropzoneDragEnter() {
+                onDropzoneDragEnter: function onDropzoneDragEnter() {
                   this.dropzoneVisible = true;
                 },
-                onDropzoneDragLeave() {
+                onDropzoneDragLeave: function onDropzoneDragLeave() {
                   this.dropzoneVisible = false;
                 },
-                async onDropzoneUpload(file) {
-                  try {
-                    let binarySrc = new Uint8Array(file);
-                    this.$emit("update:src", binarySrc);
-                  } catch (e) {
-                    console.error(e);
-                    this.src = null;
-                  }
+                onDropzoneUpload: function onDropzoneUpload(file) {
+                  var _this3 = this;
+
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee3() {
+                    var binarySrc;
+                    return regenerator.wrap(function _callee3$(_context3) {
+                      while (1) {
+                        switch (_context3.prev = _context3.next) {
+                          case 0:
+                            try {
+                              binarySrc = new Uint8Array(file);
+
+                              _this3.$emit("update:src", binarySrc);
+                            } catch (e) {
+                              console.error(e);
+                              _this3.src = null;
+                            }
+
+                          case 1:
+                          case "end":
+                            return _context3.stop();
+                        }
+                      }
+                    }, _callee3);
+                  }))();
                 },
-                onDropzoneUploadError(msg) {
+                onDropzoneUploadError: function onDropzoneUploadError(msg) {
                   this.pdfNotifications.push({
                     text: msg,
                     type: "error"
                   });
                 },
-                async getDataAsBuffer() {
-                  if (this.viewer.content.pdf)
-                    return await this.viewer.content.pdf.getData();
-                  return null;
-                },
+                getDataAsBuffer: function getDataAsBuffer() {
+                  var _this4 = this;
 
-                async getPDF(val) {
-                  try {
-                    this.viewer.content.loading = true;
-                    let pdf = await PDFJS.getDocument(val);
-                    this.viewer.content.loading = false;
-                    return pdf;
-                  } catch (e) {
-                    this.viewer.content.loading = false;
-                    throw new Error(e);
-                  }
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee4() {
+                    return regenerator.wrap(function _callee4$(_context4) {
+                      while (1) {
+                        switch (_context4.prev = _context4.next) {
+                          case 0:
+                            if (!_this4.viewer.content.pdf) {
+                              _context4.next = 4;
+                              break;
+                            }
+
+                            _context4.next = 3;
+                            return _this4.viewer.content.pdf.getData();
+
+                          case 3:
+                            return _context4.abrupt("return", _context4.sent);
+
+                          case 4:
+                            return _context4.abrupt("return", null);
+
+                          case 5:
+                          case "end":
+                            return _context4.stop();
+                        }
+                      }
+                    }, _callee4);
+                  }))();
                 },
-                convertDataURIToBinary: function(dataURI) {
+                getPDF: function getPDF(val) {
+                  var _this5 = this;
+
+                  return asyncToGenerator(
+                  /*#__PURE__*/
+                  regenerator.mark(function _callee5() {
+                    var pdf;
+                    return regenerator.wrap(function _callee5$(_context5) {
+                      while (1) {
+                        switch (_context5.prev = _context5.next) {
+                          case 0:
+                            _context5.prev = 0;
+                            _this5.viewer.content.loading = true;
+                            _context5.next = 4;
+                            return PDFJS.getDocument(val);
+
+                          case 4:
+                            pdf = _context5.sent;
+                            _this5.viewer.content.loading = false;
+                            return _context5.abrupt("return", pdf);
+
+                          case 9:
+                            _context5.prev = 9;
+                            _context5.t0 = _context5["catch"](0);
+                            _this5.viewer.content.loading = false;
+                            throw new Error(_context5.t0);
+
+                          case 13:
+                          case "end":
+                            return _context5.stop();
+                        }
+                      }
+                    }, _callee5, null, [[0, 9]]);
+                  }))();
+                },
+                convertDataURIToBinary: function convertDataURIToBinary(dataURI) {
                   var BASE64_MARKER = ";base64,",
-                    base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length,
-                    base64 = dataURI.substring(base64Index),
-                    raw = window.atob(base64),
-                    rawLength = raw.length,
-                    array = new Uint8Array(new ArrayBuffer(rawLength));
+                      base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length,
+                      base64 = dataURI.substring(base64Index),
+                      raw = window.atob(base64),
+                      rawLength = raw.length,
+                      array = new Uint8Array(new ArrayBuffer(rawLength));
 
                   for (var i = 0; i < rawLength; i++) {
                     array[i] = raw.charCodeAt(i);
                   }
+
                   return array;
                 }
               },
               computed: {
-                normalizedSource() {
-                  let src = this.src;
-
+                normalizedSource: function normalizedSource() {
+                  var src = this.src;
                   if (!src) return null;
-                  if (
-                    (src.includes("data:application/pdf;base64,"))
-                  ) {
+
+                  if (src.includes("data:application/pdf;base64,")) {
                     src = src.substring("data:application/pdf;base64,");
                   }
 
