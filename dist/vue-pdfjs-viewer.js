@@ -70134,6 +70134,28 @@ var PDFView = (function (exports) {
 
             var regenerator = runtime_1;
 
+            var _extends_1 = createCommonjsModule(function (module) {
+            function _extends() {
+              module.exports = _extends = Object.assign || function (target) {
+                for (var i = 1; i < arguments.length; i++) {
+                  var source = arguments[i];
+
+                  for (var key in source) {
+                    if (Object.prototype.hasOwnProperty.call(source, key)) {
+                      target[key] = source[key];
+                    }
+                  }
+                }
+
+                return target;
+              };
+
+              return _extends.apply(this, arguments);
+            }
+
+            module.exports = _extends;
+            });
+
             function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
               try {
                 var info = gen[key](arg);
@@ -73374,7 +73396,7 @@ var PDFView = (function (exports) {
                 },
                 scaleSelection: function scaleSelection(newval) {
                   if (newval !== "auto") newval = (parseInt(newval) / 100).toString();
-                  this.$emit("input", Object.assign({}, this.value, {
+                  this.$emit("input", _extends_1({}, this.value, {
                     scale: newval
                   }));
                 }
@@ -82314,13 +82336,14 @@ var PDFView = (function (exports) {
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
-                          Object.assign(_this.viewer.toolbar, {
+                          _extends_1(_this.viewer.toolbar, {
                             downloadFeatureVisible: _this.downloadFeatureVisible,
                             sidebarFeatureVisible: _this.sidebarFeatureVisible,
                             visible: _this.toolbarVisible,
                             scale: _this.scale,
                             height: _this.toolbarVisible ? _this.viewer.toolbar.height : 0
                           });
+
                           _this.dropzoneOptions.active = _this.dropzoneFeatureVisible;
 
                           if (!_this.src) {

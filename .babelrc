@@ -10,7 +10,8 @@
             }
         ],
         "@babel/plugin-transform-arrow-functions",
-        "@babel/plugin-transform-shorthand-properties"
+        "@babel/plugin-transform-shorthand-properties",
+        "@babel/plugin-transform-object-assign"
     ],
     "presets": [
         "@babel/preset-env"
