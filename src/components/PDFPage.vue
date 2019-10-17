@@ -119,7 +119,7 @@ export default {
       });
 
       this.textContent = await page.getTextContent();
-      this.annotations = await page.getAnnotations();
+      this.annotations = await page.getAnnotations({ intent: 'display' });
 
       this.resizing = false;
     },

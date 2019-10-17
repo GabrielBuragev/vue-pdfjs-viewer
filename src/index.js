@@ -1,3 +1,4 @@
+import './assets/js/pollyfils';
 import "./assets/scss/app.scss";
 // PDFJS Conf
 import PDFJS from "pdfjs-dist/build/pdf.js";

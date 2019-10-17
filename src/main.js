@@ -1,4 +1,5 @@
-import 'babel-polyfill'
+import '@babel/polyfill'
+import './assets/js/pollyfils';
 import Vue from "vue";
 import App from './App.vue'
 import './assets/scss/app.scss';

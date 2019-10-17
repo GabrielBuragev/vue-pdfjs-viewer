@@ -223,7 +223,9 @@ export default {
       if (
         (typeof src === "string", src.includes("data:application/pdf;base64,"))
       ) {
-        src = src.substring("data:application/pdf;base64,");
+        src = this.convertDataURIToBinary(
+          src.substring("data:application/pdf;base64,")
+        );
       }
 
       return src;

@@ -35,6 +35,8 @@ export default {
       blob = new Blob([data], {
         type: mimeType
       });
+      if (window.navigator.msSaveBlob)
+        return window.navigator.msSaveBlob(blob, fileName);
       url = window.URL.createObjectURL(blob);
       this.downloadURL(url, fileName);
       this.$nextTick(function() {
