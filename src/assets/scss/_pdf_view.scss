@@ -8,14 +8,16 @@
   height: 100%;
   .pdf-toolbar {
     display: flex;
-    flex: 1;
+    flex: 5%;
+    flex-grow: 5%;
     flex-direction: row;
     align-items: center;
     justify-content: center;
   }
   #pdfCanvasContainer {
     display: flex;
-    flex: 12;
+    flex: 95%;
+    flex-grow: 95%;
   }
   #dropzone {
     width: 100vw;
