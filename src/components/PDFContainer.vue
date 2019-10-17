@@ -8,7 +8,7 @@
       <div class="loading-wrapper" v-if="pdfLoadingProgress < pdfNumPages || loading">
         <slot name="loading" :loadingProgress="pdfLoadingProgress / pdfNumPages">
           <div class="loading-status">
-            <img :src="loader" width="20%" height="20%" />
+            <img :src="(browser === 'IE')?loaderGif:loaderSvg" width="20%" height="20%" />
             <br />
             <h3>{{loadingAlert}}</h3>
           </div>
@@ -38,11 +38,12 @@
 <script>
 import PageNotFound from "./404.vue";
 import PDFPage from "./PDFPage.vue";
-import loader from "../assets/images/icons/loader.svg";
-import isMobile from "../mixins/isMobile";
+import loaderGif from "../assets/images/icons/loader_red.gif";
+import loaderSvg from "../assets/images/icons/loader.svg";
+import userInfo from "../mixins/user-info";
 
 export default {
-  mixins: [isMobile],
+  mixins: [userInfo],
   props: {
     scale: {
       type: String,
@@ -80,7 +81,8 @@ export default {
       pdfLoading: true,
       pages: [],
       height: 0,
-      loader
+      loaderSvg,
+      loaderGif
     };
   },
   mounted() {
@@ -146,7 +148,7 @@ export default {
       let scaleDecimal = parseFloat(this.scale);
 
       if (this.scale == "auto") return fitScale;
-      else return this.isMobile() ? fitScale * scaleDecimal : scaleDecimal;
+      else return this.isMobile ? fitScale * scaleDecimal : scaleDecimal;
     },
     pdfNumPages() {
       return this.value.pdf && this.value.pdf.numPages;

@@ -9,7 +9,7 @@
   >
     <div class="page-content-wrapper" v-if="inViewport.now">
       <div class="page-loader-wrapper">
-        <img :src="loader" v-if="resizing" class="page-loader" />
+        <img :src="(browser === 'IE')? loaderGif : loaderSvg" v-if="resizing" class="page-loader" />
       </div>
       <div class="canvasWrapper" ref="canvasWrapper" :style="viewportSizeStyle">
         <canvas
@@ -34,15 +34,18 @@
 <script>
 import TextLayer from "./Layers/PDFTextLayer.vue";
 import AnnotationLayer from "./Layers/PDFAnnotationLayer.vue";
-import loader from "../assets/images/icons/loader.svg";
+import loaderGif from "../assets/images/icons/loader_red.gif";
+import loaderSvg from "../assets/images/icons/loader.svg";
 import inViewport from "vue-in-viewport-mixin";
+import userInfo from "../mixins/user-info";
+
 export default {
   props: ["page", "maxDimensions", "canvasContainer", "scale"],
   components: {
     TextLayer,
     AnnotationLayer
   },
-  mixins: [inViewport],
+  mixins: [inViewport, userInfo],
   data() {
     return {
       dims: {
@@ -57,7 +60,8 @@ export default {
       textContent: {},
       annotations: [],
       resizing: false,
-      loader
+      loaderSvg,
+      loaderGif
     };
   },
   mounted() {
@@ -119,7 +123,7 @@ export default {
       });
 
       this.textContent = await page.getTextContent();
-      this.annotations = await page.getAnnotations({ intent: 'display' });
+      this.annotations = await page.getAnnotations({ intent: "display" });
 
       this.resizing = false;
     },

@@ -1,21 +1,33 @@
 {
-  "name": "vue_pdfjs_viewer",
-  "version": "0.1.9",
-  "description": "Vue viewer component built on top of pdfjs",
-  "main": "dist/vue-pdfjs-viewer.umd.js",
-  "module": "dist/vue-pdfjs-viewer.es.js",
-  "unpkg": "dist/vue-pdfjs-viewer.min.js",
-  "repository": {
+  "_from": "github:GabrielBuragev/vue_pdfjs_viewer",
+  "_id": "vue_pdfjs_viewer@0.1.10",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/vue_pdfjs_viewer",
+  "_phantomChildren": {},
+  "_requested": {
     "type": "git",
-    "url": "https://github.com/GabrielBuragev/vue-pdfjs-viewer.git"
+    "raw": "github:GabrielBuragev/vue_pdfjs_viewer",
+    "rawSpec": "github:GabrielBuragev/vue_pdfjs_viewer",
+    "saveSpec": "github:GabrielBuragev/vue_pdfjs_viewer",
+    "fetchSpec": null,
+    "gitCommittish": null
   },
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "rollup:prod": "NODE_ENV=production rollup -c",
-    "rollup:dev": "NODE_ENV=development rollup -c",
-    "lint": "vue-cli-service lint"
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "github:GabrielBuragev/vue_pdfjs_viewer#f2572eb816599b5ccd5fc91cfc4e46a4418098a8",
+  "_spec": "github:GabrielBuragev/vue_pdfjs_viewer",
+  "_where": "/var/www/html/solumio",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "bugs": {
+    "url": "https://github.com/GabrielBuragev/vue-pdfjs-viewer/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
     "@babel/polyfill": "^7.6.0",
     "babel-polyfill": "^6.26.0",
@@ -26,6 +38,8 @@
     "vue-dropzone": "git+https://github.com/gabrielburagev/vue-dropzone.git",
     "vue-in-viewport-mixin": "^2.0.0"
   },
+  "deprecated": false,
+  "description": "Vue viewer component built on top of pdfjs",
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
@@ -49,6 +63,7 @@
     "rollup-plugin-buble": "^0.19.8",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-css-only": "^1.0.0",
+    "rollup-plugin-img": "^1.1.0",
     "rollup-plugin-livereload": "^1.0.3",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
@@ -57,7 +72,6 @@
     "rollup-plugin-sass": "^1.2.2",
     "rollup-plugin-scss": "^1.0.2",
     "rollup-plugin-serve": "^1.0.1",
-    "rollup-plugin-svg": "^2.0.0",
     "rollup-plugin-vue2": "^0.8.1",
     "sass": "^1.17.4",
     "sass-loader": "^7.1.0",
@@ -77,13 +91,26 @@
       "parser": "babel-eslint"
     }
   },
+  "homepage": "https://github.com/GabrielBuragev/vue-pdfjs-viewer#readme",
+  "main": "dist/vue-pdfjs-viewer.umd.js",
+  "module": "dist/vue-pdfjs-viewer.es.js",
+  "name": "vue_pdfjs_viewer",
   "postcss": {
     "plugins": {
       "autoprefixer": {}
     }
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabrielBuragev/vue-pdfjs-viewer.git"
+  },
+  "scripts": {
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "rollup:dev": "NODE_ENV=development rollup -c",
+    "rollup:prod": "NODE_ENV=production rollup -c",
+    "serve": "vue-cli-service serve"
+  },
+  "unpkg": "dist/vue-pdfjs-viewer.min.js",
+  "version": "0.1.10"
 }

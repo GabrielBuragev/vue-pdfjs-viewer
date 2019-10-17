@@ -27,15 +27,15 @@ export default {
   },
   data() {
     return {
-      src: "http://127.0.0.1:8082/test.pdf",
+      src:"http://localhost:8081/test.pdf",
       scale: "1.25"
     };
   },
   mounted() {
     var self = this;
-    setTimeout(() => {
-      self.scale = "auto";
-    }, 5000);
+    // setTimeout(() => {
+    //   self.scale = "auto";
+    // }, 5000);
   }
 };
 </script>

@@ -36,7 +36,7 @@ export default {
         type: mimeType
       });
       if (window.navigator.msSaveBlob)
-        return window.navigator.msSaveBlob(blob, fileName);
+        return window.navigator.msSaveBlob(blob, fileName + ".pdf");
       url = window.URL.createObjectURL(blob);
       this.downloadURL(url, fileName);
       this.$nextTick(function() {
