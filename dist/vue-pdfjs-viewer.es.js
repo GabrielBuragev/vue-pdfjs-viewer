@@ -82879,10 +82879,13 @@ var onBind = function onBind(el, binding, vnode) {
 };
 
 var onDestroy = function onDestroy(el, binding, vnode) {
-  el.removeEventListener("dragover", DropController._onDragover);
-  el.removeEventListener("drop", DropController._onDrop);
-  el.removeEventListener("dragenter", Dropzone$1.onDragEnter);
-  el.removeEventListener("dragleave", Dropzone$1.onDragLeave);
+  if (DropController) {
+    el.removeEventListener("dragover", DropController._onDragover);
+    el.removeEventListener("drop", DropController._onDrop);
+    el.removeEventListener("dragenter", Dropzone$1.onDragEnter);
+    el.removeEventListener("dragleave", Dropzone$1.onDragLeave);
+  }
+
   binded = false;
 };
 
