@@ -112,5 +112,5 @@
     "serve": "vue-cli-service serve"
   },
   "unpkg": "dist/vue-pdfjs-viewer.min.js",
-  "version": "0.1.12"
+  "version": "0.1.11"
 }
