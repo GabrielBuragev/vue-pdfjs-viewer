@@ -35,7 +35,7 @@
     "intersection-observer": "^0.7.0",
     "pdfjs-dist": "2.0.943",
     "vue": "^2.6.11",
-    "vue-dropzone": "git+https://github.com/gabrielburagev/vue-dropzone.git",
+    "vue-dropzone": "https://github.com/gabrielburagev/vue-dropzone.git",
     "vue-in-viewport-mixin": "^2.0.0"
   },
   "deprecated": false,
