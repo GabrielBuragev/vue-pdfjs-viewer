@@ -14,15 +14,15 @@ export default {
   props: {
     pdf: {
       type: Object,
-      default: function() {
+      default: function () {
         return {};
-      }
-    }
+      },
+    },
   },
   inject: ["getFileName"],
   data() {
     return {
-      downloadSvg
+      downloadSvg,
     };
   },
   methods: {
@@ -33,13 +33,13 @@ export default {
     downloadBlob(data, fileName, mimeType) {
       var blob, url;
       blob = new Blob([data], {
-        type: mimeType
+        type: mimeType,
       });
       if (window.navigator.msSaveBlob)
         return window.navigator.msSaveBlob(blob, fileName + ".pdf");
       url = window.URL.createObjectURL(blob);
       this.downloadURL(url, fileName);
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         window.URL.revokeObjectURL(url);
       });
     },
@@ -52,7 +52,7 @@ export default {
       a.style = "display: none";
       a.click();
       a.remove();
-    }
-  }
+    },
+  },
 };
 </script>
