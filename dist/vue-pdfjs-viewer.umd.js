@@ -74147,7 +74147,7 @@
               },
               data: function data() {
                 return {
-                  selectOptions: ["auto", "75", "100", "125", "150"],
+                  selectOptions: ["auto", "75", "100", "125", "150", "200"],
                   scaleSelection: "125"
                 };
               },
