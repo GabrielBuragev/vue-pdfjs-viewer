@@ -90,7 +90,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "ignorePatters": ["dist/*"]
+    "ignorePatters": [
+      "dist/*"
+    ]
   },
   "homepage": "https://github.com/GabrielBuragev/vue-pdfjs-viewer#readme",
   "main": "dist/vue-pdfjs-viewer.umd.js",
@@ -113,5 +115,5 @@
     "serve": "vue-cli-service serve"
   },
   "unpkg": "dist/vue-pdfjs-viewer.min.js",
-  "version": "0.1.13"
+  "version": "0.1.14"
 }
