@@ -14,7 +14,7 @@
  */
 /* globals PDFJS */
 
-'use strict';
+"use strict";
 
 /**
  * @typedef {Object} TextLayerBuilderOptions
@@ -50,13 +50,13 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
     _finishRendering: function TextLayerBuilder_finishRendering() {
       this.renderingDone = true;
 
-      var endOfContent = document.createElement('div');
-      endOfContent.className = 'endOfContent';
+      var endOfContent = document.createElement("div");
+      endOfContent.className = "endOfContent";
       this.textLayerDiv.appendChild(endOfContent);
 
-      var event = document.createEvent('CustomEvent');
-      event.initCustomEvent('textlayerrendered', true, true, {
-        pageNumber: this.pageNumber
+      var event = document.createEvent("CustomEvent");
+      event.initCustomEvent("textlayerrendered", true, true, {
+        pageNumber: this.pageNumber,
       });
       this.textLayerDiv.dispatchEvent(event);
     },
@@ -83,15 +83,19 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         container: textLayerFrag,
         viewport: this.viewport,
         textDivs: this.textDivs,
-        timeout: timeout
+        timeout: timeout,
       });
-      this.textLayerRenderTask.promise.then(function () {
-        this.textLayerDiv.appendChild(textLayerFrag);
-        this._finishRendering();
-        this.updateMatches();
-      }.bind(this), function (reason) {
-        // canceled or failed to render text layer -- skipping errors
-      });
+      this.textLayerRenderTask.promise.then(
+        function() {
+          this.textLayerDiv.appendChild(textLayerFrag);
+          this._finishRendering();
+          this.updateMatches();
+        }.bind(this),
+        // eslint-disable-next-line
+        function(reason) {
+          // canceled or failed to render text layer -- skipping errors
+        }
+      );
     },
 
     setTextContent: function TextLayerBuilder_setTextContent(textContent) {
@@ -108,8 +112,10 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
       var iIndex = 0;
       var bidiTexts = this.textContent.items;
       var end = bidiTexts.length - 1;
-      var queryLen = (this.findController === null ?
-                      0 : this.findController.state.query.length);
+      var queryLen =
+        this.findController === null
+          ? 0
+          : this.findController.state.query.length;
       var ret = [];
 
       for (var m = 0, len = matches.length; m < len; m++) {
@@ -117,20 +123,20 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         var matchIdx = matches[m];
 
         // Loop over the divIdxs.
-        while (i !== end && matchIdx >= (iIndex + bidiTexts[i].str.length)) {
+        while (i !== end && matchIdx >= iIndex + bidiTexts[i].str.length) {
           iIndex += bidiTexts[i].str.length;
           i++;
         }
 
         if (i === bidiTexts.length) {
-          console.error('Could not find a matching mapping');
+          console.error("Could not find a matching mapping");
         }
 
         var match = {
           begin: {
             divIdx: i,
-            offset: matchIdx - iIndex
-          }
+            offset: matchIdx - iIndex,
+          },
         };
 
         // Calculate the end position.
@@ -138,14 +144,14 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
 
         // Somewhat the same array as above, but use > instead of >= to get
         // the end position right.
-        while (i !== end && matchIdx > (iIndex + bidiTexts[i].str.length)) {
+        while (i !== end && matchIdx > iIndex + bidiTexts[i].str.length) {
           iIndex += bidiTexts[i].str.length;
           i++;
         }
 
         match.end = {
           divIdx: i,
-          offset: matchIdx - iIndex
+          offset: matchIdx - iIndex,
         };
         ret.push(match);
       }
@@ -163,20 +169,26 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
       var textDivs = this.textDivs;
       var prevEnd = null;
       var pageIdx = this.pageIdx;
-      var isSelectedPage = (this.findController === null ?
-        false : (pageIdx === this.findController.selected.pageIdx));
-      var selectedMatchIdx = (this.findController === null ?
-                              -1 : this.findController.selected.matchIdx);
-      var highlightAll = (this.findController === null ?
-                          false : this.findController.state.highlightAll);
+      var isSelectedPage =
+        this.findController === null
+          ? false
+          : pageIdx === this.findController.selected.pageIdx;
+      var selectedMatchIdx =
+        this.findController === null
+          ? -1
+          : this.findController.selected.matchIdx;
+      var highlightAll =
+        this.findController === null
+          ? false
+          : this.findController.state.highlightAll;
       var infinity = {
         divIdx: -1,
-        offset: undefined
+        offset: undefined,
       };
 
       function beginText(begin, className) {
         var divIdx = begin.divIdx;
-        textDivs[divIdx].textContent = '';
+        textDivs[divIdx].textContent = "";
         appendTextToDiv(divIdx, 0, begin.offset, className);
       }
 
@@ -185,7 +197,7 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         var content = bidiTexts[divIdx].str.substring(fromOffset, toOffset);
         var node = document.createTextNode(content);
         if (className) {
-          var span = document.createElement('span');
+          var span = document.createElement("span");
           span.className = className;
           span.appendChild(node);
           div.appendChild(span);
@@ -194,7 +206,8 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         div.appendChild(node);
       }
 
-      var i0 = selectedMatchIdx, i1 = i0 + 1;
+      var i0 = selectedMatchIdx,
+        i1 = i0 + 1;
       if (highlightAll) {
         i0 = 0;
         i1 = matches.length;
@@ -207,12 +220,17 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         var match = matches[i];
         var begin = match.begin;
         var end = match.end;
-        var isSelected = (isSelectedPage && i === selectedMatchIdx);
-        var highlightSuffix = (isSelected ? ' selected' : '');
+        var isSelected = isSelectedPage && i === selectedMatchIdx;
+        var highlightSuffix = isSelected ? " selected" : "";
 
         if (this.findController) {
-          this.findController.updateMatchPosition(pageIdx, i, textDivs,
-                                                  begin.divIdx, end.divIdx);
+          this.findController.updateMatchPosition(
+            pageIdx,
+            i,
+            textDivs,
+            begin.divIdx,
+            end.divIdx
+          );
         }
 
         // Match inside new div.
@@ -228,15 +246,23 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         }
 
         if (begin.divIdx === end.divIdx) {
-          appendTextToDiv(begin.divIdx, begin.offset, end.offset,
-                          'highlight' + highlightSuffix);
+          appendTextToDiv(
+            begin.divIdx,
+            begin.offset,
+            end.offset,
+            "highlight" + highlightSuffix
+          );
         } else {
-          appendTextToDiv(begin.divIdx, begin.offset, infinity.offset,
-                          'highlight begin' + highlightSuffix);
+          appendTextToDiv(
+            begin.divIdx,
+            begin.offset,
+            infinity.offset,
+            "highlight begin" + highlightSuffix
+          );
           for (var n0 = begin.divIdx + 1, n1 = end.divIdx; n0 < n1; n0++) {
-            textDivs[n0].className = 'highlight middle' + highlightSuffix;
+            textDivs[n0].className = "highlight middle" + highlightSuffix;
           }
-          beginText(end, 'highlight end' + highlightSuffix);
+          beginText(end, "highlight end" + highlightSuffix);
         }
         prevEnd = end;
       }
@@ -265,7 +291,7 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
         for (var n = begin, end = match.end.divIdx; n <= end; n++) {
           var div = textDivs[n];
           div.textContent = bidiTexts[n].str;
-          div.className = '';
+          div.className = "";
         }
         clearedUntilDivIdx = match.end.divIdx + 1;
       }
@@ -276,8 +302,11 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
 
       // Convert the matches on the page controller into the match format
       // used for the textLayer.
-      this.matches = this.convertMatches(this.findController === null ?
-        [] : (this.findController.pageMatches[this.pageIdx] || []));
+      this.matches = this.convertMatches(
+        this.findController === null
+          ? []
+          : this.findController.pageMatches[this.pageIdx] || []
+      );
       this.renderMatches(this.matches);
     },
 
@@ -288,38 +317,40 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
      */
     _bindMouse: function TextLayerBuilder_bindMouse() {
       var div = this.textLayerDiv;
-      div.addEventListener('mousedown', function (e) {
-        var end = div.querySelector('.endOfContent');
+      div.addEventListener("mousedown", function(e) {
+        var end = div.querySelector(".endOfContent");
         if (!end) {
           return;
         }
-//#if !(MOZCENTRAL || FIREFOX)
+        //#if !(MOZCENTRAL || FIREFOX)
         // On non-Firefox browsers, the selection will feel better if the height
         // of the endOfContent div will be adjusted to start at mouse click
         // location -- this will avoid flickering when selections moves up.
         // However it does not work when selection started on empty space.
         var adjustTop = e.target !== div;
-//#if GENERIC
-        adjustTop = adjustTop && window.getComputedStyle(end).
-          getPropertyValue('-moz-user-select') !== 'none';
-//#endif
+        //#if GENERIC
+        adjustTop =
+          adjustTop &&
+          window.getComputedStyle(end).getPropertyValue("-moz-user-select") !==
+            "none";
+        //#endif
         if (adjustTop) {
           var divBounds = div.getBoundingClientRect();
           var r = Math.max(0, (e.pageY - divBounds.top) / divBounds.height);
-          end.style.top = (r * 100).toFixed(2) + '%';
+          end.style.top = (r * 100).toFixed(2) + "%";
         }
-//#endif
-        end.classList.add('active');
+        //#endif
+        end.classList.add("active");
       });
-      div.addEventListener('mouseup', function (e) {
-        var end = div.querySelector('.endOfContent');
+      div.addEventListener("mouseup", function() {
+        var end = div.querySelector(".endOfContent");
         if (!end) {
           return;
         }
-//#if !(MOZCENTRAL || FIREFOX)
-        end.style.top = '';
-//#endif
-        end.classList.remove('active');
+        //#if !(MOZCENTRAL || FIREFOX)
+        end.style.top = "";
+        //#endif
+        end.classList.remove("active");
       });
     },
   };
@@ -337,13 +368,13 @@ DefaultTextLayerFactory.prototype = {
    * @param {PageViewport} viewport
    * @returns {TextLayerBuilder}
    */
-  createTextLayerBuilder: function (textLayerDiv, pageIndex, viewport) {
+  createTextLayerBuilder: function(textLayerDiv, pageIndex, viewport) {
     return new TextLayerBuilder({
       textLayerDiv: textLayerDiv,
       pageIndex: pageIndex,
-      viewport: viewport
+      viewport: viewport,
     });
-  }
+  },
 };
 
 export default TextLayerBuilder;

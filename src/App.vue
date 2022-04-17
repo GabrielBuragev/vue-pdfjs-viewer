@@ -23,20 +23,20 @@ import { PDFView } from "../dist/vue-pdfjs-viewer.es";
 export default {
   name: "app",
   components: {
-    PDFView
+    PDFView,
   },
   data() {
     return {
-      src:"http://localhost:8081/test.pdf",
-      scale: "1.25"
+      src: "http://localhost:8081/test.pdf",
+      scale: "1.25",
     };
   },
   mounted() {
-    var self = this;
+    // var self = this;
     // setTimeout(() => {
     //   self.scale = "auto";
     // }, 5000);
-  }
+  },
 };
 </script>
 
