@@ -87,7 +87,15 @@
       "eslint:recommended"
     ],
     "rules": {
-      "no-console": ["error", { "allow": ["warn", "error"] }]
+      "no-console": [
+        "error",
+        {
+          "allow": [
+            "warn",
+            "error"
+          ]
+        }
+      ]
     },
     "parserOptions": {
       "parser": "babel-eslint"
@@ -114,5 +122,5 @@
     "serve": "vue-cli-service serve"
   },
   "unpkg": "dist/vue-pdfjs-viewer.min.js",
-  "version": "0.1.14"
+  "version": "0.1.15"
 }
