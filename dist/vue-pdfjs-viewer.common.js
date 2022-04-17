@@ -69845,11 +69845,11 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
   TextLayerBuilder.prototype = {
     _finishRendering: function TextLayerBuilder_finishRendering() {
       this.renderingDone = true;
-      var endOfContent = document.createElement('div');
-      endOfContent.className = 'endOfContent';
+      var endOfContent = document.createElement("div");
+      endOfContent.className = "endOfContent";
       this.textLayerDiv.appendChild(endOfContent);
-      var event = document.createEvent('CustomEvent');
-      event.initCustomEvent('textlayerrendered', true, true, {
+      var event = document.createEvent("CustomEvent");
+      event.initCustomEvent("textlayerrendered", true, true, {
         pageNumber: this.pageNumber
       });
       this.textLayerDiv.dispatchEvent(event);
@@ -69885,7 +69885,8 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
         this._finishRendering();
 
         this.updateMatches();
-      }.bind(this), function (reason) {// canceled or failed to render text layer -- skipping errors
+      }.bind(this), // eslint-disable-next-line
+      function (reason) {// canceled or failed to render text layer -- skipping errors
       });
     },
     setTextContent: function TextLayerBuilder_setTextContent(textContent) {
@@ -69915,7 +69916,7 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
         }
 
         if (i === bidiTexts.length) {
-          console.error('Could not find a matching mapping');
+          console.error("Could not find a matching mapping");
         }
 
         var match = {
@@ -69962,7 +69963,7 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
 
       function beginText(begin, className) {
         var divIdx = begin.divIdx;
-        textDivs[divIdx].textContent = '';
+        textDivs[divIdx].textContent = "";
         appendTextToDiv(divIdx, 0, begin.offset, className);
       }
 
@@ -69972,7 +69973,7 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
         var node = document.createTextNode(content);
 
         if (className) {
-          var span = document.createElement('span');
+          var span = document.createElement("span");
           span.className = className;
           span.appendChild(node);
           div.appendChild(span);
@@ -69998,7 +69999,7 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
         var begin = match.begin;
         var end = match.end;
         var isSelected = isSelectedPage && i === selectedMatchIdx;
-        var highlightSuffix = isSelected ? ' selected' : '';
+        var highlightSuffix = isSelected ? " selected" : "";
 
         if (this.findController) {
           this.findController.updateMatchPosition(pageIdx, i, textDivs, begin.divIdx, end.divIdx);
@@ -70018,15 +70019,15 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
         }
 
         if (begin.divIdx === end.divIdx) {
-          appendTextToDiv(begin.divIdx, begin.offset, end.offset, 'highlight' + highlightSuffix);
+          appendTextToDiv(begin.divIdx, begin.offset, end.offset, "highlight" + highlightSuffix);
         } else {
-          appendTextToDiv(begin.divIdx, begin.offset, infinity.offset, 'highlight begin' + highlightSuffix);
+          appendTextToDiv(begin.divIdx, begin.offset, infinity.offset, "highlight begin" + highlightSuffix);
 
           for (var n0 = begin.divIdx + 1, n1 = end.divIdx; n0 < n1; n0++) {
-            textDivs[n0].className = 'highlight middle' + highlightSuffix;
+            textDivs[n0].className = "highlight middle" + highlightSuffix;
           }
 
-          beginText(end, 'highlight end' + highlightSuffix);
+          beginText(end, "highlight end" + highlightSuffix);
         }
 
         prevEnd = end;
@@ -70055,7 +70056,7 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
         for (var n = begin, end = match.end.divIdx; n <= end; n++) {
           var div = textDivs[n];
           div.textContent = bidiTexts[n].str;
-          div.className = '';
+          div.className = "";
         }
 
         clearedUntilDivIdx = match.end.divIdx + 1;
@@ -70078,8 +70079,8 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
      */
     _bindMouse: function TextLayerBuilder_bindMouse() {
       var div = this.textLayerDiv;
-      div.addEventListener('mousedown', function (e) {
-        var end = div.querySelector('.endOfContent');
+      div.addEventListener("mousedown", function (e) {
+        var end = div.querySelector(".endOfContent");
 
         if (!end) {
           return;
@@ -70092,28 +70093,28 @@ var TextLayerBuilder$1 = function TextLayerBuilderClosure() {
 
         var adjustTop = e.target !== div; //#if GENERIC
 
-        adjustTop = adjustTop && window.getComputedStyle(end).getPropertyValue('-moz-user-select') !== 'none'; //#endif
+        adjustTop = adjustTop && window.getComputedStyle(end).getPropertyValue("-moz-user-select") !== "none"; //#endif
 
         if (adjustTop) {
           var divBounds = div.getBoundingClientRect();
           var r = Math.max(0, (e.pageY - divBounds.top) / divBounds.height);
-          end.style.top = (r * 100).toFixed(2) + '%';
+          end.style.top = (r * 100).toFixed(2) + "%";
         } //#endif
 
 
-        end.classList.add('active');
+        end.classList.add("active");
       });
-      div.addEventListener('mouseup', function (e) {
-        var end = div.querySelector('.endOfContent');
+      div.addEventListener("mouseup", function () {
+        var end = div.querySelector(".endOfContent");
 
         if (!end) {
           return;
         } //#if !(MOZCENTRAL || FIREFOX)
 
 
-        end.style.top = ''; //#endif
+        end.style.top = ""; //#endif
 
-        end.classList.remove('active');
+        end.classList.remove("active");
       });
     }
   };
