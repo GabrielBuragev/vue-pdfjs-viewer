@@ -83,7 +83,7 @@
   "homepage": "https://github.com/GabrielBuragev/vue-pdfjs-viewer#readme",
   "main": "dist/vue-pdfjs-viewer.umd.js",
   "module": "dist/vue-pdfjs-viewer.es.js",
-  "name": "vue-pdf-viewer",
+  "name": "@gabrielbu/vue-pdf-viewer",
   "postcss": {
     "plugins": {
       "autoprefixer": {}

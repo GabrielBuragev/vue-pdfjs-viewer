@@ -1,34 +1,31 @@
-# vue_pdfjs_viewer
+# @gabrielbu/vue-pdf-viewer
 
-### Installation
+Vue PDF viewer components implemented using PDFJS.
 
-`npm install vue_pdfjs_viewer`
+## Install
+
+```bash
+npm install --save @gabrielbu/vue-pdf-viewer
+```
 
 ### Usage in vue
 
 ```js
-
 <template>
-  <div id="app" style="height:593px">
-    <PDFView
-      :src.sync="src" // Valid PDF Source (read below for more info)
-      ref="pdfView"
-      fileName="order" // Name of the file that's going to be downloaded (default: {Date.now()}.pdf )
-      :sidebarFeatureVisible="false" // Should the sidebar feature be visible ? (default: true)
-      :downloadFeatureVisible="false" // Should the download button feature be active ? (default: true)
-      :dropzoneFeatureVisible="false" // Should the pdf dropzone feature be active ? (default: true)
-      :toolbarVisible="false" // Should the toolbar be visible ? (default: true)
-      scale.sync="scale" // String value for the page scale ["0.75", "1", "1.25", "1.5", "auto"] are supported
-    >
-        <template slot="right-toolbox"></template> <!-- Add more buttons/features on the right side of the toolbar -->
-        <template slot="left-toolbox"></template> <!-- Add more buttons/features on the left side of the toolbar -->
-        <template slot="error"></template> <!-- Change the error message design -->
-        <template slot="loading"></template> <!-- Change the pdf loader design -->
+  <div id="app" style="height:100vh;width:100vw; position:fixed;">
+    <PDFView :src.sync="src" ref="pdfView" fileName="order" :scale.sync="scale">
+      <template slot="right-toolbox"></template>
+      <!-- Add more buttons/features on the right side of the toolbar -->
+      <template slot="left-toolbox"></template>
+      <!-- Add more buttons/features on the left side of the toolbar -->
+      <template slot="error"></template>
+      <!-- Change the error message design -->
+      <template slot="loading"></template>
     </PDFView>
   </div>
 </template>
 <script>
-import {PDFView} from 'vue_pdfjs_viewer';
+import {PDFView} from '@gabrielbu/vue-pdf-viewer';
 export default {
   components:{
   // ...
@@ -43,9 +40,15 @@ export default {
 </script>
 ```
 
-### Valid PDF source
+## API
 
-- URL (https://example.com/pdf-content.pdf)
+### Props
+
+#### :src <sup>String / Object - default: null<sup>
+
+`src` accepts the following values:
+
+- URL - example: https://example.com/pdf-content.pdf
 
 - PDF Uint8Array Buffer
 
@@ -55,6 +58,33 @@ export default {
 
 - Base64 encoded PDF buffer
 
-- data:application/pdf;base64, ....
+- Base64 string - data:application/pdf;base64, ....
 
-- You can also drag/drop pdf files into the viewer !
+- You can also drag/drop pdf files into the viewer utilizing my own [vue-dropzone](https://github.com/GabrielBuragev/vue-dropzone) directive!
+
+for more details see [`PDFJS.getDocument()`](https://github.com/mozilla/pdf.js/blob/8ff1fbe7f819513e7d0023df961e3d223b35aefa/src/display/api.js#L117).
+
+#### :toolbarVisible <sup>Boolean - default: true<sup>
+
+Toggle toolbar visibility.
+
+#### :downloadFeatureVisible <sup>Boolean - default: true<sup>
+
+Toggle download button feature visibility.
+
+#### :sidebarFeatureVisible <sup>Boolean - default: true<sup>
+
+Toggle sidebar (page navigation bar) visibility.
+
+#### :dropzoneFeatureVisible <sup>Boolean - default: true<sup>
+
+Enable/disable the dropzone(drag-n-drop PDF files) feature.
+
+#### :scale <sup>String - default: "1.25"<sup>
+
+Set the initial scale of the viewer.
+You can use it with `:scale.sync` for enabling two-way data binding.
+
+#### :fileName <sup>String - default: "{Date.now()}.pdf"<sup>
+
+Name of the file used when download function is triggered.
