@@ -54,7 +54,7 @@ const plugins = [
     exclude: "node_modules/**",
   }),
 ];
-const pluginsWithMinify = plugins.slice(0);
+
 const defaultConfig = {
   input: "src/index.js",
   external: externals.filter((dep) => {
@@ -62,12 +62,9 @@ const defaultConfig = {
   }),
 };
 
-if (process.env.NODE_ENV === "production") {
-  pluginsWithMinify.push(minify());
-}
-
 export default [
-  Object.assign({}, defaultConfig, {
+  {
+    ...defaultConfig,
     output: [
       {
         file: `dist/${FILE_NAME}.es.js`,
@@ -82,20 +79,18 @@ export default [
         sourcemap,
         exports: "named",
       },
+      {
+        file: `dist/${FILE_NAME}.js`,
+        format: "iife",
+        name: LIBRARY_NAME,
+        sourcemap,
+        exports: "named",
+      },
     ],
     plugins,
-  }),
-  Object.assign({}, defaultConfig, {
-    output: {
-      file: `dist/${FILE_NAME}.js`,
-      format: "iife",
-      name: LIBRARY_NAME,
-      sourcemap,
-      exports: "named",
-    },
-    plugins,
-  }),
-  Object.assign({}, defaultConfig, {
+  },
+  {
+    ...defaultConfig,
     output: {
       file: `dist/${FILE_NAME}.min.js`,
       format: "iife",
@@ -103,6 +98,6 @@ export default [
       sourcemap,
       exports: "named",
     },
-    plugins: pluginsWithMinify,
-  }),
+    plugins: [...plugins, minify()],
+  },
 ];
