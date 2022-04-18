@@ -8,18 +8,18 @@
   },
   "bundleDependencies": false,
   "dependencies": {
-    "@babel/polyfill": "^7.8.3",
-    "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.11",
-    "intersection-observer": "^0.7.0",
     "pdfjs-dist": "2.0.943",
-    "vue": "^2.6.11",
     "vue-dropzone": "https://github.com/gabrielburagev/vue-dropzone.git",
     "vue-in-viewport-mixin": "^2.0.0"
   },
   "deprecated": false,
   "description": "Vue viewer component built on top of pdfjs",
   "devDependencies": {
+    "vue": "^2.6.11",
+    "intersection-observer": "^0.7.0",
+    "babel-polyfill": "^6.26.0",
+    "@babel/polyfill": "^7.8.3",
     "@babel/core": "^7.8.3",
     "@babel/plugin-transform-arrow-functions": "^7.8.3",
     "@babel/plugin-transform-async-to-generator": "^7.8.3",
@@ -112,5 +112,9 @@
     "pdfjs",
     "viewer",
     "components"
+  ],
+  "files": [
+    "/dist",
+    "/src"
   ]
 }

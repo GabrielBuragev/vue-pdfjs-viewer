@@ -1,19 +1,17 @@
 {
-    "plugins": [
-        "@babel/plugin-transform-async-to-generator",
-        "@babel/plugin-transform-regenerator",
-        [
-            "@babel/plugin-transform-runtime",
-            {
-                "helpers": true,
-                "regenerator": true
-            }
-        ],
-        "@babel/plugin-transform-arrow-functions",
-        "@babel/plugin-transform-shorthand-properties",
-        "@babel/plugin-transform-object-assign"
+  "plugins": [
+    "@babel/plugin-transform-async-to-generator",
+    "@babel/plugin-transform-regenerator",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "helpers": true,
+        "regenerator": true
+      }
     ],
-    "presets": [
-        "@babel/preset-env"
-    ]
+    "@babel/plugin-transform-arrow-functions",
+    "@babel/plugin-transform-shorthand-properties",
+    "@babel/plugin-transform-object-assign"
+  ],
+  "presets": ["@babel/preset-env"]
 }

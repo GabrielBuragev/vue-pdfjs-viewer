@@ -8,11 +8,19 @@ import vue from "rollup-plugin-vue2";
 import postcss from "rollup-plugin-postcss";
 import css from "rollup-plugin-css-only";
 import image from "rollup-plugin-img";
+import pkg from "./package.json";
 
 const LIBRARY_NAME = "PDFView";
 const FILE_NAME = "vue-pdfjs-viewer";
 
-const sourcemap = true;
+const externals = [
+  ...(pkg.dependencies ? Object.keys(pkg.dependencies) : []),
+  ...(pkg.peerDependencies ? Object.keys(pkg.peerDependencies) : []),
+  "pdfjs-dist/build/pdf.js",
+];
+const externalExcludes = [];
+
+const sourcemap = false;
 const plugins = [
   resolve({
     browser: true,
@@ -46,17 +54,17 @@ const plugins = [
     exclude: "node_modules/**",
   }),
 ];
-const pluginsWithMinify = plugins.slice(0);
+
 const defaultConfig = {
   input: "src/index.js",
+  external: externals.filter((dep) => {
+    return !externalExcludes.includes(dep);
+  }),
 };
 
-if (process.env.NODE_ENV === "production") {
-  pluginsWithMinify.push(minify());
-}
-
 export default [
-  Object.assign({}, defaultConfig, {
+  {
+    ...defaultConfig,
     output: [
       {
         file: `dist/${FILE_NAME}.es.js`,
@@ -71,20 +79,18 @@ export default [
         sourcemap,
         exports: "named",
       },
+      {
+        file: `dist/${FILE_NAME}.js`,
+        format: "iife",
+        name: LIBRARY_NAME,
+        sourcemap,
+        exports: "named",
+      },
     ],
     plugins,
-  }),
-  Object.assign({}, defaultConfig, {
-    output: {
-      file: `dist/${FILE_NAME}.js`,
-      format: "iife",
-      name: LIBRARY_NAME,
-      sourcemap,
-      exports: "named",
-    },
-    plugins,
-  }),
-  Object.assign({}, defaultConfig, {
+  },
+  {
+    ...defaultConfig,
     output: {
       file: `dist/${FILE_NAME}.min.js`,
       format: "iife",
@@ -92,6 +98,6 @@ export default [
       sourcemap,
       exports: "named",
     },
-    plugins: pluginsWithMinify,
-  }),
+    plugins: [...plugins, minify()],
+  },
 ];
