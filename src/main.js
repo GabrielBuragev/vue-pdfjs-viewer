@@ -1,15 +1,14 @@
-import '@babel/polyfill'
-import './assets/js/pollyfils';
+import "@babel/polyfill";
+import "./assets/js/pollyfils";
 import Vue from "vue";
-import App from './App.vue'
-import './assets/scss/app.scss';
-
+import App from "./App.vue";
+import "./assets/scss/app.scss";
 
 // PDFJS Conf
 import PDFJS from "pdfjs-dist";
-import PdfjsWorker from 'worker-loader!pdfjs-dist/build/pdf.worker.js'
+import PdfjsWorker from "worker-loader!pdfjs-dist/build/pdf.worker.js";
 
-if (typeof window !== 'undefined' && 'Worker' in window) {
+if (typeof window !== "undefined" && "Worker" in window) {
   PDFJS.GlobalWorkerOptions.workerPort = new PdfjsWorker();
 }
 
@@ -20,5 +19,5 @@ window.TextLayerBuilder = TextLayerBuilder;
 Vue.config.productionTip = false;
 
 new Vue({
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
