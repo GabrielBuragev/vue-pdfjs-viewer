@@ -99,7 +99,7 @@
     "rollup:dev": "NODE_ENV=development rollup -c",
     "rollup:prod": "NODE_ENV=production rollup -c",
     "serve": "vue-cli-service serve",
-    "version": "npm run rollup:prod && git add -A dist",
+    "version": "npm run rollup:prod",
     "postversion": "git push && git push --tags"
   },
   "unpkg": "dist/vue-pdfjs-viewer.min.js",
