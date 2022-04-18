@@ -1,4 +1,24 @@
 {
+  "_from": "github:GabrielBuragev/vue_pdfjs_viewer",
+  "_id": "vue_pdfjs_viewer@0.1.15",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/vue_pdfjs_viewer",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "github:GabrielBuragev/vue_pdfjs_viewer",
+    "rawSpec": "github:GabrielBuragev/vue_pdfjs_viewer",
+    "saveSpec": "github:GabrielBuragev/vue_pdfjs_viewer",
+    "fetchSpec": null,
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "github:GabrielBuragev/vue_pdfjs_viewer#f2572eb816599b5ccd5fc91cfc4e46a4418098a8",
+  "_spec": "github:GabrielBuragev/vue_pdfjs_viewer",
   "browserslist": [
     "> 1%",
     "last 2 versions"
@@ -83,7 +103,7 @@
   "homepage": "https://github.com/GabrielBuragev/vue-pdfjs-viewer#readme",
   "main": "dist/vue-pdfjs-viewer.umd.js",
   "module": "dist/vue-pdfjs-viewer.es.js",
-  "name": "vue-pdfjs-viewer",
+  "name": "vue_pdfjs_viewer",
   "postcss": {
     "plugins": {
       "autoprefixer": {}
@@ -103,7 +123,7 @@
     "postversion": "git push && git push --tags"
   },
   "unpkg": "dist/vue-pdfjs-viewer.min.js",
-  "version": "0.1.17",
+  "version": "0.1.16",
   "author": "Gabriel Buragev",
   "license": "MIT",
   "keywords": [
