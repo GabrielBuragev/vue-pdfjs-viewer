@@ -12,13 +12,15 @@
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.11",
     "intersection-observer": "^0.7.0",
-    "pdfjs-dist": "2.0.943",
-    "vue": "^2.6.11",
+    "pdfjs-dist": "^2.13.0",
     "vue-dropzone": "https://github.com/gabrielburagev/vue-dropzone.git",
     "vue-in-viewport-mixin": "^2.0.0"
   },
   "deprecated": false,
   "description": "Vue viewer component built on top of pdfjs",
+  "peerDependencies": {
+    "vue": "^2.6.11"
+  },
   "devDependencies": {
     "@babel/core": "^7.8.3",
     "@babel/plugin-transform-arrow-functions": "^7.8.3",
@@ -112,5 +114,9 @@
     "pdfjs",
     "viewer",
     "components"
+  ],
+  "files": [
+    "/dist",
+    "/src"
   ]
 }
