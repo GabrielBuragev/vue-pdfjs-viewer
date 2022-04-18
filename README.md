@@ -8,6 +8,10 @@ Vue PDF viewer components implemented using PDFJS.
 npm install --save @gabrielbu/vue-pdf-viewer
 ```
 
+## Demo
+
+`TBD`
+
 ### Usage in vue
 
 ```js
