@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:593px">
+  <div id="app" style="height:100vh; width:100vw; position:fixed;">
     <PDFView
       :src.sync="src"
       ref="pdfView"
@@ -10,8 +10,11 @@
       :scale.sync="scale"
     >
       <template slot="right-toolbox"></template>
+      <!-- Add more buttons/features on the right side of the toolbar -->
       <template slot="left-toolbox"></template>
+      <!-- Add more buttons/features on the left side of the toolbar -->
       <template slot="error"></template>
+      <!-- Change the error message design -->
       <template slot="loading"></template>
     </PDFView>
   </div>
@@ -30,12 +33,6 @@ export default {
       src: "http://localhost:8081/test.pdf",
       scale: "1.25",
     };
-  },
-  mounted() {
-    // var self = this;
-    // setTimeout(() => {
-    //   self.scale = "auto";
-    // }, 5000);
   },
 };
 </script>
