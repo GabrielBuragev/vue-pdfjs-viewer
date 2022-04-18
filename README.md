@@ -1,12 +1,10 @@
+# vue_pdfjs_viewer
 
-#  vue_pdfjs_viewer
-
-
-###  Installation
+### Installation
 
 `npm install vue_pdfjs_viewer`
 
-###  Usage in vue
+### Usage in vue
 
 ```js
 
@@ -20,8 +18,8 @@
       :downloadFeatureVisible="false" // Should the download button feature be active ? (default: true)
       :dropzoneFeatureVisible="false" // Should the pdf dropzone feature be active ? (default: true)
       :toolbarVisible="false" // Should the toolbar be visible ? (default: true)
-      scale.sync="scale" // String value for the page scale ["0.75", "1", "1.25", "1.5", "auto"] are supported 
-    > 
+      scale.sync="scale" // String value for the page scale ["0.75", "1", "1.25", "1.5", "auto"] are supported
+    >
         <template slot="right-toolbox"></template> <!-- Add more buttons/features on the right side of the toolbar -->
         <template slot="left-toolbox"></template> <!-- Add more buttons/features on the left side of the toolbar -->
         <template slot="error"></template> <!-- Change the error message design -->
@@ -45,20 +43,18 @@ export default {
 </script>
 ```
 
-  
+### Valid PDF source
 
-###  Valid PDF source
+- URL (https://example.com/pdf-content.pdf)
 
-* URL (https://example.com/pdf-content.pdf)
+- PDF Uint8Array Buffer
 
-* PDF Uint8Array Buffer
+- [PDFDataRangeTransport](https://mozilla.github.io/pdf.js/api/draft/PDFDataRangeTransport.html)
 
-* [PDFDataRangeTransport](https://mozilla.github.io/pdf.js/api/draft/PDFDataRangeTransport.html)
+- [DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/global.html#DocumentInitParameters)
 
-* [DocumentInitParameters](https://mozilla.github.io/pdf.js/api/draft/global.html#DocumentInitParameters)
+- Base64 encoded PDF buffer
 
-* Base64 encoded PDF buffer
+- data:application/pdf;base64, ....
 
-* data:application/pdf;base64, ....
-
-* You can also drag/drop pdf files into the viewer !
+- You can also drag/drop pdf files into the viewer !
