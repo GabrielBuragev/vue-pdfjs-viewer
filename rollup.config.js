@@ -16,26 +16,26 @@ const sourcemap = true;
 const plugins = [
   resolve({
     browser: true,
-    preferBuiltins: true
+    preferBuiltins: true,
   }),
   vue({ css: false }),
   commonjs({
     namedExports: {
-      "node_modules/pdfjs-dist/build/pdf.js": ["pdfjs"]
-    }
+      "node_modules/pdfjs-dist/build/pdf.js": ["pdfjs"],
+    },
   }),
   babel({
     runtimeHelpers: true,
     exclude: "node_modules/**",
     babelrc: true,
-    extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".vue"]
+    extensions: [".js", ".jsx", ".es6", ".es", ".mjs", ".vue"],
   }),
   postcss({
     extensions: [".css, .scss"],
-    namedExports: true
+    namedExports: true,
   }),
   css({
-    output: false
+    output: false,
   }),
   plugin_globals(),
   builtins(),
@@ -43,12 +43,12 @@ const plugins = [
     output: `dist/images`, // default the root
     extensions: /\.(png|jpg|jpeg|gif|svg)$/, // support png|jpg|jpeg|gif|svg, and it's alse the default value
     limit: 50000, // default 8192(8k)
-    exclude: "node_modules/**"
-  })
+    exclude: "node_modules/**",
+  }),
 ];
 const pluginsWithMinify = plugins.slice(0);
 const defaultConfig = {
-  input: "src/index.js"
+  input: "src/index.js",
 };
 
 if (process.env.NODE_ENV === "production") {
@@ -59,45 +59,19 @@ export default [
   Object.assign({}, defaultConfig, {
     output: [
       {
-        file: `dist/${FILE_NAME}.common.js`,
-        format: "cjs",
-        sourcemap,
-        exports: "named"
-      },
-      {
         file: `dist/${FILE_NAME}.es.js`,
         format: "es",
         sourcemap,
-        exports: "named"
+        exports: "named",
       },
       {
         file: `dist/${FILE_NAME}.umd.js`,
         format: "umd",
         name: LIBRARY_NAME,
         sourcemap,
-        exports: "named"
-      }
+        exports: "named",
+      },
     ],
-    plugins
+    plugins,
   }),
-  Object.assign({}, defaultConfig, {
-    output: {
-      file: `dist/${FILE_NAME}.js`,
-      format: "iife",
-      name: LIBRARY_NAME,
-      sourcemap,
-      exports: "named"
-    },
-    plugins
-  }),
-  Object.assign({}, defaultConfig, {
-    output: {
-      file: `dist/${FILE_NAME}.min.js`,
-      format: "iife",
-      name: LIBRARY_NAME,
-      sourcemap,
-      exports: "named"
-    },
-    plugins: pluginsWithMinify
-  })
 ];
