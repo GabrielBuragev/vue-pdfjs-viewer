@@ -74,4 +74,24 @@ export default [
     ],
     plugins,
   }),
+  Object.assign({}, defaultConfig, {
+    output: {
+      file: `dist/${FILE_NAME}.js`,
+      format: "iife",
+      name: LIBRARY_NAME,
+      sourcemap,
+      exports: "named",
+    },
+    plugins,
+  }),
+  Object.assign({}, defaultConfig, {
+    output: {
+      file: `dist/${FILE_NAME}.min.js`,
+      format: "iife",
+      name: LIBRARY_NAME,
+      sourcemap,
+      exports: "named",
+    },
+    plugins: pluginsWithMinify,
+  }),
 ];
